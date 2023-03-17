@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:title="@string/beranda"
+        android:enabled="true"
+        android:icon="@drawable/ic_home" />
+
+    <item
+        android:id="@+id/reportFragment"
+        android:title="@string/laporan"
+        android:enabled="true"
+        android:icon="@drawable/ic_report" />
+
+    <item
+        android:title=""
+        android:enabled="true" />
+
+    <item
+        android:id="@+id/anggaranFragment"
+        android:title="@string/anggaran"
+        android:enabled="true"
+        android:icon="@drawable/ic_budget" />
+
+    <item
+        android:id="@+id/targetFragment"
+        android:title="@string/tujuan"
+        android:enabled="true"
+        android:icon="@drawable/ic_target" />
+</menu>

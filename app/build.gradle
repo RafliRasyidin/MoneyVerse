@@ -1,0 +1,124 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-parcelize'
+}
+
+android {
+    namespace 'com.rasyidin.moneyverse'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.rasyidin.moneyverse"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.0'
+    }
+}
+
+dependencies {
+
+    // Android Core
+    implementation 'androidx.core:core-ktx:1.9.0'
+
+    // App Compat
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+
+    // Material Component
+    implementation 'com.google.android.material:material:1.8.0'
+
+    // Constraint Layout
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Compose
+    implementation "androidx.compose.compiler:compiler:1.4.3"
+    implementation 'androidx.activity:activity-compose:1.6.1'
+    implementation "androidx.compose.ui:ui:1.3.3"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.3.3"
+    implementation "androidx.compose.material:material:1.3.1"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+    implementation "androidx.compose.animation:animation:1.3.3"
+    debugImplementation "androidx.compose.ui:ui-tooling:1.3.3"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:1.3.3"
+
+    // Navigation Component
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // Paging
+    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
+
+    // Room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.room:room-paging:$roomVersion"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
+
+    // Circle Image View
+    implementation "de.hdodenhof:circleimageview:$circleImageVersion"
+
+    //flipper
+    implementation 'com.facebook.flipper:flipper:0.177.0'
+    implementation 'com.facebook.soloader:soloader:0.10.5'
+    implementation 'com.facebook.flipper:flipper-network-plugin:0.177.0'
+    implementation 'com.facebook.flipper:flipper-leakcanary2-plugin:0.177.0'
+    implementation "com.facebook.stetho:stetho:1.6.0"
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
+
+    // Currency Edit Text
+    implementation 'com.cottacush:CurrencyEditText:1.0.0'
+
+    // Lottie
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    // Easy Pref
+    implementation 'com.pixplicity.easyprefs:EasyPrefs:1.10.0'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}

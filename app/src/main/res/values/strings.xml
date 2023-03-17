@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Money Verse</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="beranda">Beranda</string>
+    <string name="laporan">Laporan</string>
+    <string name="anggaran">Anggaran</string>
+    <string name="tujuan">Tujuan</string>
+    <string name="total_saldo">Total Saldo</string>
+    <string name="cash">Cash</string>
+    <string name="makan_dan_minum"><![CDATA[Makan & Minum]]></string>
+    <string name="belanja">Belanja</string>
+    <string name="kendaraan">Kendaraan</string>
+    <string name="tagihan">Tagihan</string>
+    <string name="kesehatan">Kesehatan</string>
+    <string name="liburan">Liburan</string>
+    <string name="peliharaan">Peliharaan</string>
+    <string name="asuransi">Asuransi</string>
+    <string name="sedekah">Sedekah</string>
+    <string name="hiburan">Hiburan</string>
+    <string name="hobi">Hobi</string>
+    <string name="olahraga">Olahraga</string>
+    <string name="sosial">Sosial</string>
+    <string name="lain_lain">Lain-lain</string>
+    <string name="atm">ATM</string>
+    <string name="dompet">Dompet</string>
+    <string name="gaji">Gaji</string>
+    <string name="bonus">Bonus</string>
+    <string name="pemberian">Pemberian</string>
+    <string name="bisnis">Bisnis</string>
+    <string name="investasi">Investasi</string>
+    <string name="penjualan">Penjualan</string>
+    <string name="rp">Rp</string>
+    <string name="tambah_baru">Tambah Baru</string>
+    <string name="tambah_akun">Tambah Akun</string>
+    <string name="pilih_icon">Pilih Icon</string>
+    <string name="nama_akun">Nama Akun</string>
+    <string name="deskripsi">Deskripsi</string>
+    <string name="jumlah_saldo">Jumlah Saldo</string>
+    <string name="simpan">Simpan</string>
+</resources>

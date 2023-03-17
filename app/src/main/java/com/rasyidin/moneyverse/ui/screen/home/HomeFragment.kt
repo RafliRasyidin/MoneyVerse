@@ -1,0 +1,42 @@
+package com.rasyidin.moneyverse.ui.screen.home
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.fragment.findNavController
+import com.rasyidin.moneyverse.databinding.FragmentHomeBinding
+import com.rasyidin.moneyverse.ui.component.FragmentBinding
+import com.rasyidin.moneyverse.ui.screen.account.AccountActivity
+import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
+
+class HomeFragment : FragmentBinding<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setContentView()
+    }
+
+    private fun setContentView() {
+        binding.composeView.setContent {
+            MoneyVerseTheme {
+                HomeScreen(
+                    modifier = Modifier.padding(top = 24.dp),
+                    onBtnChatClick = {},
+                    onBtnSaldoClick = {
+                        navigateToAccountScreen()
+                    },
+                    onBtnNotifClick = {}
+                )
+            }
+        }
+    }
+
+    private fun navigateToAccountScreen() {
+        val intent = Intent(requireActivity(), AccountActivity::class.java)
+        startActivity(intent)
+    }
+}
