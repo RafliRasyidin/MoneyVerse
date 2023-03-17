@@ -1,7 +1,9 @@
 package com.rasyidin.moneyverse.domain
 
+import androidx.compose.runtime.Composable
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.*
 
 sealed class ResultState<A: Any> {
     class Loading<T: Any> : ResultState<T>()
@@ -10,6 +12,33 @@ sealed class ResultState<A: Any> {
     data class Success<T: Any>(val data: T?) : ResultState<T>()
     data class Error<T: Any>(val throwable: Throwable, val message: String? = "") : ResultState<T>()
 }
+
+suspend fun <T: Any> fetch(call: suspend () -> T): Flow<ResultState<T>> = flow {
+    emit(ResultState.Loading())
+    emit(ResultState.Success(call.invoke()))
+}.catch { error ->
+    emit(ResultState.Error(error, error.message))
+}.flowOn(Dispatchers.IO)
+
+suspend fun <T: Any> fetchDataList(call: suspend () -> List<T>): Flow<ResultState<List<T>>> = flow {
+    emit(ResultState.Loading())
+    val data = call.invoke()
+    if (data.isEmpty()) {
+        emit(ResultState.Empty())
+    } else {
+        emit(ResultState.Success(data))
+    }
+}.catch { error ->
+    emit(ResultState.Error(error, error.message))
+}.flowOn(Dispatchers.IO)
+
+suspend fun performAction(action: suspend () -> Unit): Flow<ResultState<Nothing>> = flow {
+    emit(ResultState.Loading())
+    action.invoke()
+    emit(ResultState.Success(null))
+}.catch { error ->
+    emit(ResultState.Error(error, error.message))
+}.flowOn(Dispatchers.IO)
 
 inline fun <T : Any, U : Any> mapResult(
     resultState: ResultState<out T>,
@@ -28,9 +57,23 @@ inline fun <T : Any, U : Any> mapResult(
     }
 }
 
+@Composable
+fun <T : Any> ResultState<T>.OnFailure(result: @Composable (Throwable, String?) -> Unit) {
+    if (this is ResultState.Error) {
+        result.invoke(this.throwable, this.message)
+    }
+}
+
 fun <T : Any> ResultState<T>.onFailure(result: (Throwable, String?) -> Unit) {
     if (this is ResultState.Error) {
         result.invoke(this.throwable, this.message)
+    }
+}
+
+@Composable
+fun <T : Any> ResultState<T>.OnEmpty(result: @Composable (String?) -> Unit) {
+    if (this is ResultState.Empty) {
+        result.invoke(this.message)
     }
 }
 
@@ -40,14 +83,35 @@ fun <T : Any> ResultState<T>.onEmpty(result: (String?) -> Unit) {
     }
 }
 
-fun <T : Any> ResultState<T>.onSuccess(result: (T?) -> Unit) {
+@Composable
+fun <T : Any> ResultState<T>.OnSuccess(result: @Composable (T?) -> Unit) {
     if (this is ResultState.Success) {
         result.invoke(this.data)
     }
 }
 
+fun <T: Any> ResultState<T>.onSuccess(result: (T?) -> Unit) {
+    if (this is ResultState.Success) {
+        result.invoke(this.data)
+    }
+}
+
+@Composable
+fun <T : Any> ResultState<T>.OnLoading(result: @Composable () -> Unit) {
+    if (this is ResultState.Loading) {
+        result.invoke()
+    }
+}
+
 fun <T : Any> ResultState<T>.onLoading(result: () -> Unit) {
     if (this is ResultState.Loading) {
+        result.invoke()
+    }
+}
+
+@Composable
+fun <T : Any> ResultState<T>.OnIdle(result: @Composable () -> Unit) {
+    if (this is ResultState.Idle) {
         result.invoke()
     }
 }
