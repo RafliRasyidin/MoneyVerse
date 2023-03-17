@@ -2,7 +2,8 @@ package com.rasyidin.moneyverse.domain.usecase.account
 
 data class AccountUseCase(
     val addAccount: AddAccount,
-    val updateAccount: UpdateAccount,
     val deleteAccount: DeleteAccount,
-    val getListAccount: GetListAccount
+    val getListAccount: GetListAccount,
+    val getTotalSaldo: GetTotalSaldo,
+    val updateAccount: UpdateAccount,
 )
