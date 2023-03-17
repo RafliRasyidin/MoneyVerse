@@ -21,6 +21,8 @@ val ColoGed500 = Color(0xFF17B978)
 val ColorBlack = Color(0xFF000000)
 val ColorWhite = Color(0xFFFFFFFF)
 
+val ColorShadow = Color(0x12000000)
+
 val ColorBgRed = Color(0x40FD6A7E)
 val ColorBgLightBlue = Color(0x4037E0FF)
 val ColorBgBlue = Color(0x4041A6F9)
