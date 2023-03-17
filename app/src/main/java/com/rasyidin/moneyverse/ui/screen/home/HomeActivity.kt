@@ -4,10 +4,11 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.databinding.ActivityHomeBinding
 import com.rasyidin.moneyverse.ui.component.ActivityBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeActivity : ActivityBinding<ActivityHomeBinding>(ActivityHomeBinding::inflate) {
 
     private lateinit var navHost: NavHostFragment
