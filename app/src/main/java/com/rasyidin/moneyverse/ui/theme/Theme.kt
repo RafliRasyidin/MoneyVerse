@@ -1,15 +1,10 @@
 package com.rasyidin.moneyverse.ui.theme
 
-import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
 
 private val DarkColorPalette = darkColors(
     primary = ColorPurple200,
@@ -29,16 +24,6 @@ fun MoneyVerseTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compos
         DarkColorPalette
     } else {
         LightColorPalette
-    }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            val insets = WindowCompat.getInsetsController(window, view)
-            window.statusBarColor = ColorWhite.toArgb()
-            insets.isAppearanceLightStatusBars = !darkTheme
-            insets.isAppearanceLightNavigationBars = !darkTheme
-        }
     }
 
     MaterialTheme(
