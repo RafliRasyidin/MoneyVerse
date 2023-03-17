@@ -22,4 +22,7 @@ interface AccountDao {
 
     @Update
     suspend fun updateAccount(accountEntity: AccountEntity)
+
+    @Query("SELECT SUM(nominal) FROM account")
+    suspend fun getTotalSaldo(): Long
 } 
