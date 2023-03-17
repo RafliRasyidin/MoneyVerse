@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.OnSuccess
-import com.rasyidin.moneyverse.domain.ResultState
 import com.rasyidin.moneyverse.ui.theme.ColorGray100
 import com.rasyidin.moneyverse.ui.theme.ColorGray500
 import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
@@ -32,8 +31,8 @@ fun HomeScreen(
     onBtnNotifClick: () -> Unit,
     onBtnSaldoClick: () -> Unit
 ) {
-    viewModel.totalSaldo.collectAsState(initial = ResultState.Idle()).value.let { result ->
-        result.OnSuccess {saldo ->
+    viewModel.totalSaldo.collectAsState().value.let { result ->
+        result.OnSuccess { saldo ->
             Column(
                 modifier = modifier
                     .fillMaxSize()
@@ -160,7 +159,7 @@ fun SaldoCard(
 fun ListRecentActivity(
     modifier: Modifier = Modifier
 ) {
-    
+
 }
 
 

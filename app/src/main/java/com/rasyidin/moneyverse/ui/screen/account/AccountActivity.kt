@@ -5,7 +5,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.rasyidin.moneyverse.databinding.ActivityAccountBinding
 import com.rasyidin.moneyverse.ui.component.ActivityBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AccountActivity : ActivityBinding<ActivityAccountBinding>(ActivityAccountBinding::inflate) {
 
     private lateinit var navHost: NavHostFragment

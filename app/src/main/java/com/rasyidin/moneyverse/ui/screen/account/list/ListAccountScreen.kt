@@ -18,24 +18,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.model.account.Account
 import com.rasyidin.moneyverse.ui.component.MVToolbar
-import com.rasyidin.moneyverse.ui.theme.ColorBgGreen
-import com.rasyidin.moneyverse.ui.theme.ColorGray500
-import com.rasyidin.moneyverse.ui.theme.ColorWhite
-import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
+import com.rasyidin.moneyverse.ui.theme.*
+import com.rasyidin.moneyverse.utils.shadow
 import com.rasyidin.moneyverse.utils.toCurrency
 
 @Composable
 fun ListAccountScreen(
     modifier: Modifier = Modifier,
-    totalSaldo: Long,
-    accounts: List<Account>,
+    viewModel: ListAccountViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onAddAccountClick: () -> Unit,
     onItemAccountClick: (Account) -> Unit
 ) {
+    val uiState = viewModel.uiState.value
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -44,16 +43,16 @@ fun ListAccountScreen(
             title = stringResource(id = R.string.total_saldo),
             onBackClick = onBackClick
         )
-        TotalSaldo(totalSaldo = totalSaldo)
-        Spacer(modifier = Modifier.height(30.dp))
-        ListAccount(modifier = Modifier.weight(1F), accounts = accounts, onItemClick = onItemAccountClick)
+        TotalSaldo(totalSaldo = uiState.totalSaldo)
+        Spacer(modifier = Modifier.height(18.dp))
+        ListAccount(modifier = Modifier.weight(1F), accounts = uiState.accounts, onItemClick = onItemAccountClick)
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
             onClick = onAddAccountClick,
 
-        ) {
+            ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = null)
             Spacer(modifier = Modifier.width(4.dp))
             Text(
@@ -110,14 +109,21 @@ fun ItemAccount(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onItemClick.invoke(account) }
             .height(intrinsicSize = IntrinsicSize.Max)
-            .padding(12.dp),
+            .padding(horizontal = 12.dp, vertical = 12.dp)
+            .shadow(
+                color = ColorShadow,
+                alpha = .1F,
+                shadowBlurRadius = 16.dp,
+                cornersRadius = 16.dp
+            ),
         shape = MaterialTheme.shapes.small,
         elevation = 0.dp
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .clickable { onItemClick.invoke(account) }
+                .padding(12.dp),
         ) {
             Box(
                 modifier = Modifier
@@ -170,20 +176,7 @@ fun ItemAccount(
 @Composable
 private fun PreviewListAccountScreen() {
     MoneyVerseTheme {
-        val accounts = mutableListOf<Account>()
-        for (i in 0 until 11) {
-            accounts.add(
-                Account(
-                    id = i,
-                    nominal = 100000,
-                    name = "Cash",
-                    updatedAt = "",
-                    iconPath = R.drawable.ic_cash,
-                    bgColor = ColorBgGreen.toArgb()
-                )
-            )
-        }
-        ListAccountScreen(onBackClick = {}, totalSaldo = 7000000, accounts = accounts, onAddAccountClick = {}, onItemAccountClick = {})
+        ListAccountScreen(onBackClick = {}, onAddAccountClick = {}, onItemAccountClick = {})
     }
 }
 
