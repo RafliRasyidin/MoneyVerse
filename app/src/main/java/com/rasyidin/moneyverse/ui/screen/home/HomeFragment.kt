@@ -11,6 +11,7 @@ import com.rasyidin.moneyverse.databinding.FragmentHomeBinding
 import com.rasyidin.moneyverse.ui.component.FragmentBinding
 import com.rasyidin.moneyverse.ui.screen.account.AccountActivity
 import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
+import com.rasyidin.moneyverse.utils.showBotNav
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +28,7 @@ class HomeFragment : FragmentBinding<FragmentHomeBinding>(FragmentHomeBinding::i
     override fun onResume() {
         super.onResume()
         viewModel.getTotalSaldo()
+        showBotNav()
     }
 
     private fun setContentView() {

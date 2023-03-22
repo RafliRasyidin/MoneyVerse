@@ -46,4 +46,8 @@
     <string name="ya">Ya</string>
     <string name="batalkan">Batalkan</string>
     <string name="edit_akun">Edit Akun</string>
+    <string name="tambah_transaksi">Tambah Transaksi</string>
+    <string name="pengeluaran">Pengeluaran</string>
+    <string name="pemasukan">Pemasukan</string>
+    <string name="transfer">Transfer</string>
 </resources>

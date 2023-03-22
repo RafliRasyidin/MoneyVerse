@@ -1,7 +1,9 @@
 package com.rasyidin.moneyverse.utils
 
 import android.content.Context
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
@@ -11,6 +13,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.rasyidin.moneyverse.R
 
 fun Long.toCurrency(): String {
     return String.format("%,d", this)
@@ -59,7 +65,7 @@ fun Context.showShortToast(message: String) {
 }
 
 fun Fragment.showShortToast(message: String) {
-    Toast.makeText(this.requireActivity(), message, Toast.LENGTH_SHORT).show()
+    Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
 }
 
 fun Context.showLongToast(message: String) {
@@ -67,5 +73,35 @@ fun Context.showLongToast(message: String) {
 }
 
 fun Fragment.showLongToast(message: String) {
-    Toast.makeText(this.requireActivity(), message, Toast.LENGTH_LONG).show()
+    Toast.makeText(requireActivity(), message, Toast.LENGTH_LONG).show()
+}
+
+fun Context.hideBotNav() {
+    val botNav =
+        (this as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bot_nav)
+    val fabAdd = this.findViewById<FloatingActionButton>(R.id.fab_add)
+    val fabBackground = this.findViewById<View>(R.id.fab_bg)
+    botNav.visibility = View.GONE
+    fabAdd.visibility = View.GONE
+    fabBackground.visibility = View.GONE
+}
+
+fun Fragment.hideBotNav() {
+    val botNav =
+        (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bot_nav)
+    val fabAdd = requireActivity().findViewById<FloatingActionButton>(R.id.fab_add)
+    val fabBackground = requireActivity().findViewById<View>(R.id.fab_bg)
+    botNav.visibility = View.GONE
+    fabAdd.visibility = View.GONE
+    fabBackground.visibility = View.GONE
+}
+
+fun Fragment.showBotNav() {
+    val botNav =
+        (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bot_nav)
+    val fabAdd = requireActivity().findViewById<FloatingActionButton>(R.id.fab_add)
+    val fabBackground = requireActivity().findViewById<View>(R.id.fab_bg)
+    botNav.visibility = View.VISIBLE
+    fabAdd.visibility = View.VISIBLE
+    fabBackground.visibility = View.VISIBLE
 }

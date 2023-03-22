@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.screen.transaction.add.AddTransactionFragment"
+    android:orientation="vertical">
+    
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/toolbar_compose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabBackground="@drawable/tab_indicator_selector"
+        app:tabIndicator="@color/color_purple500"
+        app:tabIndicatorColor="@color/color_purple500"
+        app:tabTextAppearance="@style/Theme.MoneyVerse.TextAppearance.TabLayout"
+        app:tabIndicatorHeight="1dp" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_transaction"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    
+</LinearLayout>
