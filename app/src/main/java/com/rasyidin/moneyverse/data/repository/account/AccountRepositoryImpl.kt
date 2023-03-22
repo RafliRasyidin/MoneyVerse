@@ -14,7 +14,7 @@ class AccountRepositoryImpl @Inject constructor(private val accountDao: AccountD
     }
 
     override suspend fun addAccount(accountEntity: AccountEntity) {
-        accountDao.upsertAccount(accountEntity)
+        accountDao.upsert(accountEntity)
     }
 
     override suspend fun deleteAccountById(accountId: Int) {

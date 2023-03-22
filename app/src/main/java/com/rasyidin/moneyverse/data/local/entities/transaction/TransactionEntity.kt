@@ -3,6 +3,7 @@ package com.rasyidin.moneyverse.data.local.entities.transaction
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.rasyidin.moneyverse.domain.model.transaction.Transaction
 import com.rasyidin.moneyverse.domain.model.transaction.TransactionType
 
 @Entity(tableName = "transaksi")
@@ -25,9 +26,20 @@ data class TransactionEntity(
     @ColumnInfo("categoryId")
     var categoryId: Int,
 
-    @ColumnInfo("sumberAkun")
+    @ColumnInfo("sumberAkunId")
     var sourceAccountId: Int,
 
-    @ColumnInfo("tujuanAkun")
+    @ColumnInfo("tujuanAkunId")
     var destinationAccountId: Int? = null,
-)
+) {
+    fun toDomain() = Transaction(
+        id = id,
+        nominal = nominal,
+        createdAt = createdAt,
+        notes = notes,
+        transactionType = transactionType,
+        categoryId = categoryId,
+        sourceAccountId = sourceAccountId,
+        destinationAccountId = destinationAccountId
+    )
+}

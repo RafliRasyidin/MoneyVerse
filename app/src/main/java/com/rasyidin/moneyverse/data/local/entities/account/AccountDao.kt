@@ -12,7 +12,7 @@ interface AccountDao {
     suspend fun getAccountById(accountId: Int): AccountEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertAccount(accountEntity: AccountEntity)
+    suspend fun upsert(accountEntity: AccountEntity)
 
     @Query("DELETE FROM account WHERE id = :accountId")
     suspend fun deleteAccountById(accountId: Int)
