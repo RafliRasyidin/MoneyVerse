@@ -28,7 +28,7 @@ class ListAccountFragment :
                         findNavController().navigate(ListAccountFragmentDirections.actionListAccountFragmentToDetailAccountFragment())
                     },
                     onItemAccountClick = { account ->
-
+                        findNavController().navigate(ListAccountFragmentDirections.actionListAccountFragmentToDetailAccountFragment(account.id))
                     }
                 )
             }

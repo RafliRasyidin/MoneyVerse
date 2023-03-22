@@ -29,7 +29,7 @@ class DatabaseModule {
     ) {
         withContext(Dispatchers.IO) {
             val accountDao = accountProvider.get()
-            accountDao.addAccount(MoneyVerseDb.initDefaultAccount(context).first())
+            accountDao.upsertAccount(MoneyVerseDb.initDefaultAccount(context).first())
 
             val categoryDao = categoryProvider.get()
             categoryDao.addCategories(MoneyVerseDb.initCategories(context))

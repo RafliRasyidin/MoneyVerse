@@ -1,5 +1,25 @@
 package com.rasyidin.moneyverse.domain.model.category
 
+import androidx.annotation.DrawableRes
+import com.rasyidin.moneyverse.data.local.entities.category.CategoryEntity
+
+
+data class Category(
+    var id: Int,
+    @DrawableRes var bgColor: Int,
+    @DrawableRes var iconPath: Int,
+    var name: String,
+    var categoryType: CategoryType = CategoryType.TransactionOutcome
+) {
+    fun toEntity() = CategoryEntity(
+        id = id,
+        bgColor = bgColor,
+        iconPath = iconPath,
+        name = name,
+        categoryType = categoryType
+    )
+}
+
 object CategoryKey {
     const val FOOD = 1
     const val SHOP = 2

@@ -22,5 +22,10 @@
         android:id="@+id/detailAccountFragment"
         android:name="com.rasyidin.moneyverse.ui.screen.account.detail.DetailAccountFragment"
         android:label="fragment_detail_account"
-        tools:layout="@layout/fragment_detail_account" />
+        tools:layout="@layout/fragment_detail_account" >
+        <argument
+            android:name="accountId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

@@ -4,13 +4,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rasyidin.moneyverse.domain.*
-import com.rasyidin.moneyverse.domain.model.account.Account
 import com.rasyidin.moneyverse.domain.model.account.AccountUi
+import com.rasyidin.moneyverse.domain.onEmpty
+import com.rasyidin.moneyverse.domain.onFailure
+import com.rasyidin.moneyverse.domain.onSuccess
 import com.rasyidin.moneyverse.domain.usecase.account.AccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,7 +32,7 @@ class ListAccountViewModel @Inject constructor(private val useCase: AccountUseCa
                 }
 
                 result.onFailure { throwable, message ->
-                    _uiState.value = uiState.value.copy(totalSaldo = 0)
+                    _uiState.value = uiState.value.copy(totalSaldo = 0, errorMessage = message.toString())
                 }
             }
         }
@@ -53,7 +52,7 @@ class ListAccountViewModel @Inject constructor(private val useCase: AccountUseCa
                 }
 
                 result.onFailure { throwable, message ->
-                    _uiState.value = uiState.value.copy(accounts = emptyList())
+                    _uiState.value = uiState.value.copy(accounts = emptyList(), errorMessage = message.toString())
                 }
             }
         }

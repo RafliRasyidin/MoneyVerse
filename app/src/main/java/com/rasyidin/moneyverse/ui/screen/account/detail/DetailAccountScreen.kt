@@ -2,11 +2,11 @@ package com.rasyidin.moneyverse.ui.screen.account.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -22,84 +22,122 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
-import com.rasyidin.moneyverse.domain.model.account.Account
+import com.rasyidin.moneyverse.domain.model.category.Category
 import com.rasyidin.moneyverse.ui.component.MVTextField
 import com.rasyidin.moneyverse.ui.component.MVToolbar
+import com.rasyidin.moneyverse.ui.component.SheetContent
 import com.rasyidin.moneyverse.ui.theme.ColorBgGreen
 import com.rasyidin.moneyverse.ui.theme.ColorWhite
 import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DetailAccountScreen(
     modifier: Modifier = Modifier,
-    account: Account?,
+    viewModel: DetailAccountViewModel = hiltViewModel(),
     onNameChange: (String) -> Unit,
     onDescChange: (String) -> Unit,
     onNominalChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    onSaveClick: () -> Unit
+    onSaveClick: () -> Unit,
+    onIconSelected: (Category) -> Unit
 ) {
-    var name by remember { mutableStateOf(account?.name ?: "") }
-    var desc by remember { mutableStateOf(account?.desc ?: "") }
-    var nominal by remember { mutableStateOf((account?.nominal ?: 0).toString()) }
+    val coroutineScope = rememberCoroutineScope()
+    val uiState = viewModel.uiState.value
+    val modalSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
+    )
+    var name by remember { mutableStateOf(uiState.account.name) }
+    var desc by remember { mutableStateOf(uiState.account.desc ?: "") }
+    var nominal by remember { mutableStateOf((uiState.account.nominal).toString()) }
 
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-        MVToolbar(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            title = "Tambah Akun",
-            onBackClick = onBackClick
-        )
-        PickAddAccountIcon(
-            iconPath = account?.iconPath,
-            bgColor = account?.bgColor
-        )
-        TextFieldAccount(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            name = name,
-            desc = desc,
-            nominal = nominal,
-            onNameChange = { newText ->
-                name = newText
-                onNameChange.invoke(name)
-            },
-            onDescChange = { newText ->
-                desc = newText
-                onDescChange.invoke(desc)
-            },
-            onNominalChange = { newText ->
-                nominal = newText
-                onNominalChange.invoke(nominal)
-            }
-        )
-        Spacer(modifier = Modifier.weight(1F))
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
-            onClick = onSaveClick
-        ) {
-            Text(
-                text = stringResource(id = R.string.simpan),
-                style = MaterialTheme.typography.button,
-                color = ColorWhite
+    ModalBottomSheetLayout(
+        sheetState = modalSheetState,
+        sheetShape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
+        sheetContent = {
+            SheetContent(
+                title = stringResource(id = R.string.pilih_icon),
+                categories = uiState.categories,
+                onItemClick = onIconSelected
             )
+        },
+        content = {
+            Column(
+                modifier = modifier.fillMaxSize()
+            ) {
+                MVToolbar(
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    title = stringResource(id = R.string.tambah_akun),
+                    onBackClick = onBackClick
+                )
+                PickAddAccountIcon(
+                    iconPath = uiState.account.iconPath,
+                    bgColor = uiState.account.bgColor,
+                    onClick = {
+                        coroutineScope.launch {
+                            if (modalSheetState.isVisible) {
+                                modalSheetState.hide()
+                            } else {
+                                modalSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                            }
+                        }
+                    }
+                )
+                TextFieldAccount(
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    name = name,
+                    desc = desc,
+                    nominal = nominal,
+                    onNameChange = { newText ->
+                        name = newText
+                        onNameChange.invoke(name)
+                    },
+                    onDescChange = { newText ->
+                        desc = newText
+                        onDescChange.invoke(desc)
+                    },
+                    onNominalChange = { newText ->
+                        nominal = newText
+                        onNominalChange.invoke(nominal)
+                    }
+                )
+                Spacer(modifier = Modifier.weight(1F))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
+                    onClick = onSaveClick
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.simpan),
+                        style = MaterialTheme.typography.button,
+                        color = ColorWhite
+                    )
+                }
+            }
         }
-    }
+    )
+
+
 }
 
 @Composable
 fun PickAddAccountIcon(
     modifier: Modifier = Modifier,
     iconPath: Int? = null,
-    bgColor: Int? = null
+    bgColor: Int? = null,
+    onClick: () -> Unit
 ) {
     val background by remember { mutableStateOf(bgColor) }
     val icon by remember { mutableStateOf(iconPath) }
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick.invoke() },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
@@ -183,19 +221,12 @@ fun TextFieldAccount(
 private fun PreviewDetailAccountScreen() {
     MoneyVerseTheme {
         DetailAccountScreen(
-            account = Account(
-                id = 1,
-                nominal = 100000,
-                name = "Cash",
-                updatedAt = "",
-                iconPath = R.drawable.ic_cash,
-                bgColor = ColorBgGreen.toArgb()
-            ),
             onNominalChange = {},
             onDescChange = {},
             onNameChange = {},
             onBackClick = {},
-            onSaveClick = {}
+            onSaveClick = {},
+            onIconSelected = {}
         )
     }
 }
