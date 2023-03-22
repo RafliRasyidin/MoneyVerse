@@ -38,4 +38,6 @@
     <string name="deskripsi">Deskripsi</string>
     <string name="jumlah_saldo">Jumlah Saldo</string>
     <string name="simpan">Simpan</string>
+    <string name="akun_berhasil_dihapus">Akun Berhasil Dihapus</string>
+    <string name="akun_berhasil_ditambah">Akun Berhasil Ditambah</string>
 </resources>

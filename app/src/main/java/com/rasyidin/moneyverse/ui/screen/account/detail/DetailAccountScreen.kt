@@ -79,7 +79,11 @@ fun DetailAccountScreen(
                 MVToolbar(
                     modifier = Modifier.padding(horizontal = 12.dp),
                     title = stringResource(id = R.string.tambah_akun),
-                    onBackClick = onBackClick
+                    onBackClick = onBackClick,
+                    iconEnd = if (viewModel.currentAccountId != null) R.drawable.ic_delete else null,
+                    onIconEndClick = {
+                        viewModel.onEvent(DetailAccountEvent.DeleteAccount)
+                    }
                 )
                 PickAddAccountIcon(
                     iconPath = uiState.iconPath,
@@ -117,7 +121,8 @@ fun DetailAccountScreen(
                     onClick = {
                         viewModel.onEvent(DetailAccountEvent.SaveAccount)
                     },
-                    enabled = viewModel.buttonState
+                    enabled = viewModel.buttonState,
+                    shape = MaterialTheme.shapes.large
                 ) {
                     Text(
                         text = stringResource(id = R.string.simpan),

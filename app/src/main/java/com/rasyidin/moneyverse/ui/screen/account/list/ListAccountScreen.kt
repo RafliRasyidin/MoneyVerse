@@ -45,14 +45,18 @@ fun ListAccountScreen(
         )
         TotalSaldo(totalSaldo = uiState.totalSaldo)
         Spacer(modifier = Modifier.height(18.dp))
-        ListAccount(modifier = Modifier.weight(1F), accounts = uiState.accounts, onItemClick = onItemAccountClick)
+        ListAccount(
+            modifier = Modifier.weight(1F),
+            accounts = uiState.accounts,
+            onItemClick = onItemAccountClick
+        )
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
             onClick = onAddAccountClick,
-
-            ) {
+            shape = MaterialTheme.shapes.large
+        ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = null)
             Spacer(modifier = Modifier.width(4.dp))
             Text(
@@ -121,7 +125,8 @@ fun ItemAccount(
         elevation = 0.dp
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .clickable { onItemClick.invoke(account) }
                 .padding(12.dp),
         ) {

@@ -6,4 +6,5 @@ sealed class DetailAccountEvent {
     data class OnSaldoChange(val text: String): DetailAccountEvent()
     data class OnPickAccountIcon(val iconPath: Int, val bgColor: Int): DetailAccountEvent()
     object SaveAccount: DetailAccountEvent()
+    object DeleteAccount: DetailAccountEvent()
 }

@@ -33,9 +33,12 @@ class DetailAccountViewModel @Inject constructor(
     private var _upsertState: Channel<ResultState<Nothing>> = idleChannel()
     val upsertState get() = _upsertState.receiveAsFlow()
 
+    private var _deleteState: Channel<ResultState<Nothing>> = idleChannel()
+    val deleteState get() = _deleteState.receiveAsFlow()
+
     var buttonState by mutableStateOf(false)
 
-    private var currentAccountId: Int? = null
+    var currentAccountId: Int? = null
 
     init {
         getAccountCategories()
@@ -79,6 +82,7 @@ class DetailAccountViewModel @Inject constructor(
             }
             is DetailAccountEvent.OnPickAccountIcon -> _uiState.value = uiState.value.copy(iconPath = event.iconPath, bgColor = event.bgColor)
             is DetailAccountEvent.SaveAccount -> upsertAccount()
+            is DetailAccountEvent.DeleteAccount -> deleteAccount()
         }
     }
 
@@ -87,6 +91,16 @@ class DetailAccountViewModel @Inject constructor(
         val isNameNotEmpty = uiState.value.name.isNotEmpty()
         val isSaldoNotEmpty = saldo != 0L && saldo.toString().isNotEmpty()
         buttonState = isNameNotEmpty && isSaldoNotEmpty
+    }
+
+    private fun deleteAccount() {
+        viewModelScope.launch {
+            if (currentAccountId != null) {
+                useCase.deleteAccount(currentAccountId!!).collect { result ->
+                    _deleteState.send(result)
+                }
+            }
+        }
     }
 
     private fun upsertAccount() {

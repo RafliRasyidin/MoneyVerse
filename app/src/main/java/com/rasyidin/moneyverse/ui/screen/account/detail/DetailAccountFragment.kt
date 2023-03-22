@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.databinding.FragmentDetailAccountBinding
 import com.rasyidin.moneyverse.domain.onFailure
 import com.rasyidin.moneyverse.domain.onSuccess
@@ -26,6 +27,8 @@ class DetailAccountFragment :
         setContentView()
 
         observeSaveAccount()
+
+        observeDeleteAccount()
     }
 
     private fun setContentView() {
@@ -43,6 +46,22 @@ class DetailAccountFragment :
             viewModel.upsertState.collect { result ->
                 result.onSuccess {
                     findNavController().popBackStack()
+                    showShortToast(getString(R.string.akun_berhasil_ditambah))
+                }
+
+                result.onFailure { throwable, message ->
+                    showShortToast(message.toString())
+                }
+            }
+        }
+    }
+
+    private fun observeDeleteAccount() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.deleteState.collect { result ->
+                result.onSuccess {
+                    findNavController().popBackStack()
+                    showShortToast(getString(R.string.akun_berhasil_dihapus))
                 }
 
                 result.onFailure { throwable, message ->
