@@ -27,7 +27,7 @@ import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.model.category.Category
 import com.rasyidin.moneyverse.ui.component.MVTextField
 import com.rasyidin.moneyverse.ui.component.MVToolbar
-import com.rasyidin.moneyverse.ui.component.SheetContent
+import com.rasyidin.moneyverse.ui.component.SheetContentCategories
 import com.rasyidin.moneyverse.ui.theme.ColorBgGreen
 import com.rasyidin.moneyverse.ui.theme.ColorWhite
 import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
@@ -59,10 +59,11 @@ fun DetailAccountScreen(
         sheetState = modalSheetState,
         sheetShape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
         sheetContent = {
-            SheetContent(
+            SheetContentCategories(
                 title = stringResource(id = R.string.pilih_icon),
                 categories = uiState.categories,
-                onItemClick = onIconSelected
+                onItemClick = onIconSelected,
+                isShowName = false
             )
         },
         content = {

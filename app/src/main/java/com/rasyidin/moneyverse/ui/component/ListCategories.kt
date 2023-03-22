@@ -1,5 +1,6 @@
 package com.rasyidin.moneyverse.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rasyidin.moneyverse.R
@@ -31,14 +33,16 @@ import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
 fun ListCategories(
     modifier: Modifier = Modifier,
     categories: List<Category>,
+    isShowName: Boolean,
     onItemClick: (Category) -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(3),
+        contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 16.dp)
     ) {
         items(categories) { category ->
-            ItemCategory(item = category, onItemClick = onItemClick)
+            ItemCategory(item = category, onItemClick = onItemClick, isShowName = isShowName)
         }
     }
 }
@@ -47,6 +51,7 @@ fun ListCategories(
 fun ItemCategory(
     modifier: Modifier = Modifier,
     item: Category,
+    isShowName: Boolean,
     onItemClick: (Category) -> Unit
 ) {
     Column(
@@ -70,11 +75,14 @@ fun ItemCategory(
                 contentDescription = null
             )
         }
-        Text(
-            text = item.name,
-            style = MaterialTheme.typography.h6,
-            color = ColorGray500
-        )
+        AnimatedVisibility(visible = isShowName) {
+            Text(
+                text = item.name,
+                style = MaterialTheme.typography.h6,
+                color = ColorGray500,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
@@ -85,7 +93,8 @@ fun PreviewListCategories() {
         val context = LocalContext.current
         ListCategories(
             categories = MoneyVerseDb.initCategories(context).map { it.toDomain() },
-            onItemClick = {}
+            onItemClick = {},
+            isShowName = true
         )
     }
 }
@@ -102,7 +111,8 @@ private fun PreviewItemCategory() {
                 "Makanan & Minuman",
                 CategoryType.TransactionOutcome
             ),
-            onItemClick = {}
+            onItemClick = {},
+            isShowName = true
         )
     }
 }

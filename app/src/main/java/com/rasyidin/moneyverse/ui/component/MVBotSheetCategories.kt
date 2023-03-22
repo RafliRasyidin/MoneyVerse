@@ -17,17 +17,18 @@ import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
 
 
 @Composable
-fun SheetContent(
+fun SheetContentCategories(
     modifier: Modifier = Modifier,
     title: String,
     categories: List<Category>,
+    isShowName: Boolean,
     onItemClick: (Category) -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
         SheetHeader(title = title)
-        ListCategories(categories = categories, onItemClick = onItemClick)
+        ListCategories(categories = categories, onItemClick = onItemClick, isShowName = isShowName)
     }
 }
 
@@ -61,10 +62,11 @@ fun SheetHeader(
 private fun PreviewMVBotSheet() {
     MoneyVerseTheme {
         val context = LocalContext.current
-        SheetContent(
+        SheetContentCategories(
             title = "Pengeluaran",
             categories = MoneyVerseDb.initCategories(context).map { it.toDomain() },
-            onItemClick = {}
+            onItemClick = {},
+            isShowName = true
         )
     }
 }
