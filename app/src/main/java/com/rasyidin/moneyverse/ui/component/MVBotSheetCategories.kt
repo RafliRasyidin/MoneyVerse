@@ -1,7 +1,10 @@
 package com.rasyidin.moneyverse.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,12 +25,13 @@ fun SheetContentCategories(
     title: String,
     categories: List<Category>,
     isShowName: Boolean,
-    onItemClick: (Category) -> Unit
+    onItemClick: (Category) -> Unit,
+    onCloseClick: () -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        SheetHeader(title = title)
+        SheetHeader(title = title, onCloseClick = onCloseClick)
         ListCategories(categories = categories, onItemClick = onItemClick, isShowName = isShowName)
     }
 }
@@ -35,7 +39,8 @@ fun SheetContentCategories(
 @Composable
 fun SheetHeader(
     modifier: Modifier = Modifier,
-    title: String
+    title: String,
+    onCloseClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -44,7 +49,9 @@ fun SheetHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            modifier = Modifier.size(16.dp),
+            modifier = Modifier
+                .clickable { onCloseClick.invoke() }
+                .size(16.dp),
             painter = painterResource(id = R.drawable.ic_close),
             contentDescription = null
         )
@@ -66,7 +73,8 @@ private fun PreviewMVBotSheet() {
             title = "Pengeluaran",
             categories = MoneyVerseDb.initCategories(context).map { it.toDomain() },
             onItemClick = {},
-            isShowName = true
+            isShowName = true,
+            onCloseClick = {}
         )
     }
 }

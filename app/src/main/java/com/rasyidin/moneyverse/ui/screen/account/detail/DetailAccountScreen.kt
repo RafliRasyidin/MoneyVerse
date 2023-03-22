@@ -62,8 +62,17 @@ fun DetailAccountScreen(
             SheetContentCategories(
                 title = stringResource(id = R.string.pilih_icon),
                 categories = uiState.categories,
-                onItemClick = onIconSelected,
-                isShowName = false
+                onItemClick = {
+                    coroutineScope.launch {
+                        modalSheetState.hide()
+                    }
+                },
+                isShowName = false,
+                onCloseClick = {
+                    coroutineScope.launch {
+                        modalSheetState.hide()
+                    }
+                }
             )
         },
         content = {
