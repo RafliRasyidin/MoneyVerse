@@ -116,7 +116,8 @@ fun DetailAccountScreen(
                         .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
                     onClick = {
                         viewModel.onEvent(DetailAccountEvent.SaveAccount)
-                    }
+                    },
+                    enabled = viewModel.buttonState
                 ) {
                     Text(
                         text = stringResource(id = R.string.simpan),

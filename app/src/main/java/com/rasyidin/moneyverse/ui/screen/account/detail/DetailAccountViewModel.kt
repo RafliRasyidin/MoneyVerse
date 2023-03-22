@@ -1,7 +1,9 @@
 package com.rasyidin.moneyverse.ui.screen.account.detail
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,6 +33,8 @@ class DetailAccountViewModel @Inject constructor(
     private var _upsertState: Channel<ResultState<Nothing>> = idleChannel()
     val upsertState get() = _upsertState.receiveAsFlow()
 
+    var buttonState by mutableStateOf(false)
+
     private var currentAccountId: Int? = null
 
     init {
@@ -49,6 +53,7 @@ class DetailAccountViewModel @Inject constructor(
                                     iconPath = account.iconPath,
                                     bgColor = account.bgColor
                                 )
+                                setButtonValidation()
                             }
                         }
 
@@ -64,11 +69,24 @@ class DetailAccountViewModel @Inject constructor(
     fun onEvent(event: DetailAccountEvent) {
         when (event) {
             is DetailAccountEvent.OnDescriptionChange -> _uiState.value = uiState.value.copy(desc = event.text)
-            is DetailAccountEvent.OnNameChange -> _uiState.value = uiState.value.copy(name = event.text)
-            is DetailAccountEvent.OnSaldoChange -> _uiState.value = uiState.value.copy(nominal = event.text.toLongOrNull() ?: 0)
+            is DetailAccountEvent.OnNameChange -> {
+                _uiState.value = uiState.value.copy(name = event.text)
+                setButtonValidation()
+            }
+            is DetailAccountEvent.OnSaldoChange -> {
+                _uiState.value = uiState.value.copy(nominal = event.text.toLongOrNull() ?: 0)
+                setButtonValidation()
+            }
             is DetailAccountEvent.OnPickAccountIcon -> _uiState.value = uiState.value.copy(iconPath = event.iconPath, bgColor = event.bgColor)
             is DetailAccountEvent.SaveAccount -> upsertAccount()
         }
+    }
+
+    private fun setButtonValidation() {
+        val saldo = uiState.value.nominal
+        val isNameNotEmpty = uiState.value.name.isNotEmpty()
+        val isSaldoNotEmpty = saldo != 0L && saldo.toString().isNotEmpty()
+        buttonState = isNameNotEmpty && isSaldoNotEmpty
     }
 
     private fun upsertAccount() {
