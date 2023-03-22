@@ -55,7 +55,7 @@ fun MVTextField(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = ColorGray200, MaterialTheme.shapes.small),
+                .background(color = ColorGray200, MaterialTheme.shapes.medium),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AnimatedVisibility(visible = prefix.isNotEmpty()) {

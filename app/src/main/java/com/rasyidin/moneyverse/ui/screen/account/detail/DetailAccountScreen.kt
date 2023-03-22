@@ -194,6 +194,7 @@ fun TextFieldAccount(
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Next,
             value = name,
+            hint = stringResource(id = R.string.cash),
             onKeyboardActionClick = {
                 focusManager.moveFocus(FocusDirection.Next)
             }
@@ -205,6 +206,7 @@ fun TextFieldAccount(
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Next,
             value = desc,
+            hint = stringResource(id = R.string.hint_desc_akun),
             onKeyboardActionClick = {
                 focusManager.moveFocus(FocusDirection.Next)
             }
