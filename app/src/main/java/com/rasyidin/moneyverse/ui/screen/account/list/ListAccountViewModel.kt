@@ -19,11 +19,6 @@ class ListAccountViewModel @Inject constructor(private val useCase: AccountUseCa
     private val _uiState = mutableStateOf(AccountUi())
     val uiState: State<AccountUi> = _uiState
 
-    init {
-        getTotalSaldo()
-        getAccounts()
-    }
-
     fun getTotalSaldo() {
         viewModelScope.launch {
             useCase.getTotalSaldo().collect { result ->

@@ -6,6 +6,7 @@ import android.view.View
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.viewModels
 import com.rasyidin.moneyverse.databinding.FragmentHomeBinding
 import com.rasyidin.moneyverse.ui.component.FragmentBinding
 import com.rasyidin.moneyverse.ui.screen.account.AccountActivity
@@ -15,10 +16,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : FragmentBinding<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
+    private val viewModel by viewModels<HomeViewModel>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setContentView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getTotalSaldo()
     }
 
     private fun setContentView() {

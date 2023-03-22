@@ -2,6 +2,7 @@ package com.rasyidin.moneyverse.ui.screen.account.list
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.rasyidin.moneyverse.databinding.FragmentListAccountBinding
 import com.rasyidin.moneyverse.ui.component.FragmentBinding
@@ -12,12 +13,19 @@ import dagger.hilt.android.AndroidEntryPoint
 class ListAccountFragment :
     FragmentBinding<FragmentListAccountBinding>(FragmentListAccountBinding::inflate) {
 
+    private val viewModel by viewModels<ListAccountViewModel>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setContentView()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getTotalSaldo()
+        viewModel.getAccounts()
+    }
 
     private fun setContentView() {
         binding.composeView.setContent {

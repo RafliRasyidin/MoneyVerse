@@ -17,11 +17,7 @@ class HomeViewModel @Inject constructor(private val useCase: HomeUseCase): ViewM
     private var _totalSaldoState: MutableStateFlow<ResultState<Long>> = idleStateFlow()
     val totalSaldo get() = _totalSaldoState.asStateFlow()
 
-    init {
-        getTotalSaldo()
-    }
-
-    private fun getTotalSaldo() {
+    fun getTotalSaldo() {
         viewModelScope.launch {
             useCase.getTotalSaldo().collect { resultState ->
                 _totalSaldoState.value = resultState
