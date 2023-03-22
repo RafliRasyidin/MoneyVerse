@@ -24,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
-import com.rasyidin.moneyverse.domain.model.category.Category
 import com.rasyidin.moneyverse.ui.component.MVTextField
 import com.rasyidin.moneyverse.ui.component.MVToolbar
 import com.rasyidin.moneyverse.ui.component.SheetContentCategories
@@ -38,12 +37,7 @@ import kotlinx.coroutines.launch
 fun DetailAccountScreen(
     modifier: Modifier = Modifier,
     viewModel: DetailAccountViewModel = hiltViewModel(),
-    onNameChange: (String) -> Unit,
-    onDescChange: (String) -> Unit,
-    onNominalChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    onSaveClick: () -> Unit,
-    onIconSelected: (Category) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val uiState = viewModel.uiState.value
@@ -51,9 +45,6 @@ fun DetailAccountScreen(
         initialValue = ModalBottomSheetValue.Hidden,
         confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
     )
-    var name by remember { mutableStateOf(uiState.account.name) }
-    var desc by remember { mutableStateOf(uiState.account.desc ?: "") }
-    var nominal by remember { mutableStateOf((uiState.account.nominal).toString()) }
 
     ModalBottomSheetLayout(
         sheetState = modalSheetState,
@@ -62,9 +53,15 @@ fun DetailAccountScreen(
             SheetContentCategories(
                 title = stringResource(id = R.string.pilih_icon),
                 categories = uiState.categories,
-                onItemClick = {
+                onItemClick = { category ->
                     coroutineScope.launch {
                         modalSheetState.hide()
+                        viewModel.onEvent(
+                            DetailAccountEvent.OnPickAccountIcon(
+                                category.iconPath,
+                                category.bgColor
+                            )
+                        )
                     }
                 },
                 isShowName = false,
@@ -85,8 +82,8 @@ fun DetailAccountScreen(
                     onBackClick = onBackClick
                 )
                 PickAddAccountIcon(
-                    iconPath = uiState.account.iconPath,
-                    bgColor = uiState.account.bgColor,
+                    iconPath = uiState.iconPath,
+                    bgColor = uiState.bgColor,
                     onClick = {
                         coroutineScope.launch {
                             if (modalSheetState.isVisible) {
@@ -99,20 +96,17 @@ fun DetailAccountScreen(
                 )
                 TextFieldAccount(
                     modifier = Modifier.padding(horizontal = 12.dp),
-                    name = name,
-                    desc = desc,
-                    nominal = nominal,
+                    name = uiState.name,
+                    desc = uiState.desc ?: "",
+                    nominal = uiState.nominal.toString(),
                     onNameChange = { newText ->
-                        name = newText
-                        onNameChange.invoke(name)
+                        viewModel.onEvent(DetailAccountEvent.OnNameChange(newText))
                     },
                     onDescChange = { newText ->
-                        desc = newText
-                        onDescChange.invoke(desc)
+                        viewModel.onEvent(DetailAccountEvent.OnDescriptionChange(newText))
                     },
                     onNominalChange = { newText ->
-                        nominal = newText
-                        onNominalChange.invoke(nominal)
+                        viewModel.onEvent(DetailAccountEvent.OnSaldoChange(newText))
                     }
                 )
                 Spacer(modifier = Modifier.weight(1F))
@@ -120,7 +114,9 @@ fun DetailAccountScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
-                    onClick = onSaveClick
+                    onClick = {
+                        viewModel.onEvent(DetailAccountEvent.SaveAccount)
+                    }
                 ) {
                     Text(
                         text = stringResource(id = R.string.simpan),
@@ -142,8 +138,6 @@ fun PickAddAccountIcon(
     bgColor: Int? = null,
     onClick: () -> Unit
 ) {
-    val background by remember { mutableStateOf(bgColor) }
-    val icon by remember { mutableStateOf(iconPath) }
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -152,12 +146,12 @@ fun PickAddAccountIcon(
     ) {
         Box(
             modifier = Modifier
-                .background(Color(background ?: ColorBgGreen.toArgb()), shape = CircleShape)
+                .background(Color(bgColor ?: ColorBgGreen.toArgb()), shape = CircleShape)
                 .padding(36.dp)
         ) {
             Image(
                 modifier = Modifier.size(48.dp),
-                painter = painterResource(id = icon ?: R.drawable.ic_cash),
+                painter = painterResource(id = iconPath ?: R.drawable.ic_cash),
                 contentDescription = null
             )
         }
@@ -230,13 +224,6 @@ fun TextFieldAccount(
 @Composable
 private fun PreviewDetailAccountScreen() {
     MoneyVerseTheme {
-        DetailAccountScreen(
-            onNominalChange = {},
-            onDescChange = {},
-            onNameChange = {},
-            onBackClick = {},
-            onSaveClick = {},
-            onIconSelected = {}
-        )
+        DetailAccountScreen(onBackClick = {})
     }
 }

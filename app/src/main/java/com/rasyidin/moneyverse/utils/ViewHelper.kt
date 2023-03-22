@@ -1,5 +1,7 @@
 package com.rasyidin.moneyverse.utils
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
@@ -8,6 +10,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 
 fun Long.toCurrency(): String {
     return String.format("%,d", this)
@@ -49,4 +52,20 @@ fun Modifier.shadow(
             paint
         )
     }
+}
+
+fun Context.showShortToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Fragment.showShortToast(message: String) {
+    Toast.makeText(this.requireActivity(), message, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.showLongToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+fun Fragment.showLongToast(message: String) {
+    Toast.makeText(this.requireActivity(), message, Toast.LENGTH_LONG).show()
 }
