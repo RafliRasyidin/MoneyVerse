@@ -80,7 +80,7 @@ fun DetailAccountScreen(
             ) {
                 MVToolbar(
                     modifier = Modifier.padding(horizontal = 12.dp),
-                    title = stringResource(id = R.string.tambah_akun),
+                    title = stringResource(id = if (viewModel.currentAccountId != null) R.string.edit_akun else R.string.tambah_akun),
                     onBackClick = onBackClick,
                     iconEnd = if (viewModel.currentAccountId != null) R.drawable.ic_delete else null,
                     onIconEndClick = {
@@ -167,13 +167,13 @@ fun PickAddAccountIcon(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick.invoke() },
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
             modifier = Modifier
                 .background(Color(bgColor ?: ColorBgGreen.toArgb()), shape = CircleShape)
+                .clickable { onClick.invoke() }
                 .padding(36.dp)
         ) {
             Image(
@@ -184,6 +184,7 @@ fun PickAddAccountIcon(
         }
         Spacer(modifier = Modifier.height(12.dp))
         Text(
+            modifier = Modifier.clickable { onClick.invoke() },
             text = stringResource(id = R.string.pilih_icon),
             style = MaterialTheme.typography.h6
         )

@@ -45,4 +45,5 @@
     <string name="desc_hapus_akun">Apakah anda yakin ingin menghapus akun ini?</string>
     <string name="ya">Ya</string>
     <string name="batalkan">Batalkan</string>
+    <string name="edit_akun">Edit Akun</string>
 </resources>
