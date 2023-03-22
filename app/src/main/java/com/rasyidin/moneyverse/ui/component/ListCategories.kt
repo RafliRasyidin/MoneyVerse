@@ -1,12 +1,12 @@
 package com.rasyidin.moneyverse.ui.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -64,7 +64,7 @@ fun ItemCategory(
                 .height(IntrinsicSize.Max),
             contentAlignment = Alignment.Center
         ) {
-            Icon(
+            Image(
                 modifier = Modifier.size(32.dp),
                 painter = painterResource(id = item.iconPath),
                 contentDescription = null
