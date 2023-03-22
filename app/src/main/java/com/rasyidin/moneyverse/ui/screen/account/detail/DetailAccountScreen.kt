@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
+import com.rasyidin.moneyverse.ui.component.MVDialogAlert
 import com.rasyidin.moneyverse.ui.component.MVTextField
 import com.rasyidin.moneyverse.ui.component.MVToolbar
 import com.rasyidin.moneyverse.ui.component.SheetContentCategories
@@ -45,6 +46,7 @@ fun DetailAccountScreen(
         initialValue = ModalBottomSheetValue.Hidden,
         confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
     )
+    var showDialog by remember { mutableStateOf(false) }
 
     ModalBottomSheetLayout(
         sheetState = modalSheetState,
@@ -82,7 +84,7 @@ fun DetailAccountScreen(
                     onBackClick = onBackClick,
                     iconEnd = if (viewModel.currentAccountId != null) R.drawable.ic_delete else null,
                     onIconEndClick = {
-                        viewModel.onEvent(DetailAccountEvent.DeleteAccount)
+                        showDialog = true
                     }
                 )
                 PickAddAccountIcon(
@@ -134,6 +136,25 @@ fun DetailAccountScreen(
         }
     )
 
+    if (showDialog) {
+        MVDialogAlert(
+            title = stringResource(id = R.string.hapus_akun),
+            desc = stringResource(id = R.string.desc_hapus_akun),
+            showDialog = showDialog,
+            positiveText = stringResource(id = R.string.ya),
+            negativeText = stringResource(id = R.string.batalkan),
+            onPositiveClick = {
+                showDialog = false
+                viewModel.onEvent(DetailAccountEvent.DeleteAccount)
+            },
+            onNegativeClick = {
+                showDialog = false
+            },
+            onDismiss = {
+                showDialog = false
+            }
+        )
+    }
 
 }
 
