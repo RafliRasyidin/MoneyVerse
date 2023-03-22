@@ -13,10 +13,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rasyidin.moneyverse.R
+import com.rasyidin.moneyverse.ui.theme.ColorShadow
 
 fun Long.toCurrency(): String {
     return String.format("%,d", this)
@@ -26,12 +26,12 @@ fun String.formatValue(delimiter: Char): String {
     return this.chunked(3).joinToString(delimiter.toString())
 }
 
-fun Modifier.shadow(
-    color: Color = Color.Black,
-    alpha: Float = 1f,
-    cornersRadius: Dp = 0.dp,
-    shadowBlurRadius: Dp = 0.dp,
-    offsetY: Dp = 0.dp,
+fun Modifier.dropShadow(
+    color: Color = ColorShadow,
+    alpha: Float = .1F,
+    cornersRadius: Dp = 8.dp,
+    shadowBlurRadius: Dp = 16.dp,
+    offsetY: Dp = 3.dp,
     offsetX: Dp = 0.dp
 ) = drawBehind {
 

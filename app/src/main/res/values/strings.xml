@@ -50,4 +50,6 @@
     <string name="pengeluaran">Pengeluaran</string>
     <string name="pemasukan">Pemasukan</string>
     <string name="transfer">Transfer</string>
+    <string name="nominal">Nominal</string>
+    <string name="desckripsi_singkat">Deskripsi Singkat</string>
 </resources>

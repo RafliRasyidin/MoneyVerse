@@ -2,6 +2,7 @@ package com.rasyidin.moneyverse.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -37,6 +38,7 @@ fun MVTextField(
     maxLength: Int = Int.MAX_VALUE,
     imeAction: ImeAction = ImeAction.Next,
     @DrawableRes iconEnd: Int? = null,
+    @DrawableRes iconStart: Int? = null,
     onValueChange: (String) -> Unit,
     onKeyboardActionClick: () -> Unit = {},
     onIconEndClick: () -> Unit = {},
@@ -47,17 +49,29 @@ fun MVTextField(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.h5
-        )
-        Spacer(modifier = Modifier.height(12.dp))
+        AnimatedVisibility(visible = label.isNotEmpty()) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.h5
+            )
+        }
+
+        Spacer(modifier = Modifier.height(if (label.isNotEmpty()) 12.dp else 0.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = ColorGray200, MaterialTheme.shapes.medium),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            AnimatedVisibility(visible = iconStart != null) {
+                Image(
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .size(24.dp),
+                    painter = painterResource(id = iconStart!!),
+                    contentDescription = null
+                )
+            }
             AnimatedVisibility(visible = prefix.isNotEmpty()) {
                 Text(
                     modifier = Modifier.padding(start = 12.dp),
@@ -143,7 +157,8 @@ private fun PreviewMVTextField() {
             hint = "Hint",
             value = "",
             prefix = "Rp",
-            onValueChange = {}
+            onValueChange = {},
+            iconStart = R.drawable.ic_calendar
         )
     }
 }

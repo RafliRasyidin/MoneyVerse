@@ -4,6 +4,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.rasyidin.moneyverse.ui.screen.transaction.add.income.IncomeFragment
+import com.rasyidin.moneyverse.ui.screen.transaction.add.outcome.OutcomeFragment
+import com.rasyidin.moneyverse.ui.screen.transaction.add.transfer.TransferFragment
 
 class TransactionPagerAdapter(
     fragmentManager: FragmentManager,

@@ -22,8 +22,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.model.account.Account
 import com.rasyidin.moneyverse.ui.component.MVToolbar
-import com.rasyidin.moneyverse.ui.theme.*
-import com.rasyidin.moneyverse.utils.shadow
+import com.rasyidin.moneyverse.ui.theme.ColorBgGreen
+import com.rasyidin.moneyverse.ui.theme.ColorGray500
+import com.rasyidin.moneyverse.ui.theme.ColorWhite
+import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
+import com.rasyidin.moneyverse.utils.dropShadow
 import com.rasyidin.moneyverse.utils.toCurrency
 
 @Composable
@@ -115,12 +118,7 @@ fun ItemAccount(
             .fillMaxWidth()
             .height(intrinsicSize = IntrinsicSize.Max)
             .padding(horizontal = 12.dp, vertical = 12.dp)
-            .shadow(
-                color = ColorShadow,
-                alpha = .1F,
-                shadowBlurRadius = 16.dp,
-                cornersRadius = 16.dp
-            ),
+            .dropShadow(),
         shape = MaterialTheme.shapes.small,
         elevation = 0.dp
     ) {
