@@ -5,7 +5,9 @@ import android.view.View
 import com.rasyidin.moneyverse.databinding.FragmentOutcomeBinding
 import com.rasyidin.moneyverse.ui.component.FragmentBinding
 import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OutcomeFragment : FragmentBinding<FragmentOutcomeBinding>(FragmentOutcomeBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

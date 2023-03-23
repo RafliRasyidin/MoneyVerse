@@ -52,4 +52,6 @@
     <string name="transfer">Transfer</string>
     <string name="nominal">Nominal</string>
     <string name="desckripsi_singkat">Deskripsi Singkat</string>
+    <string name="pilih_kategori">Pilih Kategori</string>
+    <string name="pilih_akun">Pilih Akun</string>
 </resources>
