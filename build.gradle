@@ -2,22 +2,31 @@
 buildscript {
     ext {
         // UI
-        appCompatVersion = '1.4.2'
-        materialVersion = '1.8.0-rc01'
+        appCompatVersion = '1.6.1'
+        materialVersion = '1.8.0'
         constraintLayoutVersion = '2.1.4'
         lottieVersion = '5.2.0'
         glideVersion = '4.14.2'
         navigationVersion = '2.5.3'
         circleImageVersion = "3.1.0"
+        composeActivityVersion = '1.7.0'
+        composeUiVersion = '1.4.0'
+        composeMaterialVersion = '1.4.0'
+        composeConstraintLayoutVersion = '1.0.1'
+        composeCalendarVersion = '2.2.0'
 
         // Core
+        androidCoreVersion = '1.9.0'
         hiltVersion = '2.44.2'
+        hiltCompilerVersion = '1.0.0'
+        hiltComposeVersion = '1.0.0'
         pagingVersion = '3.1.1'
-        lifecycleVersion = '2.6.0'
+        lifecycleVersion = '2.6.1'
         retrofitVersion = '2.9.0'
         okhttpVersion = '4.9.3'
-        roomVersion = '2.5.0'
+        roomVersion = '2.5.1'
         coroutinesVersion = '1.6.4'
+        composeCompilerVersion = '1.4.4'
     }
 
     repositories {
