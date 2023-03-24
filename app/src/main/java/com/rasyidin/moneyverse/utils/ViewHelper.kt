@@ -38,7 +38,7 @@ fun String.formatValue(delimiter: Char): String {
 
 fun Modifier.dropShadow(
     color: Color = ColorShadow,
-    alpha: Float = .1F,
+    alpha: Float = .06F,
     cornersRadius: Dp = 8.dp,
     shadowBlurRadius: Dp = 16.dp,
     offsetY: Dp = 3.dp,

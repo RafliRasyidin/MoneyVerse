@@ -348,7 +348,9 @@ fun TextFieldDesc(
     onDescChange: (String) -> Unit
 ) {
     MVTextField(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .dropShadow(),
         value = desc,
         hint = stringResource(id = R.string.desckripsi_singkat),
         iconStart = R.drawable.ic_edit,
