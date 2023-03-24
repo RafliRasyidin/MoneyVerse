@@ -82,8 +82,8 @@ fun MVCalendar(
                     onClick = { selectedDay ->
                         selection = selectedDay
                         val date = selection!!.date
-                        val dayOfMonth = date.dayOfMonth
-                        val month = date.monthValue
+                        val dayOfMonth = String.format("%02d", date.dayOfMonth)
+                        val month = String.format("%02d", date.monthValue)
                         val year = date.year
                         val times = getCurrentTime()
                         val selectedDate = "$year-$month-$dayOfMonth $times"
