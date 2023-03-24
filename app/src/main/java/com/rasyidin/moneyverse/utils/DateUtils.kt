@@ -2,6 +2,10 @@ package com.rasyidin.moneyverse.utils
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
+import java.time.DayOfWeek
+import java.time.Month
+import java.time.YearMonth
+import java.time.format.TextStyle
 import java.util.*
 
 object DateUtils {
@@ -38,6 +42,21 @@ object DateUtils {
         } catch (e: Exception) {
             e.printStackTrace()
             this
+        }
+    }
+
+    fun YearMonth.displayText(short: Boolean = false): String {
+        return "${month.displayText(short = short)} $year"
+    }
+
+    fun Month.displayText(short: Boolean = true): String {
+        val style = if (short) TextStyle.SHORT else TextStyle.FULL
+        return getDisplayName(style, Locale.getDefault())
+    }
+
+    fun DayOfWeek.displayText(dayStyle: TextStyle = TextStyle.SHORT, uppercase: Boolean = false): String {
+        return getDisplayName(dayStyle, Locale.getDefault()).let { value ->
+            if (uppercase) value.uppercase() else value
         }
     }
 }

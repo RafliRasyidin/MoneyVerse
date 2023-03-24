@@ -44,7 +44,7 @@ fun DetailAccountScreen(
     val uiState = viewModel.uiState.value
     val modalSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
-        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
+        confirmValueChange = { it != ModalBottomSheetValue.HalfExpanded }
     )
     var showDialog by remember { mutableStateOf(false) }
 
@@ -95,7 +95,7 @@ fun DetailAccountScreen(
                             if (modalSheetState.isVisible) {
                                 modalSheetState.hide()
                             } else {
-                                modalSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                                modalSheetState.show()
                             }
                         }
                     }

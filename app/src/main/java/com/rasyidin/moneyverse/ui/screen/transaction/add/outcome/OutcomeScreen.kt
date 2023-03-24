@@ -42,7 +42,8 @@ fun OutcomeScreen(
     val coroutineScope = rememberCoroutineScope()
     val modalSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
-        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
+        confirmValueChange = { it != ModalBottomSheetValue.HalfExpanded },
+        skipHalfExpanded = true
     )
 
     ModalBottomSheetLayout(
@@ -111,7 +112,7 @@ fun OutcomeScreen(
                             if (modalSheetState.isVisible) {
                                 modalSheetState.hide()
                             } else {
-                                modalSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                                modalSheetState.show()
                             }
                         }
                     }

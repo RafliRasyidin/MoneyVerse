@@ -4,19 +4,29 @@ import android.content.Context
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.kizitonwose.calendar.compose.CalendarLayoutInfo
+import com.kizitonwose.calendar.compose.CalendarState
+import com.kizitonwose.calendar.core.CalendarMonth
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.ui.theme.ColorShadow
+import kotlinx.coroutines.flow.filterNotNull
 
 fun Long.toCurrency(): String {
     return String.format("%,d", this)
@@ -58,6 +68,23 @@ fun Modifier.dropShadow(
             paint
         )
     }
+}
+
+fun Modifier.clickable(
+    enabled: Boolean = true,
+    showRipple: Boolean = true,
+    onClickLabel: String? = null,
+    role: Role? = null,
+    onClick: () -> Unit
+): Modifier = composed {
+    clickable(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = if (showRipple) LocalIndication.current else null,
+        enabled = enabled,
+        onClickLabel = onClickLabel,
+        role = role,
+        onClick = onClick
+    )
 }
 
 fun Context.showShortToast(message: String) {
@@ -104,4 +131,33 @@ fun Fragment.showBotNav() {
     botNav.visibility = View.VISIBLE
     fabAdd.visibility = View.VISIBLE
     fabBackground.visibility = View.VISIBLE
+}
+
+@Composable
+fun rememberFirstMostVisibleMonth(
+    state: CalendarState,
+    viewPortPercent: Float = 50F
+): CalendarMonth {
+    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
+    LaunchedEffect(state) {
+        snapshotFlow { state.layoutInfo.firstMostVisibleMonth(viewPortPercent) }
+            .filterNotNull()
+            .collect {
+                month -> visibleMonth.value = month
+            }
+    }
+    return visibleMonth.value
+}
+
+private fun CalendarLayoutInfo.firstMostVisibleMonth(viewPortPercent: Float = 50F): CalendarMonth? {
+    return if (visibleMonthsInfo.isEmpty()) null else {
+        val viewPortSize = (viewportEndOffset + viewportStartOffset) * viewPortPercent / 100F
+        visibleMonthsInfo.firstOrNull { itemInfo ->
+            if (itemInfo.offset < 0) {
+                itemInfo.offset + itemInfo.size >= viewPortSize
+            } else {
+                itemInfo.size - itemInfo.offset >= viewPortSize
+            }
+        }?.month
+    }
 }
