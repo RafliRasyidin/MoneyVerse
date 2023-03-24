@@ -29,7 +29,7 @@ object DateUtils {
             val sdf = SimpleDateFormat(pattern, Locale("IND", "ID"))
             sdf.format(Date().time)
         } catch (e: Exception) {
-            "Time not found"
+            "00:00:00"
         }
     }
 

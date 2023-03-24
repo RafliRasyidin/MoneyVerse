@@ -24,6 +24,7 @@ import com.kizitonwose.calendar.core.DayPosition.*
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.ui.theme.*
 import com.rasyidin.moneyverse.utils.DateUtils.displayText
+import com.rasyidin.moneyverse.utils.DateUtils.getCurrentTime
 import com.rasyidin.moneyverse.utils.clickable
 import com.rasyidin.moneyverse.utils.rememberFirstMostVisibleMonth
 import kotlinx.coroutines.launch
@@ -35,7 +36,7 @@ import java.time.format.TextStyle
 @Composable
 fun MVCalendar(
     modifier: Modifier = Modifier,
-    onSelectedDayClick: (CalendarDay) -> Unit
+    onSelectedDateClick: (String) -> Unit
 ) {
     val today = remember { LocalDate.now() }
     val currentMonth = remember(today) { today.yearMonth }
@@ -53,7 +54,7 @@ fun MVCalendar(
             firstDayOfWeek = daysOfWeek.first()
         )
         val coroutineScope = rememberCoroutineScope()
-        val visibleMonth = rememberFirstMostVisibleMonth(state = state, viewPortPercent = 90F)
+        val visibleMonth = rememberFirstMostVisibleMonth(state = state)
         LaunchedEffect(key1 = visibleMonth) {
             selection = null
         }
@@ -72,6 +73,7 @@ fun MVCalendar(
         )
         HorizontalCalendar(
             state = state,
+            userScrollEnabled = false,
             dayContent = { day ->
                 DayOfMonth(
                     day = day,
@@ -79,7 +81,13 @@ fun MVCalendar(
                     isToday = day.position == MonthDate && day.date == today,
                     onClick = { selectedDay ->
                         selection = selectedDay
-                        onSelectedDayClick.invoke(selection!!)
+                        val date = selection!!.date
+                        val dayOfMonth = date.dayOfMonth
+                        val month = date.monthValue
+                        val year = date.year
+                        val times = getCurrentTime()
+                        val selectedDate = "$year-$month-$dayOfMonth $times"
+                        onSelectedDateClick.invoke(selectedDate)
                     }
                 )
             },
@@ -191,7 +199,7 @@ fun DayOfMonth(
 private fun PreviewMVCalendar() {
     MoneyVerseTheme {
         MVCalendar(
-            onSelectedDayClick = {}
+            onSelectedDateClick = {}
         )
     }
 }

@@ -134,6 +134,7 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
             is OutcomeTransactionEvent.SaveTransaction -> upsertTransaction()
             is OutcomeTransactionEvent.ShowSheetAccounts -> _sheetState.value = SheetOutcomeTransactionEvent.ShowSheetAccounts
             is OutcomeTransactionEvent.ShowSheetCategories -> _sheetState.value = SheetOutcomeTransactionEvent.ShowSheetCategories
+            is OutcomeTransactionEvent.ShowSheetCalendar -> _sheetState.value = SheetOutcomeTransactionEvent.ShowSheetCalendar
             is OutcomeTransactionEvent.HideSheet -> _sheetState.value = SheetOutcomeTransactionEvent.Idle
         }
     }

@@ -9,11 +9,13 @@ sealed class OutcomeTransactionEvent {
     object SaveTransaction: OutcomeTransactionEvent()
     object ShowSheetCategories: OutcomeTransactionEvent()
     object ShowSheetAccounts: OutcomeTransactionEvent()
+    object ShowSheetCalendar: OutcomeTransactionEvent()
     object HideSheet: OutcomeTransactionEvent()
 }
 
 sealed class SheetOutcomeTransactionEvent {
     object ShowSheetCategories: SheetOutcomeTransactionEvent()
     object ShowSheetAccounts: SheetOutcomeTransactionEvent()
+    object ShowSheetCalendar: SheetOutcomeTransactionEvent()
     object Idle: SheetOutcomeTransactionEvent()
 }

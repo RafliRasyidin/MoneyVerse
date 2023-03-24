@@ -20,11 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
-import com.rasyidin.moneyverse.ui.component.MVTextField
-import com.rasyidin.moneyverse.ui.component.MVTextFieldNominal
-import com.rasyidin.moneyverse.ui.component.SheetContentCategories
-import com.rasyidin.moneyverse.ui.screen.transaction.add.outcome.SheetOutcomeTransactionEvent.ShowSheetAccounts
-import com.rasyidin.moneyverse.ui.screen.transaction.add.outcome.SheetOutcomeTransactionEvent.ShowSheetCategories
+import com.rasyidin.moneyverse.ui.component.*
+import com.rasyidin.moneyverse.ui.screen.transaction.add.outcome.SheetOutcomeTransactionEvent.*
 import com.rasyidin.moneyverse.ui.theme.ColorBgBlue
 import com.rasyidin.moneyverse.ui.theme.ColorGray500
 import com.rasyidin.moneyverse.ui.theme.ColorWhite
@@ -50,44 +47,64 @@ fun OutcomeScreen(
         sheetState = modalSheetState,
         sheetShape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
         sheetContent = {
-            SheetContentCategories(
-                title = if (viewModel.sheetState.value == ShowSheetCategories) stringResource(
-                    id = R.string.pilih_kategori
-                ) else stringResource(id = R.string.pilih_akun),
-                categories = if (viewModel.sheetState.value == ShowSheetCategories) uiState.categories else uiState.accounts,
-                isShowName = true,
-                onItemClick = { category ->
-                    coroutineScope.launch {
-                        if (viewModel.sheetState.value == ShowSheetAccounts) {
-                            viewModel.onEvent(
-                                OutcomeTransactionEvent.OnSelectAccount(
-                                    id = category.id,
-                                    iconPath = category.iconPath,
-                                    bgColor = category.bgColor,
-                                    name = category.name
-                                )
-                            )
-                        } else {
-                            viewModel.onEvent(
-                                OutcomeTransactionEvent.OnSelectCategory(
-                                    id = category.id,
-                                    iconPath = category.iconPath,
-                                    bgColor = category.bgColor,
-                                    name = category.name
-                                )
-                            )
+            when (viewModel.sheetState.value) {
+                Idle -> {}
+                ShowSheetAccounts, ShowSheetCategories -> {
+                    SheetContentCategories(
+                        title = if (viewModel.sheetState.value == ShowSheetCategories) stringResource(
+                            id = R.string.pilih_kategori
+                        ) else stringResource(id = R.string.pilih_akun),
+                        categories = when (viewModel.sheetState.value) {
+                            ShowSheetCategories -> uiState.categories
+                            ShowSheetAccounts -> uiState.accounts
+                            else -> emptyList()
+                        },
+                        isShowName = true,
+                        onItemClick = { category ->
+                            coroutineScope.launch {
+                                if (viewModel.sheetState.value == ShowSheetAccounts) {
+                                    viewModel.onEvent(
+                                        OutcomeTransactionEvent.OnSelectAccount(
+                                            id = category.id,
+                                            iconPath = category.iconPath,
+                                            bgColor = category.bgColor,
+                                            name = category.name
+                                        )
+                                    )
+                                } else {
+                                    viewModel.onEvent(
+                                        OutcomeTransactionEvent.OnSelectCategory(
+                                            id = category.id,
+                                            iconPath = category.iconPath,
+                                            bgColor = category.bgColor,
+                                            name = category.name
+                                        )
+                                    )
+                                }
+                                modalSheetState.hide()
+                                viewModel.onEvent(OutcomeTransactionEvent.HideSheet)
+                            }
+                        },
+                        onCloseClick = {
+                            coroutineScope.launch {
+                                modalSheetState.hide()
+                                viewModel.onEvent(OutcomeTransactionEvent.HideSheet)
+                            }
                         }
-                        modalSheetState.hide()
-                        viewModel.onEvent(OutcomeTransactionEvent.HideSheet)
-                    }
-                },
-                onCloseClick = {
-                    coroutineScope.launch {
-                        modalSheetState.hide()
-                        viewModel.onEvent(OutcomeTransactionEvent.HideSheet)
-                    }
+                    )
                 }
-            )
+                ShowSheetCalendar -> {
+                    SheetContentCalendar(
+                        onSelectedDateClick = { value ->
+                            coroutineScope.launch {
+                                modalSheetState.hide()
+                                viewModel.onEvent(OutcomeTransactionEvent.OnSelectDate(value))
+                            }
+                        }
+                    )
+                }
+            }
+
         },
         content = {
             Column(
@@ -137,7 +154,14 @@ fun OutcomeScreen(
                 CardCalendar(
                     date = uiState.date.formatDate(),
                     onClick = {
-
+                        viewModel.onEvent(OutcomeTransactionEvent.ShowSheetCalendar)
+                        coroutineScope.launch {
+                            if (modalSheetState.isVisible) {
+                                modalSheetState.hide()
+                            } else {
+                                modalSheetState.show()
+                            }
+                        }
                     }
                 )
                 Spacer(modifier = Modifier.height(18.dp))
@@ -194,12 +218,12 @@ fun CardCategory(
         ) {
             Box(
                 modifier = Modifier
-                    .background(Color(bgColor), shape = MaterialTheme.shapes.small)
+                    .background(Color(if (iconPath == -1) ColorBgBlue.toArgb() else bgColor), shape = MaterialTheme.shapes.small)
                     .padding(4.dp)
             ) {
                 Image(
                     modifier = Modifier.size(24.dp),
-                    painter = painterResource(id = iconPath),
+                    painter = painterResource(id = if (iconPath == -1) R.drawable.ic_tagihan else iconPath),
                     contentDescription = null
                 )
             }
