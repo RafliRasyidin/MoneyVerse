@@ -27,10 +27,10 @@ data class TransactionEntity(
     var categoryId: Int,
 
     @ColumnInfo("sumberAkunId")
-    var sourceAccountId: Int,
+    var fromAccountId: Int,
 
     @ColumnInfo("tujuanAkunId")
-    var destinationAccountId: Int? = null,
+    var toAccountId: Int? = null,
 ) {
     fun toDomain() = Transaction(
         id = id,
@@ -39,7 +39,7 @@ data class TransactionEntity(
         notes = notes,
         transactionType = transactionType,
         categoryId = categoryId,
-        sourceAccountId = sourceAccountId,
-        destinationAccountId = destinationAccountId
+        fromAccountId = fromAccountId,
+        toAccountId = toAccountId
     )
 }

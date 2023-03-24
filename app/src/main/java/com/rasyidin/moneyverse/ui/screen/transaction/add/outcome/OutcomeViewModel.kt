@@ -38,7 +38,7 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
         getCategories()
     }
 
-    fun getListAccounts() {
+    private fun getListAccounts() {
         viewModelScope.launch {
             useCase.getListAccount().collect { result ->
                 result.onSuccess { accounts ->
@@ -69,12 +69,11 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
         }
     }
 
-    fun getCategories() {
+    private fun getCategories() {
         viewModelScope.launch {
             useCase.getOutcomeCategories().collect { result ->
                 result.onSuccess { categories ->
                     categories?.let {
-                        val category = categories.first()
                         _uiState.value = uiState.value.copy(
                             categories = categories,
                             categoryId = -1,
@@ -148,7 +147,7 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
                     notes = uiState.value.notes,
                     transactionType = TransactionType.OUTCOME,
                     categoryId = uiState.value.categoryId,
-                    sourceAccountId = uiState.value.accountId
+                    fromAccountId = uiState.value.accountId
                 )
             ).collect { result ->
                 _upsertState.send(result)

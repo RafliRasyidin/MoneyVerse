@@ -9,8 +9,8 @@ data class Transaction(
     var notes: String? = null,
     var transactionType: TransactionType = TransactionType.OUTCOME,
     var categoryId: Int,
-    var sourceAccountId: Int,
-    var destinationAccountId: Int? = null,
+    var fromAccountId: Int,
+    var toAccountId: Int? = null,
 ) {
     fun toEntity() = TransactionEntity(
         id = id,
@@ -19,7 +19,7 @@ data class Transaction(
         notes = notes,
         transactionType = transactionType,
         categoryId = categoryId,
-        sourceAccountId = sourceAccountId,
-        destinationAccountId = destinationAccountId
+        fromAccountId = fromAccountId,
+        toAccountId = toAccountId
     )
 }
