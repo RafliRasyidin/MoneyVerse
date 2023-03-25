@@ -24,10 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
-import com.rasyidin.moneyverse.ui.component.MVDialogAlert
-import com.rasyidin.moneyverse.ui.component.MVTextField
-import com.rasyidin.moneyverse.ui.component.MVToolbar
-import com.rasyidin.moneyverse.ui.component.SheetContentCategories
+import com.rasyidin.moneyverse.ui.component.*
 import com.rasyidin.moneyverse.ui.theme.ColorBgGreen
 import com.rasyidin.moneyverse.ui.theme.ColorWhite
 import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
@@ -116,7 +113,7 @@ fun DetailAccountScreen(
                     }
                 )
                 Spacer(modifier = Modifier.weight(1F))
-                Button(
+                MVButtonPrimary(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
@@ -124,7 +121,6 @@ fun DetailAccountScreen(
                         viewModel.onEvent(DetailAccountEvent.SaveAccount)
                     },
                     enabled = viewModel.buttonState,
-                    shape = MaterialTheme.shapes.large
                 ) {
                     Text(
                         text = stringResource(id = R.string.simpan),

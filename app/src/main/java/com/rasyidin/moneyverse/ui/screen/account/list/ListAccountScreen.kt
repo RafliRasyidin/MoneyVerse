@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.model.account.Account
+import com.rasyidin.moneyverse.ui.component.MVButtonPrimary
 import com.rasyidin.moneyverse.ui.component.MVToolbar
 import com.rasyidin.moneyverse.ui.theme.ColorBgGreen
 import com.rasyidin.moneyverse.ui.theme.ColorGray500
@@ -53,12 +54,11 @@ fun ListAccountScreen(
             accounts = uiState.accounts,
             onItemClick = onItemAccountClick
         )
-        Button(
+        MVButtonPrimary(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
             onClick = onAddAccountClick,
-            shape = MaterialTheme.shapes.large
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = null)
             Spacer(modifier = Modifier.width(4.dp))

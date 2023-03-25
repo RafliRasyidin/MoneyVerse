@@ -184,7 +184,7 @@ fun OutcomeScreen(
                     }
                 )
                 Spacer(modifier = Modifier.weight(1F))
-                Button(
+                MVButtonPrimary(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 12.dp),
@@ -192,7 +192,6 @@ fun OutcomeScreen(
                         viewModel.onEvent(OutcomeTransactionEvent.SaveTransaction)
                     },
                     enabled = viewModel.buttonState,
-                    shape = MaterialTheme.shapes.large
                 ) {
                     Text(
                         text = stringResource(id = R.string.simpan),
