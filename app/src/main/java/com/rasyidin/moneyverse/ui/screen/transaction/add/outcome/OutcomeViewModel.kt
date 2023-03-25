@@ -30,8 +30,8 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
 
     var buttonState by mutableStateOf(false)
 
-    private var _sheetState: MutableState<SheetOutcomeTransactionEvent> = mutableStateOf(SheetOutcomeTransactionEvent.Idle)
-    var sheetState: State<SheetOutcomeTransactionEvent> = _sheetState
+    private var _sheetState: MutableState<SheetOutcomeEvent> = mutableStateOf(SheetOutcomeEvent.Idle)
+    var sheetState: State<SheetOutcomeEvent> = _sheetState
 
     init {
         getListAccounts()
@@ -54,13 +54,13 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
                     }
                 }
 
-                result.onEmpty { message ->
+                result.onEmpty {
                     _uiState.value = uiState.value.copy(
                         accounts = emptyList()
                     )
                 }
 
-                result.onFailure { throwable, message ->
+                result.onFailure { _, message ->
                     _uiState.value = uiState.value.copy(
                         errorMessage = message
                     )
@@ -84,7 +84,7 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
                     }
                 }
 
-                result.onEmpty { _ ->
+                result.onEmpty {
                     _uiState.value = uiState.value.copy(
                         categories = emptyList()
                     )
@@ -99,14 +99,14 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
         }
     }
 
-    fun onEvent(event: OutcomeTransactionEvent) {
+    fun onEvent(event: OutcomeEvent) {
         when (event) {
-            is OutcomeTransactionEvent.OnNominalChange -> {
+            is OutcomeEvent.OnNominalChange -> {
                 _uiState.value = uiState.value.copy(nominal = event.text.toLongOrNull() ?: 0)
                 setButtonValidation()
             }
-            is OutcomeTransactionEvent.OnNotesChange -> _uiState.value = uiState.value.copy(notes = event.text)
-            is OutcomeTransactionEvent.OnSelectAccount -> {
+            is OutcomeEvent.OnNotesChange -> _uiState.value = uiState.value.copy(notes = event.text)
+            is OutcomeEvent.OnSelectAccount -> {
                 _uiState.value = uiState.value.copy(
                     accountId = event.id,
                     accountIconPath = event.iconPath,
@@ -115,7 +115,7 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
                 )
                 setButtonValidation()
             }
-            is OutcomeTransactionEvent.OnSelectCategory -> {
+            is OutcomeEvent.OnSelectCategory -> {
                 _uiState.value = uiState.value.copy(
                     categoryId = event.id,
                     categoryIconPath = event.iconPath,
@@ -124,17 +124,17 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
                 )
                 setButtonValidation()
             }
-            is OutcomeTransactionEvent.OnSelectDate -> {
+            is OutcomeEvent.OnSelectDate -> {
                 _uiState.value = uiState.value.copy(
                     date = event.text
                 )
                 setButtonValidation()
             }
-            is OutcomeTransactionEvent.SaveTransaction -> upsertTransaction()
-            is OutcomeTransactionEvent.ShowSheetAccounts -> _sheetState.value = SheetOutcomeTransactionEvent.ShowSheetAccounts
-            is OutcomeTransactionEvent.ShowSheetCategories -> _sheetState.value = SheetOutcomeTransactionEvent.ShowSheetCategories
-            is OutcomeTransactionEvent.ShowSheetCalendar -> _sheetState.value = SheetOutcomeTransactionEvent.ShowSheetCalendar
-            is OutcomeTransactionEvent.HideSheet -> _sheetState.value = SheetOutcomeTransactionEvent.Idle
+            is OutcomeEvent.Save -> upsertTransaction()
+            is OutcomeEvent.ShowSheetAccounts -> _sheetState.value = SheetOutcomeEvent.ShowSheetAccounts
+            is OutcomeEvent.ShowSheetCategories -> _sheetState.value = SheetOutcomeEvent.ShowSheetCategories
+            is OutcomeEvent.ShowSheetCalendar -> _sheetState.value = SheetOutcomeEvent.ShowSheetCalendar
+            is OutcomeEvent.HideSheet -> _sheetState.value = SheetOutcomeEvent.Idle
         }
     }
 

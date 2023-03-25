@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.ui.component.*
-import com.rasyidin.moneyverse.ui.screen.transaction.add.outcome.SheetOutcomeTransactionEvent.*
+import com.rasyidin.moneyverse.ui.screen.transaction.add.outcome.SheetOutcomeEvent.*
 import com.rasyidin.moneyverse.ui.theme.ColorBgBlue
 import com.rasyidin.moneyverse.ui.theme.ColorGray500
 import com.rasyidin.moneyverse.ui.theme.ColorWhite
@@ -70,7 +70,7 @@ fun OutcomeScreen(
                             coroutineScope.launch {
                                 if (viewModel.sheetState.value == ShowSheetAccounts) {
                                     viewModel.onEvent(
-                                        OutcomeTransactionEvent.OnSelectAccount(
+                                        OutcomeEvent.OnSelectAccount(
                                             id = category.id,
                                             iconPath = category.iconPath,
                                             bgColor = category.bgColor,
@@ -79,7 +79,7 @@ fun OutcomeScreen(
                                     )
                                 } else {
                                     viewModel.onEvent(
-                                        OutcomeTransactionEvent.OnSelectCategory(
+                                        OutcomeEvent.OnSelectCategory(
                                             id = category.id,
                                             iconPath = category.iconPath,
                                             bgColor = category.bgColor,
@@ -88,13 +88,13 @@ fun OutcomeScreen(
                                     )
                                 }
                                 modalSheetState.hide()
-                                viewModel.onEvent(OutcomeTransactionEvent.HideSheet)
+                                viewModel.onEvent(OutcomeEvent.HideSheet)
                             }
                         },
                         onCloseClick = {
                             coroutineScope.launch {
                                 modalSheetState.hide()
-                                viewModel.onEvent(OutcomeTransactionEvent.HideSheet)
+                                viewModel.onEvent(OutcomeEvent.HideSheet)
                             }
                         }
                     )
@@ -104,7 +104,7 @@ fun OutcomeScreen(
                         onSelectedDateClick = { value ->
                             coroutineScope.launch {
                                 modalSheetState.hide()
-                                viewModel.onEvent(OutcomeTransactionEvent.OnSelectDate(value))
+                                viewModel.onEvent(OutcomeEvent.OnSelectDate(value))
                             }
                         }
                     )
@@ -121,7 +121,7 @@ fun OutcomeScreen(
                 MVTextFieldNominal(
                     nominal = uiState.nominal.toString(),
                     onNominalChange = { newText ->
-                        viewModel.onEvent(OutcomeTransactionEvent.OnNominalChange(newText))
+                        viewModel.onEvent(OutcomeEvent.OnNominalChange(newText))
                     }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
@@ -130,7 +130,7 @@ fun OutcomeScreen(
                     bgColor = uiState.categoryBgColor,
                     iconPath = uiState.categoryIconPath,
                     onClick = {
-                        viewModel.onEvent(OutcomeTransactionEvent.ShowSheetCategories)
+                        viewModel.onEvent(OutcomeEvent.ShowSheetCategories)
                         coroutineScope.launch {
                             if (modalSheetState.isVisible) {
                                 modalSheetState.hide()
@@ -148,7 +148,7 @@ fun OutcomeScreen(
                     bgColor = uiState.accountBgColor,
                     iconPath = uiState.accountIconPath,
                     onClick = {
-                        viewModel.onEvent(OutcomeTransactionEvent.ShowSheetAccounts)
+                        viewModel.onEvent(OutcomeEvent.ShowSheetAccounts)
                         coroutineScope.launch {
                             if (modalSheetState.isVisible) {
                                 modalSheetState.hide()
@@ -164,7 +164,7 @@ fun OutcomeScreen(
                 CardCalendar(
                     date = uiState.date.formatDate(),
                     onClick = {
-                        viewModel.onEvent(OutcomeTransactionEvent.ShowSheetCalendar)
+                        viewModel.onEvent(OutcomeEvent.ShowSheetCalendar)
                         coroutineScope.launch {
                             if (modalSheetState.isVisible) {
                                 modalSheetState.hide()
@@ -180,7 +180,7 @@ fun OutcomeScreen(
                 TextFieldDesc(
                     desc = uiState.notes,
                     onDescChange = { newText ->
-                        viewModel.onEvent(OutcomeTransactionEvent.OnNotesChange(newText))
+                        viewModel.onEvent(OutcomeEvent.OnNotesChange(newText))
                     }
                 )
                 Spacer(modifier = Modifier.weight(1F))
@@ -189,7 +189,7 @@ fun OutcomeScreen(
                         .fillMaxWidth()
                         .padding(vertical = 12.dp),
                     onClick = {
-                        viewModel.onEvent(OutcomeTransactionEvent.SaveTransaction)
+                        viewModel.onEvent(OutcomeEvent.Save)
                     },
                     enabled = viewModel.buttonState,
                 ) {
