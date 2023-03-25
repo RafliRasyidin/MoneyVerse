@@ -6,6 +6,8 @@ import com.rasyidin.moneyverse.data.repository.transaction.TransactionRepository
 import com.rasyidin.moneyverse.domain.usecase.account.*
 import com.rasyidin.moneyverse.domain.usecase.home.HomeUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.AddTransaction
+import com.rasyidin.moneyverse.domain.usecase.transaction.income.GetIncomeCategories
+import com.rasyidin.moneyverse.domain.usecase.transaction.income.IncomeUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.outcome.GetOutcomeCategories
 import com.rasyidin.moneyverse.domain.usecase.transaction.outcome.OutcomeUseCase
 import dagger.Module
@@ -43,7 +45,18 @@ class UseCaseModule {
         accountRepo: AccountRepository
     ): OutcomeUseCase = OutcomeUseCase(
         addTransaction = AddTransaction(transactionRepo),
-        getListAccount = com.rasyidin.moneyverse.domain.usecase.transaction.outcome.GetListAccount(accountRepo),
+        getListAccount = com.rasyidin.moneyverse.domain.usecase.transaction.GetListAccount(accountRepo),
         getOutcomeCategories = GetOutcomeCategories(categoryRepo)
+    )
+
+    @Provides
+    fun providesIncomeUseCase(
+        transactionRepo: TransactionRepository,
+        categoryRepo: CategoryRepository,
+        accountRepo: AccountRepository
+    ): IncomeUseCase = IncomeUseCase(
+        addTransaction = AddTransaction(transactionRepo),
+        getIncomeCategories = GetIncomeCategories(categoryRepo),
+        getListAccount = com.rasyidin.moneyverse.domain.usecase.transaction.GetListAccount(accountRepo)
     )
 }

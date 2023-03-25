@@ -1,10 +1,10 @@
-package com.rasyidin.moneyverse.domain.usecase.transaction.outcome
+package com.rasyidin.moneyverse.domain.usecase.transaction.income
 
 import com.rasyidin.moneyverse.domain.usecase.transaction.AddTransaction
 import com.rasyidin.moneyverse.domain.usecase.transaction.GetListAccount
 
-data class OutcomeUseCase(
+data class IncomeUseCase(
     val addTransaction: AddTransaction,
-    val getListAccount: GetListAccount,
-    val getOutcomeCategories: GetOutcomeCategories
+    val getIncomeCategories: GetIncomeCategories,
+    val getListAccount: GetListAccount
 )

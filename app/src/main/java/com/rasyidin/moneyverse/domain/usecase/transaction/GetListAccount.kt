@@ -1,4 +1,4 @@
-package com.rasyidin.moneyverse.domain.usecase.transaction.outcome
+package com.rasyidin.moneyverse.domain.usecase.transaction
 
 import com.rasyidin.moneyverse.data.repository.account.AccountRepository
 import com.rasyidin.moneyverse.domain.ResultState
