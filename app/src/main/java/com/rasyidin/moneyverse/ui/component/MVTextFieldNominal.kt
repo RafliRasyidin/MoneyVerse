@@ -40,7 +40,7 @@ fun MVTextFieldNominal(
         Text(
             modifier = Modifier.offset(y = (14).dp),
             text = stringResource(id = R.string.nominal),
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.h6,
             color = ColorBlack,
         )
         Row(

@@ -121,6 +121,7 @@ fun IncomeScreen(
                  Spacer(modifier = Modifier.height(20.dp))
                  CardCategory(
                      name = uiState.categoryName,
+                     label =  stringResource(id = R.string.kategori_pemasukan),
                      bgColor = uiState.categoryBgColor,
                      iconPath = uiState.categoryIconPath,
                      onClick = {
@@ -139,6 +140,7 @@ fun IncomeScreen(
                  Spacer(modifier = Modifier.height(18.dp))
                  CardAccount(
                      name = uiState.accountName,
+                     label = stringResource(id = R.string.akun),
                      bgColor = uiState.accountBgColor,
                      iconPath = uiState.accountIconPath,
                      onClick = {

@@ -57,4 +57,8 @@
     <string name="ok">Ok</string>
     <string name="pilih">Pilih</string>
     <string name="kembali">Kembali</string>
+    <string name="tanggal">Tanggal</string>
+    <string name="kategori_pengeluaran">kategori Pengeluaran</string>
+    <string name="kategori_pemasukan">Kategori Pemasukan</string>
+    <string name="akun">Akun</string>
 </resources>

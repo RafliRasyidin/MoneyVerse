@@ -19,7 +19,8 @@
         <activity
             android:name=".ui.screen.home.HomeActivity"
             android:exported="true"
-            android:theme="@style/Theme.MoneyVerse.NoActionBar"/>
+            android:theme="@style/Theme.MoneyVerse.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ui.screen.splash.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.MoneyVerse.Fullscreen"
