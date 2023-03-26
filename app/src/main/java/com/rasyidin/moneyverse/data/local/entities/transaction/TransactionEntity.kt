@@ -24,7 +24,7 @@ data class TransactionEntity(
     var transactionType: TransactionType = TransactionType.OUTCOME,
 
     @ColumnInfo("categoryId")
-    var categoryId: Int,
+    var categoryId: Int? = null,
 
     @ColumnInfo("sumberAkunId")
     var fromAccountId: Int,

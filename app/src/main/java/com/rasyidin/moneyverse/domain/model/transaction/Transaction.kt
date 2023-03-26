@@ -8,7 +8,7 @@ data class Transaction(
     var createdAt: String,
     var notes: String? = null,
     var transactionType: TransactionType = TransactionType.OUTCOME,
-    var categoryId: Int,
+    var categoryId: Int? = null,
     var fromAccountId: Int,
     var toAccountId: Int? = null,
 ) {

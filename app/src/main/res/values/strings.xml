@@ -61,4 +61,6 @@
     <string name="kategori_pengeluaran">kategori Pengeluaran</string>
     <string name="kategori_pemasukan">Kategori Pemasukan</string>
     <string name="akun">Akun</string>
+    <string name="dari_akun">Dari Akun</string>
+    <string name="ke_akun">Ke Akun</string>
 </resources>
