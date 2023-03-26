@@ -87,7 +87,7 @@ abstract class MoneyVerseDb : RoomDatabase() {
                 add(CategoryEntity(CategoryKey.BUSINESS, ColorBgGreen.toArgb(), R.drawable.ic_bisnis, context.getString(R.string.bisnis), CategoryType.TransactionIncome))
                 add(CategoryEntity(CategoryKey.INVESTMENT, ColorBgLightBlue.toArgb(), R.drawable.ic_investasi_income, context.getString(R.string.investasi), CategoryType.TransactionIncome))
                 add(CategoryEntity(CategoryKey.SALE, ColorBgPink.toArgb(), R.drawable.ic_sale, context.getString(R.string.penjualan), CategoryType.TransactionIncome))
-                add(CategoryEntity(CategoryKey.ETC_TRANSACTION_INCOME, ColorBgRed.toArgb(), R.drawable.ic_lain_lain, context.getString(R.string.lain_lain), CategoryType.TransactionIncome))
+                add(CategoryEntity(CategoryKey.ETC_TRANSACTION_INCOME, ColorBgBlue.toArgb(), R.drawable.ic_lain_lain, context.getString(R.string.lain_lain), CategoryType.TransactionIncome))
             }
             return categories
         }
