@@ -1,6 +1,7 @@
 package com.rasyidin.moneyverse.data.local.entities.transaction
 
 import androidx.room.*
+import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
 
 @Dao
 interface TransactionDao {
@@ -23,4 +24,26 @@ interface TransactionDao {
         debitAccountById(nominal, fromAccountId)
         creditAccountById(nominal, toAccountId)
     }
+
+    @Query("""
+        SELECT 
+            a.id,
+            a.nominal,
+            a.createdAt,
+            a.notes,
+            a.transactionType,
+            a.categoryId,
+            a.sumberAkunId as fromAccountId,
+            a.tujuanAkunId as toAccountId,
+            b.iconPath,
+            b.bgColor,
+            b.name as categoryName,
+            c.name as accountName
+        FROM transaksi a
+        LEFT JOIN category b ON a.categoryId = b.id
+        LEFT JOIN account c ON a.sumberAkunId = c.id
+        ORDER BY a.createdAt DESC
+        LIMIT 3
+    """)
+    suspend fun getRecentFiveTransactions(): List<ItemTransaction>
 }

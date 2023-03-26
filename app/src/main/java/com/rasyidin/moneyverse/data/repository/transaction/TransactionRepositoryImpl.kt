@@ -2,6 +2,7 @@ package com.rasyidin.moneyverse.data.repository.transaction
 
 import com.rasyidin.moneyverse.data.local.entities.transaction.TransactionDao
 import com.rasyidin.moneyverse.data.local.entities.transaction.TransactionEntity
+import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
 import com.rasyidin.moneyverse.domain.model.transaction.TransactionType.*
 import javax.inject.Inject
 
@@ -21,5 +22,9 @@ class TransactionRepositoryImpl @Inject constructor(private val transactionDao: 
                 transactionDao.upsert(transactionEntity)
             }
         }
+    }
+
+    override suspend fun getRecentFiveTransactions(): List<ItemTransaction> {
+        return transactionDao.getRecentFiveTransactions()
     }
 }

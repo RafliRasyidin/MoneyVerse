@@ -6,6 +6,8 @@ import com.rasyidin.moneyverse.data.repository.transaction.TransactionRepository
 import com.rasyidin.moneyverse.domain.usecase.account.*
 import com.rasyidin.moneyverse.domain.usecase.home.HomeUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.AddTransaction
+import com.rasyidin.moneyverse.domain.usecase.home.GetRecentFiveTransactions
+import com.rasyidin.moneyverse.domain.usecase.transaction.history.HistoryTransactionUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.income.GetIncomeCategories
 import com.rasyidin.moneyverse.domain.usecase.transaction.income.IncomeUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.outcome.GetOutcomeCategories
@@ -35,8 +37,12 @@ class UseCaseModule {
     )
 
     @Provides
-    fun providesHomeUseCase(accountRepo: AccountRepository): HomeUseCase = HomeUseCase(
-        getTotalSaldo = GetTotalSaldo(accountRepo)
+    fun providesHomeUseCase(
+        accountRepo: AccountRepository,
+        transactionRepo: TransactionRepository
+    ): HomeUseCase = HomeUseCase(
+        getTotalSaldo = GetTotalSaldo(accountRepo),
+        getRecentFiveTransactions = GetRecentFiveTransactions(transactionRepo)
     )
 
     @Provides
@@ -68,5 +74,12 @@ class UseCaseModule {
     ): TransferUseCase = TransferUseCase(
         addTransaction = AddTransaction(transactionRepo),
         getListAccount = com.rasyidin.moneyverse.domain.usecase.transaction.GetListAccount(accountRepo)
+    )
+
+    @Provides
+    fun providesHistoryTransactionUseCase(
+        transactionRepo: TransactionRepository
+    ): HistoryTransactionUseCase = HistoryTransactionUseCase(
+        getRecentFiveTransactions = GetRecentFiveTransactions(transactionRepo)
     )
 }

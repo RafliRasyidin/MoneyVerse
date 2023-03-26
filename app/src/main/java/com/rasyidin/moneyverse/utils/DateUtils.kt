@@ -1,10 +1,11 @@
 package com.rasyidin.moneyverse.utils
 
 import android.annotation.SuppressLint
+import android.content.Context
+import com.rasyidin.moneyverse.R
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
-import java.time.Month
-import java.time.YearMonth
+import java.time.*
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 
@@ -57,6 +58,27 @@ object DateUtils {
     fun DayOfWeek.displayText(dayStyle: TextStyle = TextStyle.SHORT, uppercase: Boolean = false): String {
         return getDisplayName(dayStyle, Locale.getDefault()).let { value ->
             if (uppercase) value.uppercase() else value
+        }
+    }
+
+    fun String.getRelativeDate(context: Context): String {
+        val formatter = DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)
+        val dateTime = LocalDateTime.parse(this, formatter)
+        val now = LocalDateTime.now()
+        val today = LocalDate.now()
+        val yesterday = today.minusDays(1)
+
+        return when {
+            dateTime.toLocalDate() == today -> {
+                val duration = Duration.between(dateTime, now)
+                when {
+                    duration.toMinutes() < 1 -> context.getString(R.string.baru_saja)
+                    duration.toHours() < 1 -> context.getString(R.string.count_menit_lalu, duration.toMinutes())
+                    else -> context.getString(R.string.hari_ini)
+                }
+            }
+            dateTime.toLocalDate() == yesterday -> context.getString(R.string.kemarin)
+            else -> this.formatDate("dd MMM yyyy")
         }
     }
 }

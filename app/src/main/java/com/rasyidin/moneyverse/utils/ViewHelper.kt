@@ -1,6 +1,8 @@
 package com.rasyidin.moneyverse.utils
 
 import android.content.Context
+import android.text.Html
+import android.text.Spanned
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -147,6 +149,10 @@ fun rememberFirstMostVisibleMonth(
             }
     }
     return visibleMonth.value
+}
+
+fun String.fromHtml(): Spanned? {
+    return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
 }
 
 private fun CalendarLayoutInfo.firstMostVisibleMonth(viewPortPercent: Float = 50F): CalendarMonth? {

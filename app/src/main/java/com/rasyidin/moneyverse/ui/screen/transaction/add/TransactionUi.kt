@@ -61,7 +61,7 @@ fun CardCategory(
                             Color(if (iconPath == -1) ColorBgBlue.toArgb() else bgColor),
                             shape = MaterialTheme.shapes.small
                         )
-                        .padding(4.dp)
+                        .padding(6.dp)
                 ) {
                     Image(
                         modifier = Modifier.size(24.dp),
@@ -127,7 +127,7 @@ fun CardAccount(
                             Color(if (iconPath == -1) ColorBgBlue.toArgb() else bgColor),
                             shape = MaterialTheme.shapes.small
                         )
-                        .padding(4.dp)
+                        .padding(6.dp)
                 ) {
                     Image(
                         modifier = Modifier.size(24.dp),

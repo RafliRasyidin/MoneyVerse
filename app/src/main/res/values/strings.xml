@@ -63,4 +63,12 @@
     <string name="akun">Akun</string>
     <string name="dari_akun">Dari Akun</string>
     <string name="ke_akun">Ke Akun</string>
+    <string name="bullet_symbol"><![CDATA[&#8226;]]></string>
+    <string name="count_menit_lalu">%d menit lalu</string>
+    <string name="baru_saja">Baru saja</string>
+    <string name="count_jam_lalu">%d jam lalu</string>
+    <string name="kemarin">Kemarin</string>
+    <string name="hari_ini">Hari ini</string>
+    <string name="aktivitas_terakhir">Aktivitas Terakhir</string>
+    <string name="lihat_semua">Lihat semua</string>
 </resources>

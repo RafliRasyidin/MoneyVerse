@@ -28,6 +28,7 @@ class HomeFragment : FragmentBinding<FragmentHomeBinding>(FragmentHomeBinding::i
     override fun onResume() {
         super.onResume()
         viewModel.getTotalSaldo()
+        viewModel.getRecentTransactions()
         showBotNav()
     }
 
@@ -37,10 +38,10 @@ class HomeFragment : FragmentBinding<FragmentHomeBinding>(FragmentHomeBinding::i
                 HomeScreen(
                     modifier = Modifier.padding(top = 24.dp),
                     onBtnChatClick = {},
-                    onBtnSaldoClick = {
-                        navigateToAccountScreen()
-                    },
-                    onBtnNotifClick = {}
+                    onBtnSaldoClick = { navigateToAccountScreen() },
+                    onBtnNotifClick = {},
+                    onBtnSeeAllClick = {},
+                    onItemClick = {}
                 )
             }
         }

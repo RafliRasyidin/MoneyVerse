@@ -61,7 +61,7 @@ abstract class MoneyVerseDb : RoomDatabase() {
                 add(CategoryEntity(CategoryKey.SHOP, ColorBgLightBlue.toArgb(), R.drawable.ic_belanja, context.getString(R.string.belanja), CategoryType.TransactionOutcome))
                 add(CategoryEntity(CategoryKey.TRANSPORT, ColorBgBlue.toArgb(), R.drawable.ic_kendaraan, context.getString(R.string.kendaraan), CategoryType.TransactionOutcome))
                 add(CategoryEntity(CategoryKey.BILL, ColorBgPurple.toArgb(), R.drawable.ic_tagihan, context.getString(R.string.tagihan), CategoryType.TransactionOutcome))
-                add(CategoryEntity(CategoryKey.HEALTH, ColorBgGray.toArgb(), R.drawable.ic_kesehatan, context.getString(R.string.kesehatan), CategoryType.TransactionOutcome))
+                add(CategoryEntity(CategoryKey.HEALTH, ColorBgGreen.toArgb(), R.drawable.ic_kesehatan, context.getString(R.string.kesehatan), CategoryType.TransactionOutcome))
                 add(CategoryEntity(CategoryKey.HOLIDAY, ColorBgGreen.toArgb(), R.drawable.ic_liburan, context.getString(R.string.liburan), CategoryType.TransactionOutcome))
                 add(CategoryEntity(CategoryKey.PET, ColorBgPink.toArgb(), R.drawable.ic_peliharaan, context.getString(R.string.peliharaan), CategoryType.TransactionOutcome))
                 add(CategoryEntity(CategoryKey.INSURANCE, ColorBgPurple.toArgb(), R.drawable.ic_asuransi, context.getString(R.string.asuransi), CategoryType.TransactionOutcome))

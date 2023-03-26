@@ -12,11 +12,11 @@ val ColorGray300 = Color(0xFFA8A8A8)
 val ColorGray400 = Color(0xFF949494)
 val ColorGray500 = Color(0xFF6E6E6E)
 
-val ColoRed300 = Color(0xFFFD6A7E)
-val ColoRed500 = Color(0xFFFF4447)
+val ColorRed300 = Color(0xFFFD6A7E)
+val ColorRed500 = Color(0xFFFF4447)
 
-val ColoGed300 = Color(0xFF3AC143)
-val ColoGed500 = Color(0xFF17B978)
+val ColorGreen300 = Color(0xFF3AC143)
+val ColorGreen500 = Color(0xFF17B978)
 
 val ColorBlack = Color(0xFF000000)
 val ColorWhite = Color(0xFFFFFFFF)
