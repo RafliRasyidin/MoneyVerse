@@ -44,9 +44,8 @@ fun HomeScreen(
         )
         Spacer(modifier = Modifier.height(12.dp))
         SaldoCard(saldo = uiState.totalSaldo, onBtnSaldoClick = { onBtnSaldoClick.invoke() })
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         RecentTransactions(
-            modifier = Modifier.padding(horizontal = 12.dp),
             items = uiState.recentTransactions,
             onBtnSeeAllClick = onBtnSeeAllClick,
             onItemClick = onItemClick
