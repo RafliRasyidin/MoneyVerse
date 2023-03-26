@@ -1,5 +1,6 @@
 package com.rasyidin.moneyverse.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +31,7 @@ import com.rasyidin.moneyverse.utils.toCurrency
 fun ItemTransaction(
     modifier: Modifier = Modifier,
     item: ItemTransaction,
+    isShowDate: Boolean = true,
     onItemClick: (ItemTransaction) -> Unit
 ) {
     Card(
@@ -97,12 +99,16 @@ fun ItemTransaction(
                 }
             }
             Spacer(modifier = Modifier.width(16.dp))
-            Text(
+            AnimatedVisibility(
                 modifier = Modifier.align(Alignment.Top),
-                text = item.createdAt.getRelativeDate(LocalContext.current),
-                style = MaterialTheme.typography.subtitle2,
-                color = ColorGray500
-            )
+                visible = isShowDate
+            ) {
+                Text(
+                    text = item.createdAt.getRelativeDate(LocalContext.current),
+                    style = MaterialTheme.typography.subtitle2,
+                    color = ColorGray500
+                )
+            }
         }
     }
 

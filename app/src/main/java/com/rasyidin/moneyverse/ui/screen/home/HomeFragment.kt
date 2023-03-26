@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.rasyidin.moneyverse.databinding.FragmentHomeBinding
 import com.rasyidin.moneyverse.ui.component.FragmentBinding
 import com.rasyidin.moneyverse.ui.screen.account.AccountActivity
@@ -40,7 +41,7 @@ class HomeFragment : FragmentBinding<FragmentHomeBinding>(FragmentHomeBinding::i
                     onBtnChatClick = {},
                     onBtnSaldoClick = { navigateToAccountScreen() },
                     onBtnNotifClick = {},
-                    onBtnSeeAllClick = {},
+                    onBtnSeeAllClick = { findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToHistoryTransactionFragment()) },
                     onItemClick = {}
                 )
             }

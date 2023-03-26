@@ -17,6 +17,13 @@
             app:exitAnim="@anim/slide_down"
             app:popEnterAnim="@anim/slide_up"
             app:popExitAnim="@anim/slide_down"/>
+        <action
+            android:id="@+id/action_homeFragment_to_historyTransactionFragment"
+            app:destination="@id/historyTransactionFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/slide_down"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down"/>
     </fragment>
     <fragment
         android:id="@+id/targetFragment"
@@ -38,4 +45,9 @@
         android:name="com.rasyidin.moneyverse.ui.screen.transaction.add.AddTransactionFragment"
         android:label="fragment_add_transaction"
         tools:layout="@layout/fragment_add_transaction" />
+    <fragment
+        android:id="@+id/historyTransactionFragment"
+        android:name="com.rasyidin.moneyverse.ui.screen.transaction.history.HistoryTransactionFragment"
+        android:label="fragment_history_transaction"
+        tools:layout="@layout/fragment_history_transaction" />
 </navigation>

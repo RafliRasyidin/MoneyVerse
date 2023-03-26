@@ -34,7 +34,7 @@ class TransactionRepositoryImpl @Inject constructor(private val transactionDao: 
         return transactionDao.getRecentTransactions()
     }
 
-    override suspend fun getHistoryTransactions(): Flow<PagingData<ItemTransaction>> {
+    override fun getHistoryTransactions(): Flow<PagingData<ItemTransaction>> {
         val pagingConfig = PagingConfig(pageSize = 10, initialLoadSize = 15)
         return Pager(
             config = pagingConfig

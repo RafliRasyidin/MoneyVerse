@@ -11,5 +11,5 @@ interface TransactionRepository {
 
     suspend fun getRecentTransactions(): List<ItemTransaction>
 
-    suspend fun getHistoryTransactions(): Flow<PagingData<ItemTransaction>>
+    fun getHistoryTransactions(): Flow<PagingData<ItemTransaction>>
 }

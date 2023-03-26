@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 class GetHistoryTransactions(private val repository: TransactionRepository) {
 
-    suspend operator fun invoke(): Flow<PagingData<ItemTransaction>> {
+    operator fun invoke(): Flow<PagingData<ItemTransaction>> {
         return repository.getHistoryTransactions()
     }
 }
