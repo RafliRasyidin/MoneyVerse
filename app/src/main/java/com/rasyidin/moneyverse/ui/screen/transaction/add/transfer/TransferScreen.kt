@@ -54,6 +54,9 @@ fun TransferScreen(
                         onItemClick = { category ->
                             coroutineScope.launch {
                                 if (viewModel.sheetState.value == SheetTransferEvent.ShowSheetFromAccount) {
+                                    if (category.id == uiState.toAccountId) {
+                                        viewModel.onEvent(TransferEvent.ReverseAccount(true))
+                                    }
                                     viewModel.onEvent(
                                         TransferEvent.OnSelectFromAccount(
                                             id = category.id,
@@ -63,6 +66,9 @@ fun TransferScreen(
                                         )
                                     )
                                 } else {
+                                    if (category.id == uiState.fromAccountId) {
+                                        viewModel.onEvent(TransferEvent.ReverseAccount(false))
+                                    }
                                     viewModel.onEvent(
                                         TransferEvent.OnSelectToAccount(
                                             id = category.id,

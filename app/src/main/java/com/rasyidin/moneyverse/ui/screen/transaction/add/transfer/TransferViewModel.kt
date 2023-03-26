@@ -67,6 +67,7 @@ class TransferViewModel @Inject constructor(private val useCase: TransferUseCase
                 )
                 setButtonValidation()
             }
+            is TransferEvent.ReverseAccount -> reverseAccount(event.isFromAccountSelectedFirst)
             is TransferEvent.Save -> upsertTransaction()
             is TransferEvent.ShowSheetCalendar -> _sheetState.value = SheetTransferEvent.ShowSheetCalendar
             is TransferEvent.ShowSheetFromAccount -> _sheetState.value = SheetTransferEvent.ShowSheetFromAccount
@@ -81,7 +82,7 @@ class TransferViewModel @Inject constructor(private val useCase: TransferUseCase
                 result.onSuccess { accounts ->
                     accounts?.let {
                         val firstAccount = accounts.first()
-                        val isHadTwoOrMoreAccounts = accounts.size > 1
+                        val isHadMoreThanOneAccounts = accounts.size > 1
                         _uiState.value = uiState.value.copy(
                             accounts = accounts,
                             fromAccountId = firstAccount.id,
@@ -89,7 +90,7 @@ class TransferViewModel @Inject constructor(private val useCase: TransferUseCase
                             fromAccountBgColor = firstAccount.bgColor,
                             fromAccountIconPath = firstAccount.iconPath,
                         )
-                        if (isHadTwoOrMoreAccounts) {
+                        if (isHadMoreThanOneAccounts) {
                             val secondAccount = accounts[1]
                             _uiState.value = uiState.value.copy(
                                 toAccountId = secondAccount.id,
@@ -140,12 +141,32 @@ class TransferViewModel @Inject constructor(private val useCase: TransferUseCase
         }
     }
 
+    private fun reverseAccount(isFromAccountSelectedFirst: Boolean) {
+        if (isFromAccountSelectedFirst) {
+            _uiState.value = uiState.value.copy(
+                toAccountId = uiState.value.fromAccountId,
+                toAccountName = uiState.value.fromAccountName,
+                toAccountIconPath = uiState.value.fromAccountIconPath,
+                toAccountBgColor = uiState.value.fromAccountBgColor,
+            )
+        } else {
+            _uiState.value = uiState.value.copy(
+                fromAccountId = uiState.value.toAccountId,
+                fromAccountName = uiState.value.toAccountName,
+                fromAccountIconPath = uiState.value.toAccountIconPath,
+                fromAccountBgColor = uiState.value.toAccountBgColor
+            )
+        }
+
+    }
+
     private fun setButtonValidation() {
         val nominal = uiState.value.nominal
         val isNominalNotEmpty = nominal != 0L && nominal.toString().isNotEmpty()
         val isFromAccountIdSelected = uiState.value.fromAccountId != -1
         val isToAccountSelected = uiState.value.toAccountId != -1
         val isDateSelected = uiState.value.date.isNotEmpty()
-        buttonState = isNominalNotEmpty && isFromAccountIdSelected && isToAccountSelected && isDateSelected
+        val isAccountNotSame = uiState.value.toAccountId != uiState.value.fromAccountId
+        buttonState = isNominalNotEmpty && isFromAccountIdSelected && isToAccountSelected && isDateSelected && isAccountNotSame
     }
 }

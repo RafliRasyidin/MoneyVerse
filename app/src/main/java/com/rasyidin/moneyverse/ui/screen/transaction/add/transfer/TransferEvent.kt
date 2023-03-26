@@ -6,6 +6,7 @@ sealed class TransferEvent {
     data class OnSelectDate(val text: String) : TransferEvent()
     data class OnSelectFromAccount(val id: Int, val iconPath: Int, val bgColor: Int, val name: String): TransferEvent()
     data class OnSelectToAccount(val id: Int, val iconPath: Int, val bgColor: Int, val name: String): TransferEvent()
+    data class ReverseAccount(val isFromAccountSelectedFirst: Boolean) : TransferEvent()
     object Save : TransferEvent()
     object ShowSheetFromAccount : TransferEvent()
     object ShowSheetToAccount : TransferEvent()
