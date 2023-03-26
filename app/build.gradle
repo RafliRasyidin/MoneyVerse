@@ -82,10 +82,6 @@ dependencies {
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    // Glide
-    implementation "com.github.bumptech.glide:glide:$glideVersion"
-    kapt "com.github.bumptech.glide:compiler:$glideVersion"
-
     // Paging
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
 
@@ -101,9 +97,6 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:$hiltCompilerVersion"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltComposeVersion"
 
-    // Circle Image View
-    implementation "de.hdodenhof:circleimageview:$circleImageVersion"
-
     //flipper
     implementation 'com.facebook.flipper:flipper:0.177.0'
     implementation 'com.facebook.soloader:soloader:0.10.5'
@@ -117,6 +110,10 @@ dependencies {
 
     // Easy Pref
     implementation 'com.pixplicity.easyprefs:EasyPrefs:1.10.0'
+
+    // Paging
+    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
+    implementation "androidx.paging:paging-compose:$composePagingVersion"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

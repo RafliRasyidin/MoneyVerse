@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor(private val useCase: HomeUseCase): ViewM
 
     fun getRecentTransactions() {
         viewModelScope.launch {
-            useCase.getRecentFiveTransactions().collect { result ->
+            useCase.getRecentTransactions().collect { result ->
                 result.onSuccess {  transactions ->
                     transactions?.let {
                         _uiState.value = uiState.value.copy(

@@ -6,7 +6,8 @@ import com.rasyidin.moneyverse.data.repository.transaction.TransactionRepository
 import com.rasyidin.moneyverse.domain.usecase.account.*
 import com.rasyidin.moneyverse.domain.usecase.home.HomeUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.AddTransaction
-import com.rasyidin.moneyverse.domain.usecase.home.GetRecentFiveTransactions
+import com.rasyidin.moneyverse.domain.usecase.home.GetRecentTransactions
+import com.rasyidin.moneyverse.domain.usecase.transaction.history.GetHistoryTransactions
 import com.rasyidin.moneyverse.domain.usecase.transaction.history.HistoryTransactionUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.income.GetIncomeCategories
 import com.rasyidin.moneyverse.domain.usecase.transaction.income.IncomeUseCase
@@ -42,7 +43,7 @@ class UseCaseModule {
         transactionRepo: TransactionRepository
     ): HomeUseCase = HomeUseCase(
         getTotalSaldo = GetTotalSaldo(accountRepo),
-        getRecentFiveTransactions = GetRecentFiveTransactions(transactionRepo)
+        getRecentTransactions = GetRecentTransactions(transactionRepo)
     )
 
     @Provides
@@ -80,6 +81,6 @@ class UseCaseModule {
     fun providesHistoryTransactionUseCase(
         transactionRepo: TransactionRepository
     ): HistoryTransactionUseCase = HistoryTransactionUseCase(
-        getRecentFiveTransactions = GetRecentFiveTransactions(transactionRepo)
+        getHistoryTransactions = GetHistoryTransactions(transactionRepo)
     )
 }

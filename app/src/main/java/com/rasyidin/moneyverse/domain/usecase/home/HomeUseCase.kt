@@ -4,5 +4,5 @@ import com.rasyidin.moneyverse.domain.usecase.account.GetTotalSaldo
 
 data class HomeUseCase(
     val getTotalSaldo: GetTotalSaldo,
-    val getRecentFiveTransactions: GetRecentFiveTransactions
+    val getRecentTransactions: GetRecentTransactions
 )

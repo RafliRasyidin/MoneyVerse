@@ -6,11 +6,11 @@ import com.rasyidin.moneyverse.domain.fetchDataList
 import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
 import kotlinx.coroutines.flow.Flow
 
-class GetRecentFiveTransactions(private val transactionRepo: TransactionRepository) {
+class GetRecentTransactions(private val transactionRepo: TransactionRepository) {
 
     suspend operator fun invoke(): Flow<ResultState<List<ItemTransaction>>> {
         return fetchDataList {
-            transactionRepo.getRecentFiveTransactions()
+            transactionRepo.getRecentTransactions()
         }
     }
 }

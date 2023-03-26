@@ -1,9 +1,15 @@
 package com.rasyidin.moneyverse.data.repository.transaction
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.rasyidin.moneyverse.data.local.entities.transaction.TransactionDao
 import com.rasyidin.moneyverse.data.local.entities.transaction.TransactionEntity
 import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
 import com.rasyidin.moneyverse.domain.model.transaction.TransactionType.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class TransactionRepositoryImpl @Inject constructor(private val transactionDao: TransactionDao) : TransactionRepository {
@@ -24,7 +30,16 @@ class TransactionRepositoryImpl @Inject constructor(private val transactionDao: 
         }
     }
 
-    override suspend fun getRecentFiveTransactions(): List<ItemTransaction> {
-        return transactionDao.getRecentFiveTransactions()
+    override suspend fun getRecentTransactions(): List<ItemTransaction> {
+        return transactionDao.getRecentTransactions()
+    }
+
+    override suspend fun getHistoryTransactions(): Flow<PagingData<ItemTransaction>> {
+        val pagingConfig = PagingConfig(pageSize = 10, initialLoadSize = 15)
+        return Pager(
+            config = pagingConfig
+        ) {
+            transactionDao.getHistoryTransactions()
+        }.flow.flowOn(Dispatchers.IO)
     }
 }
