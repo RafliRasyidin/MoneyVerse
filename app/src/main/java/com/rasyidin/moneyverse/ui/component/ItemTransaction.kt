@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
 import com.rasyidin.moneyverse.domain.model.transaction.TransactionType.*
@@ -85,7 +86,8 @@ fun ItemTransaction(
                 ) {
                     Text(
                         text = if (item.notes.isNullOrEmpty()) "-" else item.notes,
-                        style = MaterialTheme.typography.subtitle2
+                        style = MaterialTheme.typography.h6,
+                        fontSize = 12.sp
                     )
                     Text(
                         text = bulletPoint,
@@ -93,8 +95,9 @@ fun ItemTransaction(
                     )
                     Text(
                         text = item.accountName,
-                        style = MaterialTheme.typography.subtitle2,
-                        color = ColorGray500
+                        style = MaterialTheme.typography.h6,
+                        color = ColorGray500,
+                        fontSize = 12.sp
                     )
                 }
             }
@@ -105,8 +108,9 @@ fun ItemTransaction(
             ) {
                 Text(
                     text = item.createdAt.getRelativeDate(LocalContext.current),
-                    style = MaterialTheme.typography.subtitle2,
-                    color = ColorGray500
+                    style = MaterialTheme.typography.h6,
+                    color = ColorGray500,
+                    fontSize = 12.sp
                 )
             }
         }

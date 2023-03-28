@@ -44,10 +44,12 @@ fun HistoryTransactionScreen(
             val groupedTransaction = items.itemSnapshotList.items.groupBy { it.createdAt.formatDate(to = DEFAULT_DATE_FORMAT) }
             groupedTransaction.forEach { (date, transactions) ->
                 item {
+                    Spacer(modifier = Modifier.height(9.dp))
                     Text(
                         text = date.formatDate(from = DEFAULT_DATE_FORMAT, to = "dd MMMM yyyy"),
                         style = MaterialTheme.typography.h5
                     )
+                    Spacer(modifier = Modifier.height(9.dp))
                 }
 
                 items(transactions) { transaction ->

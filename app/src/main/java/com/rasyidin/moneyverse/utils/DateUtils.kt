@@ -78,7 +78,7 @@ object DateUtils {
                 }
             }
             dateTime.toLocalDate() == yesterday -> context.getString(R.string.kemarin)
-            else -> this.formatDate("dd MMM yyyy")
+            else -> this.formatDate(to = "dd MMM yyyy")
         }
     }
 }

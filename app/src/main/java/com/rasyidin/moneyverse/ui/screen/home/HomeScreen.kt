@@ -13,6 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
@@ -180,8 +181,9 @@ fun RecentTransactions(
             Text(
                 modifier = Modifier.clickable { onBtnSeeAllClick.invoke() },
                 text = stringResource(id = R.string.lihat_semua),
-                style = MaterialTheme.typography.subtitle2,
-                color = ColorPurple500
+                style = MaterialTheme.typography.h6,
+                color = ColorPurple500,
+                fontSize = 12.sp
             )
         }
         items.forEach { item ->
