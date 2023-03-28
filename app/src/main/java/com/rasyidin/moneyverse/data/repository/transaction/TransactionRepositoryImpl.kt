@@ -3,8 +3,10 @@ package com.rasyidin.moneyverse.data.repository.transaction
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.rasyidin.moneyverse.data.local.entities.account.AccountDao
 import com.rasyidin.moneyverse.data.local.entities.transaction.TransactionDao
 import com.rasyidin.moneyverse.data.local.entities.transaction.TransactionEntity
+import com.rasyidin.moneyverse.domain.model.transaction.DetailTransactionUi
 import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
 import com.rasyidin.moneyverse.domain.model.transaction.TransactionType.*
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +14,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class TransactionRepositoryImpl @Inject constructor(private val transactionDao: TransactionDao) : TransactionRepository {
+class TransactionRepositoryImpl @Inject constructor(
+    private val transactionDao: TransactionDao,
+    private val accountDao: AccountDao
+) : TransactionRepository {
     override suspend fun upsertTransaction(transactionEntity: TransactionEntity) {
         when (transactionEntity.transactionType) {
             OUTCOME -> {
@@ -41,5 +46,20 @@ class TransactionRepositoryImpl @Inject constructor(private val transactionDao: 
         ) {
             transactionDao.getHistoryTransactions()
         }.flow.flowOn(Dispatchers.IO)
+    }
+
+    override suspend fun getDetailTransaction(transactionId: Int): DetailTransactionUi {
+        val detailTransaction = transactionDao.getDetailTransactionById(transactionId)
+        return if (detailTransaction.categoryId != null) {
+            detailTransaction
+        } else {
+            val detailToAccount = accountDao.getAccountById(detailTransaction.toAccountId!!)
+            detailTransaction.apply {
+                categoryBgColor = detailToAccount.bgColor
+                categoryIconPath = detailToAccount.iconPath
+                categoryName = detailToAccount.name
+            }
+            detailTransaction
+        }
     }
 }

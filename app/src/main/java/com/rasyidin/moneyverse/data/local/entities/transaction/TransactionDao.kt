@@ -2,6 +2,7 @@ package com.rasyidin.moneyverse.data.local.entities.transaction
 
 import androidx.paging.PagingSource
 import androidx.room.*
+import com.rasyidin.moneyverse.domain.model.transaction.DetailTransactionUi
 import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
 
 @Dao
@@ -68,4 +69,27 @@ interface TransactionDao {
         ORDER BY a.createdAt DESC
     """)
     fun getHistoryTransactions(): PagingSource<Int, ItemTransaction>
+
+    @Query("""
+        SELECT
+            a.id,
+            a.nominal,
+            a.createdAt,
+            a.notes,
+            a.transactionType,
+            a.categoryId,
+            a.sumberAkunId as fromAccountId,
+            a.tujuanAkunId as toAccountId,
+            b.name as accountName,
+            b.iconPath as accountIconPath,
+            b.bgColor as accountBgColor,
+            c.bgColor as categoryBgColor,
+            c.iconPath as categoryIconPath,
+            c.name as categoryName
+        FROM transaksi a
+        LEFT JOIN account b ON a.sumberAkunId = b.id
+        LEFT JOIN category c ON a.categoryId = c.id
+        WHERE a.id = :transactionId
+    """)
+    fun getDetailTransactionById(transactionId: Int): DetailTransactionUi
 }
