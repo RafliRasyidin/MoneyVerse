@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.rasyidin.moneyverse.R
-import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
 import com.rasyidin.moneyverse.ui.component.ItemTransaction
 import com.rasyidin.moneyverse.ui.component.MVToolbar
 import com.rasyidin.moneyverse.utils.DateUtils.DEFAULT_DATE_FORMAT
@@ -24,9 +24,8 @@ import com.rasyidin.moneyverse.utils.DateUtils.formatDate
 @Composable
 fun HistoryTransactionScreen(
     modifier: Modifier = Modifier,
+    navController: NavController,
     viewModel: HistoryTransactionViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    onItemClick: (ItemTransaction) -> Unit
 ) {
     val items = viewModel.getHistoryTransactions().collectAsLazyPagingItems()
     Column(
@@ -35,13 +34,16 @@ fun HistoryTransactionScreen(
         MVToolbar(
             modifier = Modifier.padding(horizontal = 12.dp),
             title = stringResource(id = R.string.riwayat_aktivitas),
-            onBackClick = onBackClick
+            onBackClick = {
+                navController.popBackStack()
+            }
         )
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(12.dp)
         ) {
-            val groupedTransaction = items.itemSnapshotList.items.groupBy { it.createdAt.formatDate(to = DEFAULT_DATE_FORMAT) }
+            val groupedTransaction =
+                items.itemSnapshotList.items.groupBy { it.createdAt.formatDate(to = DEFAULT_DATE_FORMAT) }
             groupedTransaction.forEach { (date, transactions) ->
                 item {
                     Spacer(modifier = Modifier.height(9.dp))
@@ -54,7 +56,16 @@ fun HistoryTransactionScreen(
 
                 items(transactions) { transaction ->
                     Spacer(modifier = Modifier.height(6.dp))
-                    ItemTransaction(item = transaction, onItemClick = onItemClick, isShowDate = false)
+                    ItemTransaction(
+                        item = transaction, onItemClick = {
+                            navController.navigate(
+                                HistoryTransactionFragmentDirections.actionHistoryTransactionFragmentToDetailTransactionFragment(
+                                    it.id
+                                )
+                            )
+                        },
+                        isShowDate = false
+                    )
                     Spacer(modifier = Modifier.height(6.dp))
                 }
             }

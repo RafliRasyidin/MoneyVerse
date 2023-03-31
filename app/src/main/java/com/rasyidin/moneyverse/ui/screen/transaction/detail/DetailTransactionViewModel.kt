@@ -1,10 +1,15 @@
 package com.rasyidin.moneyverse.ui.screen.transaction.detail
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.palette.graphics.Palette
 import com.rasyidin.moneyverse.domain.model.transaction.DetailTransactionUi
 import com.rasyidin.moneyverse.domain.onSuccess
 import com.rasyidin.moneyverse.domain.usecase.transaction.detail.DetailTransactionUseCase
@@ -46,6 +51,18 @@ class DetailTransactionViewModel @Inject constructor(
                         }
                     }
                 }
+            }
+        }
+    }
+
+    fun findDominantColor(drawable: Drawable, onFinish: (Color) -> Unit) {
+        val bitmapDrawable = drawable.toBitmap()
+        val bitmap = bitmapDrawable.copy(
+            Bitmap.Config.ARGB_8888, true
+        )
+        Palette.from(bitmap).generate { palette ->
+            palette?.dominantSwatch?.rgb?.let { colorValue ->
+                onFinish(Color(colorValue))
             }
         }
     }

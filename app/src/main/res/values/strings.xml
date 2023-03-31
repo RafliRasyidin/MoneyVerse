@@ -73,4 +73,8 @@
     <string name="lihat_semua">Lihat semua</string>
     <string name="riwayat_aktivitas">Riwayat Aktivitas</string>
     <string name="detail_transaksi">Detail Transaksi</string>
+    <string name="rincian_transaksi">Rincian Transaksi</string>
+    <string name="kategori">Kategori</string>
+    <string name="jenis">Jenis</string>
+    <string name="nomor_transaksi">Nomor Transaksi</string>
 </resources>

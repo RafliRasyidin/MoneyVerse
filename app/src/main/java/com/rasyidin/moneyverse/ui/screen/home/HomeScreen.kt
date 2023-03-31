@@ -1,5 +1,6 @@
 package com.rasyidin.moneyverse.ui.screen.home
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,14 +11,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
 import com.rasyidin.moneyverse.ui.component.ItemTransaction
+import com.rasyidin.moneyverse.ui.screen.account.AccountActivity
 import com.rasyidin.moneyverse.ui.theme.ColorGray100
 import com.rasyidin.moneyverse.ui.theme.ColorGray500
 import com.rasyidin.moneyverse.ui.theme.ColorPurple500
@@ -26,30 +30,34 @@ import com.rasyidin.moneyverse.utils.toCurrency
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    navController: NavController,
     viewModel: HomeViewModel = hiltViewModel(),
-    onBtnChatClick: () -> Unit,
-    onBtnNotifClick: () -> Unit,
-    onBtnSaldoClick: () -> Unit,
-    onBtnSeeAllClick: () -> Unit,
-    onItemClick: (ItemTransaction) -> Unit
 ) {
     val uiState = viewModel.uiState.value
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 12.dp)
     ) {
         TopAppBar(
-            onBtnChatClick = { onBtnChatClick.invoke() },
-            onBtnNotifClick = { onBtnNotifClick.invoke() }
+            onBtnChatClick = { },
+            onBtnNotifClick = { }
         )
         Spacer(modifier = Modifier.height(12.dp))
-        SaldoCard(saldo = uiState.totalSaldo, onBtnSaldoClick = { onBtnSaldoClick.invoke() })
+        SaldoCard(saldo = uiState.totalSaldo, onBtnSaldoClick = {
+            val intent = Intent(context, AccountActivity::class.java)
+            context.startActivity(intent)
+        })
         Spacer(modifier = Modifier.height(24.dp))
         RecentTransactions(
             items = uiState.recentTransactions,
-            onBtnSeeAllClick = onBtnSeeAllClick,
-            onItemClick = onItemClick
+            onBtnSeeAllClick = {
+                navController.navigate(HomeFragmentDirections.actionHomeFragmentToHistoryTransactionFragment())
+            },
+            onItemClick = {
+                navController.navigate(HomeFragmentDirections.actionHomeFragmentToDetailTransactionFragment(it.id))
+            }
         )
     }
 }

@@ -24,6 +24,13 @@
             app:exitAnim="@anim/slide_down"
             app:popEnterAnim="@anim/slide_up"
             app:popExitAnim="@anim/slide_down"/>
+        <action
+            android:id="@+id/action_homeFragment_to_detailTransactionFragment"
+            app:destination="@id/detailTransactionFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/push_left"
+            app:popEnterAnim="@anim/push_right"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
     <fragment
         android:id="@+id/targetFragment"
@@ -49,5 +56,23 @@
         android:id="@+id/historyTransactionFragment"
         android:name="com.rasyidin.moneyverse.ui.screen.transaction.history.HistoryTransactionFragment"
         android:label="fragment_history_transaction"
-        tools:layout="@layout/fragment_history_transaction" />
+        tools:layout="@layout/fragment_history_transaction" >
+        <action
+            android:id="@+id/action_historyTransactionFragment_to_detailTransactionFragment"
+            app:destination="@id/detailTransactionFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/push_left"
+            app:popEnterAnim="@anim/push_right"
+            app:popExitAnim="@anim/slide_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/detailTransactionFragment"
+        android:name="com.rasyidin.moneyverse.ui.screen.transaction.detail.DetailTransactionFragment"
+        android:label="fragment_detail_transaction"
+        tools:layout="@layout/fragment_detail_transaction" >
+        <argument
+            android:name="transactionId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

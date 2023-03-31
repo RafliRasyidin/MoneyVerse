@@ -23,8 +23,7 @@ class HistoryTransactionFragment :
         binding.composeView.setContent {
             MoneyVerseTheme {
                 HistoryTransactionScreen(
-                    onBackClick = { findNavController().popBackStack() },
-                    onItemClick = {}
+                    navController = findNavController(),
                 )
             }
         }
