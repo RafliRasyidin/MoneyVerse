@@ -21,5 +21,8 @@ data class TransferUi(
     var toAccountBgColor: Int = -1,
     var toAccountName: String = "",
     var accounts: List<Category> = emptyList(),
-    var errorMessage: String? = ""
+    var errorMessage: String? = "",
+    var editedToAccountId: Int = -1,
+    var editedFromAccountId: Int = -1,
+    var transactionType: TransactionType = TransactionType.TRANSFER
 )

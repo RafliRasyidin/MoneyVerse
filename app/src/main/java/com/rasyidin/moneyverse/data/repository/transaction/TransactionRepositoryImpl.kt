@@ -21,7 +21,8 @@ class TransactionRepositoryImpl @Inject constructor(
 ) : TransactionRepository {
     override suspend fun upsertTransaction(
         transactionEntity: TransactionEntity,
-        editedAccountId: Int
+        editedFromAccountId: Int,
+        editedToAccountId: Int
     ) {
         when (transactionEntity.transactionType) {
             OUTCOME -> {
@@ -29,13 +30,13 @@ class TransactionRepositoryImpl @Inject constructor(
                     transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
                 } else {
                     val currentTransaction = transactionDao.getDetailTransactionById(transactionEntity.id)
-                    if (editedAccountId != -1) {
+                    if (editedFromAccountId != -1) {
                         if (transactionEntity.nominal != currentTransaction.nominal) {
-                            transactionDao.creditAccountById(currentTransaction.nominal, editedAccountId)
+                            transactionDao.creditAccountById(currentTransaction.nominal, editedFromAccountId)
                             transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
                         } else {
                             transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
-                            transactionDao.creditAccountById(transactionEntity.nominal, editedAccountId)
+                            transactionDao.creditAccountById(transactionEntity.nominal, editedFromAccountId)
                         }
                     } else {
                         if (transactionEntity.nominal != currentTransaction.nominal) {
@@ -55,12 +56,12 @@ class TransactionRepositoryImpl @Inject constructor(
                     transactionDao.creditAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
                 } else {
                     val currentTransaction = transactionDao.getDetailTransactionById(transactionEntity.id)
-                    if (editedAccountId != -1) {
+                    if (editedFromAccountId != -1) {
                         if (transactionEntity.nominal != currentTransaction.nominal) {
-                            transactionDao.debitAccountById(currentTransaction.nominal, editedAccountId)
+                            transactionDao.debitAccountById(currentTransaction.nominal, editedFromAccountId)
                             transactionDao.creditAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
                         } else {
-                            transactionDao.debitAccountById(transactionEntity.nominal, editedAccountId)
+                            transactionDao.debitAccountById(transactionEntity.nominal, editedFromAccountId)
                             transactionDao.creditAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
                         }
                     } else {
@@ -77,7 +78,70 @@ class TransactionRepositoryImpl @Inject constructor(
                 transactionDao.upsert(transactionEntity)
             }
             TRANSFER -> {
-                transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
+                if (transactionEntity.id != 0) {
+                    val currentTransaction = transactionDao.getDetailTransactionById(transactionEntity.id)
+                    when {
+                        editedFromAccountId != -1 && editedToAccountId != -1 -> {
+                            val isReversedAccount = editedFromAccountId == transactionEntity.toAccountId && editedToAccountId == transactionEntity.fromAccountId
+                            if (transactionEntity.nominal != currentTransaction.nominal) {
+                                val nominal = currentTransaction.nominal
+                                transactionDao.debitAccountById(nominal, editedToAccountId)
+                                transactionDao.creditAccountById(nominal, editedFromAccountId)
+                                if (isReversedAccount.not()) {
+                                    transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
+                                }
+                            } else {
+                                val nominal = transactionEntity.nominal
+                                transactionDao.debitAccountById(nominal, editedToAccountId)
+                                transactionDao.creditAccountById(nominal, editedFromAccountId)
+                                if (isReversedAccount.not()) {
+                                    transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
+                                }
+                            }
+                        }
+                        editedToAccountId != -1 -> {
+                            if (transactionEntity.nominal != currentTransaction.nominal) {
+                                val nominal = currentTransaction.nominal
+                                transactionDao.debitAccountById(nominal, editedToAccountId)
+                                transactionDao.creditAccountById(nominal, transactionEntity.fromAccountId)
+                                transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
+                            } else {
+                                val nominal = transactionEntity.nominal
+                                transactionDao.debitAccountById(nominal, editedToAccountId)
+                                transactionDao.creditAccountById(nominal, transactionEntity.fromAccountId)
+                                transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
+                            }
+                        }
+                        editedFromAccountId != -1 -> {
+                            if (transactionEntity.nominal != currentTransaction.nominal) {
+                                val nominal = currentTransaction.nominal
+                                transactionDao.creditAccountById(nominal, editedFromAccountId)
+                                transactionDao.debitAccountById(nominal, transactionEntity.toAccountId!!)
+                                transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
+                            } else {
+                                val nominal = transactionEntity.nominal
+                                transactionDao.creditAccountById(nominal, editedFromAccountId)
+                                transactionDao.debitAccountById(nominal, transactionEntity.toAccountId!!)
+                                transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
+                            }
+                        }
+                        else -> {
+                            if (transactionEntity.nominal != currentTransaction.nominal) {
+                                val nominal = currentTransaction.nominal
+                                transactionDao.creditAccountById(nominal, transactionEntity.fromAccountId)
+                                transactionDao.debitAccountById(nominal, transactionEntity.toAccountId!!)
+                                transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
+                            } else {
+                                val nominal = transactionEntity.nominal
+                                transactionDao.creditAccountById(nominal, transactionEntity.fromAccountId)
+                                transactionDao.debitAccountById(nominal, transactionEntity.toAccountId!!)
+                                transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
+                            }
+                        }
+                    }
+                } else {
+                    transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
+                }
                 transactionDao.upsert(transactionEntity)
             }
         }

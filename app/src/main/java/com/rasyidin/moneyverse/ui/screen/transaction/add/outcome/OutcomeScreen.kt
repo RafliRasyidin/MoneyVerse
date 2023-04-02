@@ -113,7 +113,7 @@ fun OutcomeScreen(
                     .fillMaxSize()
                     .padding(horizontal = 12.dp)
             ) {
-                AnimatedVisibility(visible = uiState.id != -1) {
+                AnimatedVisibility(visible = uiState.id != 0) {
                     MVToolbar(
                         title = stringResource(id = R.string.edit_transaksi),
                         onBackClick = { navController.popBackStack() }

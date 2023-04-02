@@ -66,10 +66,8 @@ class OutcomeViewModel @Inject constructor(
                                     accountIconPath = detailTransaction.accountIconPath,
                                     accountBgColor = detailTransaction.accountBgColor,
                                     categoryName = detailTransaction.categoryName ?: "",
-                                    categoryIconPath = detailTransaction.categoryIconPath
-                                        ?: R.drawable.ic_tagihan,
-                                    categoryBgColor = detailTransaction.categoryBgColor
-                                        ?: ColorBgPurple.toArgb(),
+                                    categoryIconPath = detailTransaction.categoryIconPath ?: R.drawable.ic_tagihan,
+                                    categoryBgColor = detailTransaction.categoryBgColor ?: ColorBgPurple.toArgb(),
                                     editedAccountId = detailTransaction.fromAccountId
                                 )
                                 setButtonValidation()

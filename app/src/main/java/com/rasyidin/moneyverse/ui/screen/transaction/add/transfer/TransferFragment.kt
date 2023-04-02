@@ -30,7 +30,7 @@ class TransferFragment : FragmentBinding<FragmentTransferBinding>(FragmentTransf
     private fun setContent() {
         binding.composeView.setContent {
             MoneyVerseTheme {
-                TransferScreen()
+                TransferScreen(navController = findNavController())
             }
         }
     }

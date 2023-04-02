@@ -1,5 +1,6 @@
 package com.rasyidin.moneyverse.ui.screen.transaction.add.transfer
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -12,11 +13,9 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.rasyidin.moneyverse.R
-import com.rasyidin.moneyverse.ui.component.MVButtonPrimary
-import com.rasyidin.moneyverse.ui.component.MVTextFieldNominal
-import com.rasyidin.moneyverse.ui.component.SheetContentCalendar
-import com.rasyidin.moneyverse.ui.component.SheetContentCategories
+import com.rasyidin.moneyverse.ui.component.*
 import com.rasyidin.moneyverse.ui.screen.transaction.add.CardAccount
 import com.rasyidin.moneyverse.ui.screen.transaction.add.CardCalendar
 import com.rasyidin.moneyverse.ui.screen.transaction.add.TextFieldDesc
@@ -28,6 +27,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TransferScreen(
     modifier: Modifier = Modifier,
+    navController: NavController,
     viewModel: TransferViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.value
@@ -108,6 +108,12 @@ fun TransferScreen(
                     .fillMaxSize()
                     .padding(horizontal = 12.dp)
             ) {
+                AnimatedVisibility(visible = uiState.id != 0) {
+                    MVToolbar(
+                        title = stringResource(id = R.string.edit_transaksi),
+                        onBackClick = { navController.popBackStack() }
+                    )
+                }
                 MVTextFieldNominal(
                     nominal = uiState.nominal.toString(),
                     onNominalChange = { newText ->

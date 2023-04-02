@@ -2,6 +2,7 @@ package com.rasyidin.moneyverse.ui.screen.transaction.add.transfer
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rasyidin.moneyverse.MoneyVerseApp
@@ -19,7 +20,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TransferViewModel @Inject constructor(private val useCase: TransferUseCase): ViewModel() {
+class TransferViewModel @Inject constructor(
+    private val useCase: TransferUseCase,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     private var _uiState = mutableStateOf(TransferUi())
     val uiState: State<TransferUi> get() = _uiState
@@ -32,8 +36,45 @@ class TransferViewModel @Inject constructor(private val useCase: TransferUseCase
     private var _sheetState: MutableState<SheetTransferEvent> = mutableStateOf(SheetTransferEvent.Idle)
     var sheetState: State<SheetTransferEvent> = _sheetState
 
+    private var transactionId: Int = -1
+
     init {
+        getDetailTransaction()
         getListAccounts()
+    }
+
+    private fun getDetailTransaction() {
+        savedStateHandle.get<Int>("transactionId")?.let { transactionId ->
+            viewModelScope.launch {
+                useCase.getDetailTransaction(transactionId).collect { result ->
+                    result.onSuccess { detailTransaction ->
+                        detailTransaction?.let {
+                            this@TransferViewModel.transactionId = transactionId
+                            if (transactionId != -1) {
+                                _uiState.value = uiState.value.copy(
+                                    id = detailTransaction.id,
+                                    nominal = detailTransaction.nominal,
+                                    date = detailTransaction.createdAt,
+                                    notes = detailTransaction.notes ?: "",
+                                    transactionType = detailTransaction.transactionType,
+                                    fromAccountId = detailTransaction.fromAccountId,
+                                    fromAccountName = detailTransaction.accountName,
+                                    fromAccountIconPath = detailTransaction.accountIconPath,
+                                    fromAccountBgColor = detailTransaction.accountBgColor,
+                                    toAccountId = detailTransaction.toAccountId ?: -1,
+                                    toAccountName = detailTransaction.categoryName ?: "",
+                                    toAccountIconPath = detailTransaction.categoryIconPath ?: R.drawable.ic_tagihan,
+                                    toAccountBgColor = detailTransaction.categoryBgColor ?: ColorBgPurple.toArgb(),
+                                    editedToAccountId = detailTransaction.toAccountId ?: -1,
+                                    editedFromAccountId = detailTransaction.fromAccountId
+                                )
+                                setButtonValidation()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     fun onEvent(event: TransferEvent) {
@@ -81,29 +122,35 @@ class TransferViewModel @Inject constructor(private val useCase: TransferUseCase
             useCase.getListAccount().collect { result ->
                 result.onSuccess { accounts ->
                     accounts?.let {
-                        val firstAccount = accounts.first()
-                        val isHadMoreThanOneAccounts = accounts.size > 1
-                        _uiState.value = uiState.value.copy(
-                            accounts = accounts,
-                            fromAccountId = firstAccount.id,
-                            fromAccountName = firstAccount.name,
-                            fromAccountBgColor = firstAccount.bgColor,
-                            fromAccountIconPath = firstAccount.iconPath,
-                        )
-                        if (isHadMoreThanOneAccounts) {
-                            val secondAccount = accounts[1]
+                        if (transactionId == -1) {
+                            val firstAccount = accounts.first()
+                            val isHadMoreThanOneAccounts = accounts.size > 1
                             _uiState.value = uiState.value.copy(
-                                toAccountId = secondAccount.id,
-                                toAccountBgColor = secondAccount.bgColor,
-                                toAccountIconPath = secondAccount.iconPath,
-                                toAccountName = secondAccount.name
+                                accounts = accounts,
+                                fromAccountId = firstAccount.id,
+                                fromAccountName = firstAccount.name,
+                                fromAccountBgColor = firstAccount.bgColor,
+                                fromAccountIconPath = firstAccount.iconPath,
                             )
+                            if (isHadMoreThanOneAccounts) {
+                                val secondAccount = accounts[1]
+                                _uiState.value = uiState.value.copy(
+                                    toAccountId = secondAccount.id,
+                                    toAccountBgColor = secondAccount.bgColor,
+                                    toAccountIconPath = secondAccount.iconPath,
+                                    toAccountName = secondAccount.name
+                                )
+                            } else {
+                                _uiState.value = uiState.value.copy(
+                                    toAccountId = -1,
+                                    toAccountBgColor = ColorBgPurple.toArgb(),
+                                    toAccountIconPath = R.drawable.ic_tagihan,
+                                    toAccountName = MoneyVerseApp.appContext!!.getString(R.string.pilih_akun)
+                                )
+                            }
                         } else {
                             _uiState.value = uiState.value.copy(
-                                toAccountId = -1,
-                                toAccountBgColor = ColorBgPurple.toArgb(),
-                                toAccountIconPath = R.drawable.ic_tagihan,
-                                toAccountName = MoneyVerseApp.appContext!!.getString(R.string.pilih_akun)
+                                accounts = accounts
                             )
                         }
                     }
@@ -126,17 +173,42 @@ class TransferViewModel @Inject constructor(private val useCase: TransferUseCase
 
     private fun upsertTransaction() {
         viewModelScope.launch {
-            useCase.addTransaction(
-                Transaction(
-                    nominal = uiState.value.nominal,
-                    createdAt = uiState.value.date,
-                    notes = uiState.value.notes,
-                    transactionType = TransactionType.TRANSFER,
-                    fromAccountId = uiState.value.fromAccountId,
-                    toAccountId = uiState.value.toAccountId,
-                )
-            ).collect { result ->
-                _upsertState.send(result)
+            if (transactionId == -1) {
+                useCase.addTransaction(
+                    Transaction(
+                        nominal = uiState.value.nominal,
+                        createdAt = uiState.value.date,
+                        notes = uiState.value.notes,
+                        transactionType = TransactionType.TRANSFER,
+                        fromAccountId = uiState.value.fromAccountId,
+                        toAccountId = uiState.value.toAccountId,
+                    )
+                ).collect { result ->
+                    _upsertState.send(result)
+                }
+            } else {
+                val editedFromAccountId =
+                    if (uiState.value.editedFromAccountId == uiState.value.fromAccountId) -1
+                    else uiState.value.editedFromAccountId
+                val editedToAccountId =
+                    if (uiState.value.editedToAccountId == uiState.value.toAccountId) -1
+                    else uiState.value.editedToAccountId
+
+                useCase.addTransaction(
+                    Transaction(
+                        id = transactionId,
+                        nominal = uiState.value.nominal,
+                        createdAt = uiState.value.date,
+                        notes = uiState.value.notes,
+                        transactionType = TransactionType.TRANSFER,
+                        fromAccountId = uiState.value.fromAccountId,
+                        toAccountId = uiState.value.toAccountId,
+                    ),
+                    editedFromAccountId,
+                    editedToAccountId
+                ).collect { result ->
+                    _upsertState.send(result)
+                }
             }
         }
     }

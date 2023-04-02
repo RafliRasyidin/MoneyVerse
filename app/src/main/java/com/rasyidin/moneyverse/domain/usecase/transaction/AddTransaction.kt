@@ -8,9 +8,17 @@ import kotlinx.coroutines.flow.Flow
 
 class AddTransaction(private val transactionRepo: TransactionRepository) {
 
-    suspend operator fun invoke(transaction: Transaction, editedAccountId: Int = -1): Flow<ResultState<Nothing>> {
+    suspend operator fun invoke(
+        transaction: Transaction,
+        editedFromAccountId: Int = -1,
+        editedToAccountId: Int = -1
+    ): Flow<ResultState<Nothing>> {
         return performAction {
-            transactionRepo.upsertTransaction(transaction.toEntity(), editedAccountId)
+            transactionRepo.upsertTransaction(
+                transaction.toEntity(),
+                editedFromAccountId,
+                editedToAccountId
+            )
         }
     }
 }
