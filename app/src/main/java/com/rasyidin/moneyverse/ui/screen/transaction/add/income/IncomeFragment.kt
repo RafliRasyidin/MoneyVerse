@@ -30,7 +30,7 @@ class IncomeFragment : FragmentBinding<FragmentIncomeBinding>(FragmentIncomeBind
     private fun setContent() {
         binding.composeView.setContent {
             MoneyVerseTheme {
-                IncomeScreen()
+                IncomeScreen(navController = findNavController())
             }
         }
     }

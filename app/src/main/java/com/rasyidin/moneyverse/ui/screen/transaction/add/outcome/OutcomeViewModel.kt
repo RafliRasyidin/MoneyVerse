@@ -224,7 +224,7 @@ class OutcomeViewModel @Inject constructor(
                         fromAccountId = uiState.value.accountId
                     ),
                     editedAccountId
-                    ).collect { result ->
+                ).collect { result ->
                     _upsertState.send(result)
                 }
             }

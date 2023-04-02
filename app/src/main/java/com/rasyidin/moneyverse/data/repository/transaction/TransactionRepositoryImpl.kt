@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
+import kotlin.math.abs
 
 class TransactionRepositoryImpl @Inject constructor(
     private val transactionDao: TransactionDao,
@@ -27,15 +28,52 @@ class TransactionRepositoryImpl @Inject constructor(
                 if (transactionEntity.id == 0) {
                     transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
                 } else {
+                    val currentTransaction = transactionDao.getDetailTransactionById(transactionEntity.id)
                     if (editedAccountId != -1) {
-                        transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
-                        transactionDao.creditAccountById(transactionEntity.nominal, editedAccountId)
+                        if (transactionEntity.nominal != currentTransaction.nominal) {
+                            transactionDao.creditAccountById(currentTransaction.nominal, editedAccountId)
+                            transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+                        } else {
+                            transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+                            transactionDao.creditAccountById(transactionEntity.nominal, editedAccountId)
+                        }
+                    } else {
+                        if (transactionEntity.nominal != currentTransaction.nominal) {
+                            val diff = currentTransaction.nominal - transactionEntity.nominal
+                            if (diff > 0) {
+                                transactionDao.creditAccountById(diff, transactionEntity.fromAccountId)
+                            } else {
+                                transactionDao.debitAccountById(abs(diff), transactionEntity.fromAccountId)
+                            }
+                        }
                     }
                 }
                 transactionDao.upsert(transactionEntity)
             }
             INCOME -> {
-                transactionDao.creditAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+                if (transactionEntity.id == 0) {
+                    transactionDao.creditAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+                } else {
+                    val currentTransaction = transactionDao.getDetailTransactionById(transactionEntity.id)
+                    if (editedAccountId != -1) {
+                        if (transactionEntity.nominal != currentTransaction.nominal) {
+                            transactionDao.debitAccountById(currentTransaction.nominal, editedAccountId)
+                            transactionDao.creditAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+                        } else {
+                            transactionDao.debitAccountById(transactionEntity.nominal, editedAccountId)
+                            transactionDao.creditAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+                        }
+                    } else {
+                        if (transactionEntity.nominal != currentTransaction.nominal) {
+                            val diff = transactionEntity.nominal - currentTransaction.nominal
+                            if (diff > 0) {
+                                transactionDao.creditAccountById(diff, transactionEntity.fromAccountId)
+                            } else {
+                                transactionDao.debitAccountById(abs(diff), transactionEntity.fromAccountId)
+                            }
+                        }
+                    }
+                }
                 transactionDao.upsert(transactionEntity)
             }
             TRANSFER -> {
