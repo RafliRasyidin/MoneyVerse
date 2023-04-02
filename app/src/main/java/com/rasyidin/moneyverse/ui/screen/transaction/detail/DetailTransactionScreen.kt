@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.model.transaction.DetailTransactionUi
 import com.rasyidin.moneyverse.domain.model.transaction.TransactionType.*
+import com.rasyidin.moneyverse.ui.component.MVDialogAlert
 import com.rasyidin.moneyverse.ui.component.MVToolbar
 import com.rasyidin.moneyverse.ui.theme.*
 import com.rasyidin.moneyverse.utils.DateUtils.formatDate
@@ -40,6 +41,7 @@ fun DetailTransactionScreen(
     viewModel: DetailTransactionViewModel = hiltViewModel()
 ) {
     val detailUi = viewModel.uiState.value
+    var showDialog by remember { mutableStateOf(false) }
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
@@ -48,21 +50,45 @@ fun DetailTransactionScreen(
         MVToolbar(
             modifier = Modifier.padding(horizontal = 12.dp),
             title = stringResource(id = R.string.detail_transaksi),
-            iconEnd = R.drawable.ic_edit,
+            iconsEnd = listOf(R.drawable.ic_edit, R.drawable.ic_delete),
             onBackClick = { navController.popBackStack() },
-            onIconEndClick = {
-                val action = when (detailUi.transactionType) {
-                    OUTCOME -> DetailTransactionFragmentDirections.actionDetailTransactionFragmentToOutcomeFragment(detailUi.id)
-                    INCOME -> DetailTransactionFragmentDirections.actionDetailTransactionFragmentToIncomeFragment(detailUi.id)
-                    TRANSFER -> DetailTransactionFragmentDirections.actionDetailTransactionFragmentToTransferFragment(detailUi.id)
+            onIconEndClick = { position ->
+                if (position == 0) {
+                    val action = when (detailUi.transactionType) {
+                        OUTCOME -> DetailTransactionFragmentDirections.actionDetailTransactionFragmentToOutcomeFragment(detailUi.id)
+                        INCOME -> DetailTransactionFragmentDirections.actionDetailTransactionFragmentToIncomeFragment(detailUi.id)
+                        TRANSFER -> DetailTransactionFragmentDirections.actionDetailTransactionFragmentToTransferFragment(detailUi.id)
+                    }
+                    navController.navigate(action)
+                } else {
+                    showDialog = true
                 }
-                navController.navigate(action)
             }
         )
         Spacer(modifier = Modifier.height(36.dp))
         CardDetailTransaction(
             modifier = Modifier.padding(horizontal = 12.dp),
             detailUi = detailUi
+        )
+    }
+
+    if (showDialog) {
+        MVDialogAlert(
+            title = stringResource(id = R.string.hapus_transaksi),
+            desc = stringResource(id = R.string.desc_hapus_transaksi),
+            showDialog = showDialog,
+            positiveText = stringResource(id = R.string.ya),
+            negativeText = stringResource(id = R.string.batalkan),
+            onPositiveClick = {
+                showDialog = false
+                viewModel.onEvent(DetailTransactionEvent.DeleteTransaction)
+            },
+            onNegativeClick = {
+                showDialog = false
+            },
+            onDismiss = {
+                showDialog = false
+            }
         )
     }
 }

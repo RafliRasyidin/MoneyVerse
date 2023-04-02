@@ -43,6 +43,7 @@
     <string name="hint_desc_akun">Contoh: No Rekening</string>
     <string name="hapus_akun">Hapus Akun</string>
     <string name="desc_hapus_akun">Apakah anda yakin ingin menghapus akun ini?</string>
+    <string name="desc_hapus_transaksi">Apakah anda yakin ingin menghapus transaksi ini?</string>
     <string name="ya">Ya</string>
     <string name="batalkan">Batalkan</string>
     <string name="edit_akun">Edit Akun</string>
@@ -78,4 +79,7 @@
     <string name="jenis">Jenis</string>
     <string name="nomor_transaksi">Nomor Transaksi</string>
     <string name="edit_transaksi">Edit Transaksi</string>
+    <string name="hapus_transaksi">Hapus Transaksi</string>
+    <string name="transaksi_berhasil_dihapus">Transaksi berhasil dihapus</string>
+    <string name="transaksi_gagal_dihapus">Transaksi gagal dihapus</string>
 </resources>

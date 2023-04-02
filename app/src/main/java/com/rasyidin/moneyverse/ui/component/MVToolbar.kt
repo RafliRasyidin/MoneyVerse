@@ -1,13 +1,9 @@
 package com.rasyidin.moneyverse.ui.component
 
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +20,9 @@ import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
 fun MVToolbar(
     modifier: Modifier = Modifier,
     title: String,
-    @DrawableRes iconEnd: Int? = null,
     onBackClick: () -> Unit,
-    onIconEndClick: () -> Unit = {}
+    onIconEndClick: (Int) -> Unit = {},
+    iconsEnd: List<Int> = emptyList()
 ) {
     Row(
         modifier = modifier
@@ -48,14 +44,18 @@ fun MVToolbar(
             style = MaterialTheme.typography.h4,
             textAlign = TextAlign.Center
         )
-        AnimatedVisibility(visible = iconEnd != null) {
-            Image(
-                modifier = Modifier
-                    .size(20.dp)
-                    .clickable { onIconEndClick.invoke() },
-                painter = painterResource(id = iconEnd!!),
-                contentDescription = null
-            )
+        AnimatedVisibility(visible = iconsEnd.isNotEmpty()) {
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                iconsEnd.forEachIndexed { position, resId ->
+                    Image(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable { onIconEndClick.invoke(position) },
+                        painter = painterResource(id = resId),
+                        contentDescription = null
+                    )
+                }
+            }
         }
     }
 }
@@ -64,6 +64,10 @@ fun MVToolbar(
 @Composable
 private fun PreviewMVToolbar() {
     MoneyVerseTheme {
-        MVToolbar(title = "Toolbar", onBackClick = {})
+        MVToolbar(
+            title = "Toolbar",
+            onBackClick = {},
+            iconsEnd = listOf(R.drawable.ic_chat, R.drawable.ic_notif)
+        )
     }
 }

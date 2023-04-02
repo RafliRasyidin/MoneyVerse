@@ -174,4 +174,16 @@ class TransactionRepositoryImpl @Inject constructor(
             detailTransaction
         }
     }
+
+    override suspend fun deleteTransaction(transactionEntity: TransactionEntity) {
+        when (transactionEntity.transactionType) {
+            OUTCOME -> transactionDao.creditAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+            INCOME -> transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+            TRANSFER -> {
+                transactionDao.creditAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+                transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.toAccountId!!)
+            }
+        }
+        transactionDao.deleteTransaction(transactionEntity)
+    }
 }

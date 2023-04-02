@@ -7,6 +7,7 @@ import com.rasyidin.moneyverse.domain.usecase.account.*
 import com.rasyidin.moneyverse.domain.usecase.home.HomeUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.AddTransaction
 import com.rasyidin.moneyverse.domain.usecase.home.GetRecentTransactions
+import com.rasyidin.moneyverse.domain.usecase.transaction.DeleteTransaction
 import com.rasyidin.moneyverse.domain.usecase.transaction.detail.DetailTransactionUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.GetDetailTransaction
 import com.rasyidin.moneyverse.domain.usecase.transaction.history.GetHistoryTransactions
@@ -93,6 +94,7 @@ class UseCaseModule {
     fun providesDetailTransactionUseCase(
         transactionRepo: TransactionRepository
     ): DetailTransactionUseCase = DetailTransactionUseCase(
-        getDetailTransaction = GetDetailTransaction(transactionRepo)
+        getDetailTransaction = GetDetailTransaction(transactionRepo),
+        deleteTransaction = DeleteTransaction(transactionRepo)
     )
 }

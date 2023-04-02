@@ -79,10 +79,10 @@ fun DetailAccountScreen(
                     modifier = Modifier.padding(horizontal = 12.dp),
                     title = stringResource(id = if (viewModel.currentAccountId != null) R.string.edit_akun else R.string.tambah_akun),
                     onBackClick = onBackClick,
-                    iconEnd = if (viewModel.currentAccountId != null) R.drawable.ic_delete else null,
-                    onIconEndClick = {
+                    iconsEnd = if (viewModel.currentAccountId != null) listOf(R.drawable.ic_delete) else emptyList(),
+                    onIconEndClick = { position ->
                         showDialog = true
-                    }
+                    },
                 )
                 PickAddAccountIcon(
                     iconPath = uiState.iconPath,

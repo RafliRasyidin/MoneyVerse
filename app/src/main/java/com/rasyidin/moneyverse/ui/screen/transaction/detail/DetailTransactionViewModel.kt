@@ -10,10 +10,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.palette.graphics.Palette
+import com.rasyidin.moneyverse.domain.ResultState
 import com.rasyidin.moneyverse.domain.model.transaction.DetailTransactionUi
+import com.rasyidin.moneyverse.domain.model.transaction.Transaction
 import com.rasyidin.moneyverse.domain.onSuccess
 import com.rasyidin.moneyverse.domain.usecase.transaction.detail.DetailTransactionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,6 +29,9 @@ class DetailTransactionViewModel @Inject constructor(
 
     private var _uiState = mutableStateOf(DetailTransactionUi())
     val uiState: State<DetailTransactionUi> = _uiState
+
+    private var _deleteState: Channel<ResultState<Nothing>> = Channel()
+    val deleteState get() = _deleteState.receiveAsFlow()
 
     fun getDetailTransaction() {
         savedStateHandle.get<Int>("transactionId")?.let { transactionId ->
@@ -51,6 +58,31 @@ class DetailTransactionViewModel @Inject constructor(
                         }
                     }
                 }
+            }
+        }
+    }
+
+    fun onEvent(event: DetailTransactionEvent) {
+        when (event) {
+            is DetailTransactionEvent.DeleteTransaction -> deleteTransaction()
+        }
+    }
+
+    private fun deleteTransaction() {
+        viewModelScope.launch {
+            val detailTransaction = uiState.value
+            val transaction = Transaction(
+                id = detailTransaction.id,
+                nominal = detailTransaction.nominal,
+                createdAt = detailTransaction.createdAt,
+                notes = detailTransaction.notes,
+                transactionType = detailTransaction.transactionType,
+                categoryId = detailTransaction.categoryId,
+                fromAccountId = detailTransaction.fromAccountId,
+                toAccountId = detailTransaction.toAccountId
+            )
+            useCase.deleteTransaction(transaction).collect { result ->
+                _deleteState.send(result)
             }
         }
     }
