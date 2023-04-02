@@ -30,7 +30,7 @@ class OutcomeFragment : FragmentBinding<FragmentOutcomeBinding>(FragmentOutcomeB
     private fun setContent() {
         binding.composeView.setContent {
             MoneyVerseTheme {
-                OutcomeScreen()
+                OutcomeScreen(navController = findNavController())
             }
         }
     }

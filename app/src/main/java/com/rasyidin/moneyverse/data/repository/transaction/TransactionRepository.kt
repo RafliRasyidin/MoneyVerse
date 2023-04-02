@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TransactionRepository {
 
-    suspend fun upsertTransaction(transactionEntity: TransactionEntity)
+    suspend fun upsertTransaction(transactionEntity: TransactionEntity, editedAccountId: Int)
 
     suspend fun getRecentTransactions(): List<ItemTransaction>
 

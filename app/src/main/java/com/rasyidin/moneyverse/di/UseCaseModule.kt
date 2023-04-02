@@ -8,7 +8,7 @@ import com.rasyidin.moneyverse.domain.usecase.home.HomeUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.AddTransaction
 import com.rasyidin.moneyverse.domain.usecase.home.GetRecentTransactions
 import com.rasyidin.moneyverse.domain.usecase.transaction.detail.DetailTransactionUseCase
-import com.rasyidin.moneyverse.domain.usecase.transaction.detail.GetDetailTransaction
+import com.rasyidin.moneyverse.domain.usecase.transaction.GetDetailTransaction
 import com.rasyidin.moneyverse.domain.usecase.transaction.history.GetHistoryTransactions
 import com.rasyidin.moneyverse.domain.usecase.transaction.history.HistoryTransactionUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.income.GetIncomeCategories
@@ -56,7 +56,8 @@ class UseCaseModule {
     ): OutcomeUseCase = OutcomeUseCase(
         addTransaction = AddTransaction(transactionRepo),
         getListAccount = com.rasyidin.moneyverse.domain.usecase.transaction.GetListAccount(accountRepo),
-        getOutcomeCategories = GetOutcomeCategories(categoryRepo)
+        getOutcomeCategories = GetOutcomeCategories(categoryRepo),
+        getDetailTransaction = GetDetailTransaction(transactionRepo)
     )
 
     @Provides
@@ -67,7 +68,8 @@ class UseCaseModule {
     ): IncomeUseCase = IncomeUseCase(
         addTransaction = AddTransaction(transactionRepo),
         getIncomeCategories = GetIncomeCategories(categoryRepo),
-        getListAccount = com.rasyidin.moneyverse.domain.usecase.transaction.GetListAccount(accountRepo)
+        getListAccount = com.rasyidin.moneyverse.domain.usecase.transaction.GetListAccount(accountRepo),
+        getDetailTransaction = GetDetailTransaction(transactionRepo)
     )
 
     @Provides
@@ -76,7 +78,8 @@ class UseCaseModule {
         accountRepo: AccountRepository
     ): TransferUseCase = TransferUseCase(
         addTransaction = AddTransaction(transactionRepo),
-        getListAccount = com.rasyidin.moneyverse.domain.usecase.transaction.GetListAccount(accountRepo)
+        getListAccount = com.rasyidin.moneyverse.domain.usecase.transaction.GetListAccount(accountRepo),
+        getDetailTransaction = GetDetailTransaction(transactionRepo)
     )
 
     @Provides

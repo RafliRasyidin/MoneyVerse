@@ -58,7 +58,7 @@ fun MVTextFieldNominal(
                 modifier = Modifier
                     .weight(1F)
                     .offset(y = 14.dp),
-                value = text,
+                value = nominal,
                 onValueChange = { newText ->
                     text = newText
                     onNominalChange.invoke(text)

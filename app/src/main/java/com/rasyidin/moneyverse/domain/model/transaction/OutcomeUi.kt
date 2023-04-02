@@ -22,5 +22,7 @@ data class OutcomeUi(
     var accountName: String = "",
     var accounts: List<Category> = emptyList(),
     var categories: List<Category> = emptyList(),
-    var errorMessage: String? = ""
+    var errorMessage: String? = "",
+    var transactionType: TransactionType = TransactionType.OUTCOME,
+    var editedAccountId: Int = -1
 )

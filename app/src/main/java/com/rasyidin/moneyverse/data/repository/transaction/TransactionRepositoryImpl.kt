@@ -18,10 +18,20 @@ class TransactionRepositoryImpl @Inject constructor(
     private val transactionDao: TransactionDao,
     private val accountDao: AccountDao
 ) : TransactionRepository {
-    override suspend fun upsertTransaction(transactionEntity: TransactionEntity) {
+    override suspend fun upsertTransaction(
+        transactionEntity: TransactionEntity,
+        editedAccountId: Int
+    ) {
         when (transactionEntity.transactionType) {
             OUTCOME -> {
-                transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+                if (transactionEntity.id == 0) {
+                    transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+                } else {
+                    if (editedAccountId != -1) {
+                        transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
+                        transactionDao.creditAccountById(transactionEntity.nominal, editedAccountId)
+                    }
+                }
                 transactionDao.upsert(transactionEntity)
             }
             INCOME -> {

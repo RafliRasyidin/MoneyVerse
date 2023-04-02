@@ -2,6 +2,7 @@ package com.rasyidin.moneyverse.ui.screen.transaction.detail
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.rasyidin.moneyverse.databinding.FragmentDetailTransactionBinding
 import com.rasyidin.moneyverse.ui.component.FragmentBinding
@@ -11,6 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailTransactionFragment : FragmentBinding<FragmentDetailTransactionBinding>(FragmentDetailTransactionBinding::inflate) {
+
+    private val viewModel: DetailTransactionViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,6 +31,7 @@ class DetailTransactionFragment : FragmentBinding<FragmentDetailTransactionBindi
 
     override fun onResume() {
         super.onResume()
+        viewModel.getDetailTransaction()
         hideBotNav()
     }
 }

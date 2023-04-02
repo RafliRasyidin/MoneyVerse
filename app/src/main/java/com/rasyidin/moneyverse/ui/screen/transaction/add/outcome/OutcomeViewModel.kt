@@ -3,6 +3,7 @@ package com.rasyidin.moneyverse.ui.screen.transaction.add.outcome
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rasyidin.moneyverse.MoneyVerseApp
@@ -10,9 +11,10 @@ import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.*
 import com.rasyidin.moneyverse.domain.model.transaction.OutcomeUi
 import com.rasyidin.moneyverse.domain.model.transaction.Transaction
-import com.rasyidin.moneyverse.domain.model.transaction.TransactionType
+import com.rasyidin.moneyverse.domain.model.transaction.TransactionType.OUTCOME
 import com.rasyidin.moneyverse.domain.usecase.transaction.outcome.OutcomeUseCase
 import com.rasyidin.moneyverse.ui.theme.ColorBgBlue
+import com.rasyidin.moneyverse.ui.theme.ColorBgPurple
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -20,7 +22,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) : ViewModel() {
+class OutcomeViewModel @Inject constructor(
+    private val useCase: OutcomeUseCase,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     private var _uiState = mutableStateOf(OutcomeUi())
     val uiState: State<OutcomeUi> get() = _uiState
@@ -33,9 +38,47 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
     private var _sheetState: MutableState<SheetOutcomeEvent> = mutableStateOf(SheetOutcomeEvent.Idle)
     var sheetState: State<SheetOutcomeEvent> = _sheetState
 
+    private var transactionId: Int = -1
+
     init {
+        getDetailTransaction()
         getListAccounts()
         getCategories()
+    }
+
+    private fun getDetailTransaction() {
+        savedStateHandle.get<Int>("transactionId")?.let { transactionId ->
+            viewModelScope.launch {
+                useCase.getDetailTransaction(transactionId).collect { result ->
+                    result.onSuccess { detailTransaction ->
+                        detailTransaction?.let {
+                            this@OutcomeViewModel.transactionId = transactionId
+                            if (transactionId != -1) {
+                                _uiState.value = uiState.value.copy(
+                                    id = detailTransaction.id,
+                                    nominal = detailTransaction.nominal,
+                                    date = detailTransaction.createdAt,
+                                    notes = detailTransaction.notes ?: "",
+                                    transactionType = detailTransaction.transactionType,
+                                    categoryId = detailTransaction.categoryId ?: -1,
+                                    accountId = detailTransaction.fromAccountId,
+                                    accountName = detailTransaction.accountName,
+                                    accountIconPath = detailTransaction.accountIconPath,
+                                    accountBgColor = detailTransaction.accountBgColor,
+                                    categoryName = detailTransaction.categoryName ?: "",
+                                    categoryIconPath = detailTransaction.categoryIconPath
+                                        ?: R.drawable.ic_tagihan,
+                                    categoryBgColor = detailTransaction.categoryBgColor
+                                        ?: ColorBgPurple.toArgb(),
+                                    editedAccountId = detailTransaction.fromAccountId
+                                )
+                                setButtonValidation()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun getListAccounts() {
@@ -43,14 +86,20 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
             useCase.getListAccount().collect { result ->
                 result.onSuccess { accounts ->
                     accounts?.let {
-                        val account = accounts.first()
-                        _uiState.value = uiState.value.copy(
-                            accounts = accounts,
-                            accountId = account.id,
-                            accountName = account.name,
-                            accountBgColor = account.bgColor,
-                            accountIconPath = account.iconPath
-                        )
+                        if (transactionId == -1) {
+                            val account = accounts.first()
+                            _uiState.value = uiState.value.copy(
+                                accounts = accounts,
+                                accountId = account.id,
+                                accountName = account.name,
+                                accountBgColor = account.bgColor,
+                                accountIconPath = account.iconPath
+                            )
+                        } else {
+                            _uiState.value = uiState.value.copy(
+                                accounts = accounts,
+                            )
+                        }
                     }
                 }
 
@@ -74,13 +123,19 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
             useCase.getOutcomeCategories().collect { result ->
                 result.onSuccess { categories ->
                     categories?.let {
-                        _uiState.value = uiState.value.copy(
-                            categories = categories,
-                            categoryId = -1,
-                            categoryName = MoneyVerseApp.appContext!!.getString(R.string.pilih_kategori),
-                            categoryBgColor = ColorBgBlue.toArgb(),
-                            categoryIconPath = R.drawable.ic_tagihan
-                        )
+                        if (transactionId == -1) {
+                            _uiState.value = uiState.value.copy(
+                                categories = categories,
+                                categoryId = -1,
+                                categoryName = MoneyVerseApp.appContext!!.getString(R.string.pilih_kategori),
+                                categoryBgColor = ColorBgBlue.toArgb(),
+                                categoryIconPath = R.drawable.ic_tagihan
+                            )
+                        } else {
+                            _uiState.value = uiState.value.copy(
+                                categories = categories,
+                            )
+                        }
                     }
                 }
 
@@ -140,17 +195,38 @@ class OutcomeViewModel @Inject constructor(private val useCase: OutcomeUseCase) 
 
     private fun upsertTransaction() {
         viewModelScope.launch {
-            useCase.addTransaction(
-                Transaction(
-                    nominal = uiState.value.nominal,
-                    createdAt = uiState.value.date,
-                    notes = uiState.value.notes,
-                    transactionType = TransactionType.OUTCOME,
-                    categoryId = uiState.value.categoryId,
-                    fromAccountId = uiState.value.accountId
-                )
-            ).collect { result ->
-                _upsertState.send(result)
+            if (transactionId == -1) {
+                useCase.addTransaction(
+                    Transaction(
+                        nominal = uiState.value.nominal,
+                        createdAt = uiState.value.date,
+                        notes = uiState.value.notes,
+                        transactionType = OUTCOME,
+                        categoryId = uiState.value.categoryId,
+                        fromAccountId = uiState.value.accountId
+                    )
+                ).collect { result ->
+                    _upsertState.send(result)
+                }
+            } else {
+                val editedAccountId =
+                    if (uiState.value.editedAccountId == uiState.value.accountId) -1
+                    else uiState.value.editedAccountId
+
+                useCase.addTransaction(
+                    Transaction(
+                        id = transactionId,
+                        nominal = uiState.value.nominal,
+                        createdAt = uiState.value.date,
+                        notes = uiState.value.notes,
+                        transactionType = OUTCOME,
+                        categoryId = uiState.value.categoryId,
+                        fromAccountId = uiState.value.accountId
+                    ),
+                    editedAccountId
+                    ).collect { result ->
+                    _upsertState.send(result)
+                }
             }
         }
     }

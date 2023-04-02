@@ -2,6 +2,7 @@
 
 package com.rasyidin.moneyverse.ui.screen.transaction.add.outcome
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -12,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.ui.component.*
 import com.rasyidin.moneyverse.ui.screen.transaction.add.CardAccount
@@ -23,7 +24,6 @@ import com.rasyidin.moneyverse.ui.screen.transaction.add.CardCategory
 import com.rasyidin.moneyverse.ui.screen.transaction.add.TextFieldDesc
 import com.rasyidin.moneyverse.ui.screen.transaction.add.outcome.SheetOutcomeEvent.*
 import com.rasyidin.moneyverse.ui.theme.ColorWhite
-import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
 import com.rasyidin.moneyverse.utils.DateUtils.formatDate
 import kotlinx.coroutines.launch
 
@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun OutcomeScreen(
     modifier: Modifier = Modifier,
+    navController: NavController,
     viewModel: OutcomeViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.value
@@ -112,6 +113,12 @@ fun OutcomeScreen(
                     .fillMaxSize()
                     .padding(horizontal = 12.dp)
             ) {
+                AnimatedVisibility(visible = uiState.id != -1) {
+                    MVToolbar(
+                        title = stringResource(id = R.string.edit_transaksi),
+                        onBackClick = { navController.popBackStack() }
+                    )
+                }
                 MVTextFieldNominal(
                     nominal = uiState.nominal.toString(),
                     onNominalChange = { newText ->
@@ -198,12 +205,4 @@ fun OutcomeScreen(
             }
         }
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PreviewOutcomeScreen() {
-    MoneyVerseTheme {
-        OutcomeScreen()
-    }
 }

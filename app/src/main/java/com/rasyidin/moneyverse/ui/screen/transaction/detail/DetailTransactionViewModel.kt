@@ -20,13 +20,13 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailTransactionViewModel @Inject constructor(
     private val useCase: DetailTransactionUseCase,
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private var _uiState = mutableStateOf(DetailTransactionUi())
     val uiState: State<DetailTransactionUi> = _uiState
 
-    init {
+    fun getDetailTransaction() {
         savedStateHandle.get<Int>("transactionId")?.let { transactionId ->
             viewModelScope.launch {
                 useCase.getDetailTransaction(transactionId).collect { result ->

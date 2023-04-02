@@ -74,5 +74,56 @@
             android:name="transactionId"
             app:argType="integer"
             android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_detailTransactionFragment_to_outcomeFragment"
+            app:destination="@id/outcomeFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/push_left"
+            app:popEnterAnim="@anim/push_right"
+            app:popExitAnim="@anim/slide_right"/>
+        <action
+            android:id="@+id/action_detailTransactionFragment_to_incomeFragment"
+            app:destination="@id/incomeFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/push_left"
+            app:popEnterAnim="@anim/push_right"
+            app:popExitAnim="@anim/slide_right"/>
+        <action
+            android:id="@+id/action_detailTransactionFragment_to_transferFragment"
+            app:destination="@id/transferFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/push_left"
+            app:popEnterAnim="@anim/push_right"
+            app:popExitAnim="@anim/slide_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/outcomeFragment"
+        android:name="com.rasyidin.moneyverse.ui.screen.transaction.add.outcome.OutcomeFragment"
+        android:label="fragment_outcome"
+        tools:layout="@layout/fragment_outcome" >
+        <argument
+            android:name="transactionId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+    <fragment
+        android:id="@+id/incomeFragment"
+        android:name="com.rasyidin.moneyverse.ui.screen.transaction.add.income.IncomeFragment"
+        android:label="fragment_income"
+        tools:layout="@layout/fragment_income" >
+        <argument
+            android:name="transactionId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+    <fragment
+        android:id="@+id/transferFragment"
+        android:name="com.rasyidin.moneyverse.ui.screen.transaction.add.transfer.TransferFragment"
+        android:label="fragment_transfer"
+        tools:layout="@layout/fragment_transfer" >
+        <argument
+            android:name="transactionId"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
 </navigation>

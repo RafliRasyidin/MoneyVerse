@@ -50,7 +50,14 @@ fun DetailTransactionScreen(
             title = stringResource(id = R.string.detail_transaksi),
             iconEnd = R.drawable.ic_edit,
             onBackClick = { navController.popBackStack() },
-            onIconEndClick = { }
+            onIconEndClick = {
+                val action = when (detailUi.transactionType) {
+                    OUTCOME -> DetailTransactionFragmentDirections.actionDetailTransactionFragmentToOutcomeFragment(detailUi.id)
+                    INCOME -> DetailTransactionFragmentDirections.actionDetailTransactionFragmentToIncomeFragment(detailUi.id)
+                    TRANSFER -> DetailTransactionFragmentDirections.actionDetailTransactionFragmentToTransferFragment(detailUi.id)
+                }
+                navController.navigate(action)
+            }
         )
         Spacer(modifier = Modifier.height(36.dp))
         CardDetailTransaction(
