@@ -38,7 +38,7 @@ class OutcomeViewModel @Inject constructor(
     private var _sheetState: MutableState<SheetOutcomeEvent> = mutableStateOf(SheetOutcomeEvent.Idle)
     var sheetState: State<SheetOutcomeEvent> = _sheetState
 
-    private var transactionId: Int = -1
+    private var transactionId: String = ""
 
     init {
         getDetailTransaction()
@@ -47,13 +47,13 @@ class OutcomeViewModel @Inject constructor(
     }
 
     private fun getDetailTransaction() {
-        savedStateHandle.get<Int>("transactionId")?.let { transactionId ->
+        savedStateHandle.get<String>("transactionId")?.let { transactionId ->
             viewModelScope.launch {
                 useCase.getDetailTransaction(transactionId).collect { result ->
                     result.onSuccess { detailTransaction ->
                         detailTransaction?.let {
                             this@OutcomeViewModel.transactionId = transactionId
-                            if (transactionId != -1) {
+                            if (transactionId.isNotEmpty()) {
                                 _uiState.value = uiState.value.copy(
                                     id = detailTransaction.id,
                                     nominal = detailTransaction.nominal,
@@ -84,7 +84,7 @@ class OutcomeViewModel @Inject constructor(
             useCase.getListAccount().collect { result ->
                 result.onSuccess { accounts ->
                     accounts?.let {
-                        if (transactionId == -1) {
+                        if (transactionId.isEmpty()) {
                             val account = accounts.first()
                             _uiState.value = uiState.value.copy(
                                 accounts = accounts,
@@ -121,7 +121,7 @@ class OutcomeViewModel @Inject constructor(
             useCase.getOutcomeCategories().collect { result ->
                 result.onSuccess { categories ->
                     categories?.let {
-                        if (transactionId == -1) {
+                        if (transactionId.isEmpty()) {
                             _uiState.value = uiState.value.copy(
                                 categories = categories,
                                 categoryId = -1,
@@ -193,7 +193,7 @@ class OutcomeViewModel @Inject constructor(
 
     private fun upsertTransaction() {
         viewModelScope.launch {
-            if (transactionId == -1) {
+            if (transactionId.isEmpty()) {
                 useCase.addTransaction(
                     Transaction(
                         nominal = uiState.value.nominal,

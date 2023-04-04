@@ -8,7 +8,7 @@ import com.rasyidin.moneyverse.ui.theme.ColorGray400
 import com.rasyidin.moneyverse.utils.DateUtils
 
 data class DetailTransactionUi(
-    var id: Int = -1,
+    var id: String = "",
     var nominal: Long = 0,
     var createdAt: String = DateUtils.getCurrentDate(),
     var notes: String? = null,

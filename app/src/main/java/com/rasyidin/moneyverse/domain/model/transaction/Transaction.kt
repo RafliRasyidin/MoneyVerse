@@ -3,7 +3,7 @@ package com.rasyidin.moneyverse.domain.model.transaction
 import com.rasyidin.moneyverse.data.local.entities.transaction.TransactionEntity
 
 data class Transaction(
-    var id: Int = 0,
+    var id: String = "",
     var nominal: Long,
     var createdAt: String,
     var notes: String? = null,

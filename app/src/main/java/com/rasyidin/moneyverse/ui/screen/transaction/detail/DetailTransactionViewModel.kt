@@ -34,7 +34,7 @@ class DetailTransactionViewModel @Inject constructor(
     val deleteState get() = _deleteState.receiveAsFlow()
 
     fun getDetailTransaction() {
-        savedStateHandle.get<Int>("transactionId")?.let { transactionId ->
+        savedStateHandle.get<String>("transactionId")?.let { transactionId ->
             viewModelScope.launch {
                 useCase.getDetailTransaction(transactionId).collect { result ->
                     result.onSuccess { detailTransaction ->

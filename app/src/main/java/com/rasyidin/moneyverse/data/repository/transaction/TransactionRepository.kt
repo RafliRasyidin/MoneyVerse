@@ -14,7 +14,7 @@ interface TransactionRepository {
 
     fun getHistoryTransactions(): Flow<PagingData<ItemTransaction>>
 
-    suspend fun getDetailTransaction(transactionId: Int): DetailTransactionUi
+    suspend fun getDetailTransaction(transactionId: String): DetailTransactionUi
 
     suspend fun deleteTransaction(transactionEntity: TransactionEntity)
 }

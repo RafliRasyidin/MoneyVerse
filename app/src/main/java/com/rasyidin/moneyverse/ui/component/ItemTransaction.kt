@@ -124,7 +124,7 @@ private fun PreviewItemTransaction() {
     MoneyVerseTheme {
         ItemTransaction(
             item = ItemTransaction(
-                id = 0,
+                id = "",
                 nominal = 70000,
                 createdAt = "2023-03-26 15:21:00",
                 notes = "Catatan",

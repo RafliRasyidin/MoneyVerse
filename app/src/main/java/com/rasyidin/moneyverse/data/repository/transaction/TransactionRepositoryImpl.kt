@@ -9,6 +9,7 @@ import com.rasyidin.moneyverse.data.local.entities.transaction.TransactionEntity
 import com.rasyidin.moneyverse.domain.model.transaction.DetailTransactionUi
 import com.rasyidin.moneyverse.domain.model.transaction.ItemTransaction
 import com.rasyidin.moneyverse.domain.model.transaction.TransactionType.*
+import com.rasyidin.moneyverse.utils.RunningNumberUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -26,7 +27,8 @@ class TransactionRepositoryImpl @Inject constructor(
     ) {
         when (transactionEntity.transactionType) {
             OUTCOME -> {
-                if (transactionEntity.id == 0) {
+                if (transactionEntity.id.isEmpty()) {
+                    transactionEntity.id = RunningNumberUtils.getIdOutcomeTransaction()
                     transactionDao.debitAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
                 } else {
                     val currentTransaction = transactionDao.getDetailTransactionById(transactionEntity.id)
@@ -52,7 +54,8 @@ class TransactionRepositoryImpl @Inject constructor(
                 transactionDao.upsert(transactionEntity)
             }
             INCOME -> {
-                if (transactionEntity.id == 0) {
+                if (transactionEntity.id.isEmpty()) {
+                    transactionEntity.id = RunningNumberUtils.getIdIncomeTransaction()
                     transactionDao.creditAccountById(transactionEntity.nominal, transactionEntity.fromAccountId)
                 } else {
                     val currentTransaction = transactionDao.getDetailTransactionById(transactionEntity.id)
@@ -78,7 +81,7 @@ class TransactionRepositoryImpl @Inject constructor(
                 transactionDao.upsert(transactionEntity)
             }
             TRANSFER -> {
-                if (transactionEntity.id != 0) {
+                if (transactionEntity.id.isNotEmpty()) {
                     val currentTransaction = transactionDao.getDetailTransactionById(transactionEntity.id)
                     when {
                         editedFromAccountId != -1 && editedToAccountId != -1 -> {
@@ -140,6 +143,7 @@ class TransactionRepositoryImpl @Inject constructor(
                         }
                     }
                 } else {
+                    transactionEntity.id = RunningNumberUtils.getIdTransferTransaction()
                     transactionDao.transfer(transactionEntity.nominal, transactionEntity.fromAccountId, transactionEntity.toAccountId!!)
                 }
                 transactionDao.upsert(transactionEntity)
@@ -160,7 +164,7 @@ class TransactionRepositoryImpl @Inject constructor(
         }.flow.flowOn(Dispatchers.IO)
     }
 
-    override suspend fun getDetailTransaction(transactionId: Int): DetailTransactionUi {
+    override suspend fun getDetailTransaction(transactionId: String): DetailTransactionUi {
         val detailTransaction = transactionDao.getDetailTransactionById(transactionId)
         return if (detailTransaction.categoryId != null) {
             detailTransaction

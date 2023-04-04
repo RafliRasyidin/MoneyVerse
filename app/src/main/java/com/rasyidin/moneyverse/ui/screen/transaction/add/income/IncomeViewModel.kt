@@ -37,7 +37,7 @@ class IncomeViewModel @Inject constructor(
     private var _sheetState: MutableState<SheetIncomeEvent> = mutableStateOf(SheetIncomeEvent.Idle)
     val sheetState: State<SheetIncomeEvent> = _sheetState
 
-    private var transactionId: Int = -1
+    private var transactionId: String = ""
 
     init {
         getDetailTransaction()
@@ -46,13 +46,13 @@ class IncomeViewModel @Inject constructor(
     }
 
     fun getDetailTransaction() {
-        savedStateHandle.get<Int>("transactionId")?.let { transactionId ->
+        savedStateHandle.get<String>("transactionId")?.let { transactionId ->
             viewModelScope.launch {
                 useCase.getDetailTransaction(transactionId).collect { result ->
                     result.onSuccess { detailTransaction ->
                         detailTransaction?.let {
                             this@IncomeViewModel.transactionId = transactionId
-                            if (transactionId != -1) {
+                            if (transactionId.isNotEmpty()) {
                                 _uiState.value = uiState.value.copy(
                                     id = detailTransaction.id,
                                     nominal = detailTransaction.nominal,
@@ -122,7 +122,7 @@ class IncomeViewModel @Inject constructor(
             useCase.getListAccount().collect { result ->
                 result.onSuccess { accounts ->
                     accounts?.let {
-                        if (transactionId == -1) {
+                        if (transactionId.isEmpty()) {
                             val account = accounts.first()
                             _uiState.value = uiState.value.copy(
                                 accounts = accounts,
@@ -159,7 +159,7 @@ class IncomeViewModel @Inject constructor(
             useCase.getIncomeCategories().collect { result ->
                 result.onSuccess { categories ->
                     categories?.let {
-                        if (transactionId == -1) {
+                        if (transactionId.isEmpty()) {
                             _uiState.value = uiState.value.copy(
                                 categories = categories,
                                 categoryId = -1,
@@ -192,7 +192,7 @@ class IncomeViewModel @Inject constructor(
 
     private fun upsertTransaction() {
         viewModelScope.launch {
-            if (transactionId == -1) {
+            if (transactionId.isEmpty()) {
                 useCase.addTransaction(
                     Transaction(
                         nominal = uiState.value.nominal,

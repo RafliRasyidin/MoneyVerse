@@ -8,7 +8,7 @@ import com.rasyidin.moneyverse.ui.theme.ColorBgPurple
 import com.rasyidin.moneyverse.utils.DateUtils
 
 data class TransferUi(
-    var id: Int = 0,
+    var id: String = "",
     var nominal: Long = 0,
     var date: String = DateUtils.getCurrentDate(),
     var notes: String = "",

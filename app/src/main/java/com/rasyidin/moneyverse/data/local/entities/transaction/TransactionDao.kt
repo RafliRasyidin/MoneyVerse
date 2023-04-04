@@ -94,5 +94,5 @@ interface TransactionDao {
         LEFT JOIN category c ON a.categoryId = c.id
         WHERE a.id = :transactionId
     """)
-    fun getDetailTransactionById(transactionId: Int): DetailTransactionUi
+    fun getDetailTransactionById(transactionId: String): DetailTransactionUi
 }

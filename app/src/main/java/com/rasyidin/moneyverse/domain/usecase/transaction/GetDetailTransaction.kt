@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 class GetDetailTransaction(private val transactionRepo: TransactionRepository) {
 
-    suspend operator fun invoke(transactionId: Int): Flow<ResultState<DetailTransactionUi>> {
+    suspend operator fun invoke(transactionId: String): Flow<ResultState<DetailTransactionUi>> {
         return fetch {
             transactionRepo.getDetailTransaction(transactionId)
         }

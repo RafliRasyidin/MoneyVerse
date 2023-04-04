@@ -8,8 +8,8 @@ import com.rasyidin.moneyverse.domain.model.transaction.TransactionType
 
 @Entity(tableName = "transaksi")
 data class TransactionEntity(
-    @PrimaryKey(true)
-    var id: Int = 0,
+    @PrimaryKey
+    var id: String,
 
     @ColumnInfo("nominal")
     var nominal: Long,

@@ -8,7 +8,7 @@ import com.rasyidin.moneyverse.ui.theme.ColorBgRed
 import com.rasyidin.moneyverse.utils.DateUtils
 
 data class OutcomeUi(
-    var id: Int = 0,
+    var id: String = "",
     var nominal: Long = 0,
     var date: String = DateUtils.getCurrentDate(),
     var notes: String = "",

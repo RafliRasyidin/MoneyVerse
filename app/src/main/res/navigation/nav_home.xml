@@ -72,8 +72,8 @@
         tools:layout="@layout/fragment_detail_transaction" >
         <argument
             android:name="transactionId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            app:argType="string"
+            android:defaultValue="" />
         <action
             android:id="@+id/action_detailTransactionFragment_to_outcomeFragment"
             app:destination="@id/outcomeFragment"
@@ -103,8 +103,8 @@
         tools:layout="@layout/fragment_outcome" >
         <argument
             android:name="transactionId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            app:argType="string"
+            android:defaultValue="" />
     </fragment>
     <fragment
         android:id="@+id/incomeFragment"
@@ -113,8 +113,8 @@
         tools:layout="@layout/fragment_income" >
         <argument
             android:name="transactionId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            app:argType="string"
+            android:defaultValue="" />
     </fragment>
     <fragment
         android:id="@+id/transferFragment"
@@ -123,7 +123,7 @@
         tools:layout="@layout/fragment_transfer" >
         <argument
             android:name="transactionId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
 </navigation>

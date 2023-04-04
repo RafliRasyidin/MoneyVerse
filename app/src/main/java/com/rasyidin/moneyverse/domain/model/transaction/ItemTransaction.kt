@@ -1,7 +1,7 @@
 package com.rasyidin.moneyverse.domain.model.transaction
 
 data class ItemTransaction(
-    val id: Int,
+    val id: String,
     val nominal: Long,
     val createdAt: String,
     val notes: String? = null,
