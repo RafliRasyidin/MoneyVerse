@@ -82,7 +82,7 @@
     <string name="hapus_transaksi">Hapus Transaksi</string>
     <string name="transaksi_berhasil_dihapus">Transaksi berhasil dihapus</string>
     <string name="transaksi_gagal_dihapus">Transaksi gagal dihapus</string>
-    <string name="count_sisa_anggaran">Tersisa dari Rp $d</string>
+    <string name="count_sisa_anggaran">tersisa dari Rp $d</string>
     <string name="buat_anggaran_baru">Buat Anggaran Baru</string>
     <string name="sisa">Sisa</string>
     <string name="anggaran_masih_batas_wajar">Anggaran kamu masih dalam batas wajar</string>
