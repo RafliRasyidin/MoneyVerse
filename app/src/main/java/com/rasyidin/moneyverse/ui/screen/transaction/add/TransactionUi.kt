@@ -61,7 +61,7 @@ fun CardCategory(
                             Color(if (iconPath == -1) ColorBgBlue.toArgb() else bgColor),
                             shape = MaterialTheme.shapes.small
                         )
-                        .padding(6.dp)
+                        .padding(10.dp)
                 ) {
                     Image(
                         modifier = Modifier.size(24.dp),
