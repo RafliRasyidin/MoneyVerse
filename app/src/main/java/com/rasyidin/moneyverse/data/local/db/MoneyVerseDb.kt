@@ -6,10 +6,13 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.rasyidin.moneyverse.R
+import com.rasyidin.moneyverse.data.local.db.converter.AnggaranConverter
 import com.rasyidin.moneyverse.data.local.db.converter.CategoryConverter
 import com.rasyidin.moneyverse.data.local.db.converter.TransactionConverter
 import com.rasyidin.moneyverse.data.local.entities.account.AccountDao
 import com.rasyidin.moneyverse.data.local.entities.account.AccountEntity
+import com.rasyidin.moneyverse.data.local.entities.anggaran.AnggaranDao
+import com.rasyidin.moneyverse.data.local.entities.anggaran.AnggaranEntity
 import com.rasyidin.moneyverse.data.local.entities.category.CategoryDao
 import com.rasyidin.moneyverse.data.local.entities.category.CategoryEntity
 import com.rasyidin.moneyverse.data.local.entities.transaction.TransactionDao
@@ -23,17 +26,19 @@ import com.rasyidin.moneyverse.utils.DateUtils
     entities = [
         AccountEntity::class,
         CategoryEntity::class,
-        TransactionEntity::class
+        TransactionEntity::class,
+        AnggaranEntity::class
     ],
     version = MoneyVerseDb.VERSION_DB,
     exportSchema = false
 )
-@TypeConverters(TransactionConverter::class, CategoryConverter::class)
+@TypeConverters(TransactionConverter::class, CategoryConverter::class, AnggaranConverter::class)
 abstract class MoneyVerseDb : RoomDatabase() {
 
     abstract fun accountDao(): AccountDao
     abstract fun categoryDao(): CategoryDao
     abstract fun transactionDao(): TransactionDao
+    abstract fun anggaranDao(): AnggaranDao
 
     companion object {
         const val VERSION_DB = 1

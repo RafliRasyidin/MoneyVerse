@@ -8,6 +8,7 @@ object RunningNumberUtils {
     private const val PREFIX_TRANSACTION_OUTCOME = "OUT"
     private const val PREFIX_TRANSACTION_INCOME = "INC"
     private const val PREFIX_TRANSACTION_TRANSFER = "TRF"
+    private const val PREFIX_ANGGARAN = "BGT"
 
     private const val startSuffix = "00000"
 
@@ -36,6 +37,15 @@ object RunningNumberUtils {
         Prefs.putString(PrefKey.TRANSACTION_TRANSFER, lastRunningNumber)
         val uuid = UUID.randomUUID().toString().substring(0..5).uppercase()
         return "#$PREFIX_TRANSACTION_TRANSFER$uuid/$lastRunningNumber"
+    }
+
+    fun getIdAnggaran(): String {
+        var lastRunningNumber = Prefs.getString(PrefKey.ANGGARAN, startSuffix)
+        lastRunningNumber = generateRunningNumber(lastRunningNumber)
+
+        Prefs.putString(PrefKey.ANGGARAN, lastRunningNumber)
+        val uuid = UUID.randomUUID().toString().substring(0..3).uppercase()
+        return "#$PREFIX_ANGGARAN$uuid/$lastRunningNumber"
     }
 
     private fun generateRunningNumber(lastRunningNumber: String): String {

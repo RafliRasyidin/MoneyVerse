@@ -2,6 +2,8 @@ package com.rasyidin.moneyverse.di
 
 import com.rasyidin.moneyverse.data.repository.account.AccountRepository
 import com.rasyidin.moneyverse.data.repository.account.AccountRepositoryImpl
+import com.rasyidin.moneyverse.data.repository.anggaran.AnggaranRepository
+import com.rasyidin.moneyverse.data.repository.anggaran.AnggaranRepositoryImpl
 import com.rasyidin.moneyverse.data.repository.category.CategoryRepository
 import com.rasyidin.moneyverse.data.repository.category.CategoryRepositoryImpl
 import com.rasyidin.moneyverse.data.repository.transaction.TransactionRepository
@@ -23,4 +25,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun providesTransactionRepository(repositoryImpl: TransactionRepositoryImpl): TransactionRepository
+
+    @Binds
+    abstract fun providesAnggaranRepository(repositoryImpl: AnggaranRepositoryImpl): AnggaranRepository
 }

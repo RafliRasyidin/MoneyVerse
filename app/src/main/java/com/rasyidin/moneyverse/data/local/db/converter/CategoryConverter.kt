@@ -11,7 +11,7 @@ class CategoryConverter {
             CategoryType.TransactionOutcome.name -> CategoryType.TransactionOutcome
             CategoryType.TransactionIncome.name -> CategoryType.TransactionIncome
             CategoryType.AddIncome.name -> CategoryType.AddIncome
-            else -> throw IllegalStateException("Illegal category type, expected CategoryType founded $$value")
+            else -> throw IllegalStateException("Illegal category type, expected CategoryType founded $value")
         }
     }
 

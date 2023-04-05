@@ -69,4 +69,8 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun providesTransactionDao(db: MoneyVerseDb) = db.transactionDao()
+
+    @Provides
+    @Singleton
+    fun providesAnggaranDao(db: MoneyVerseDb) = db.anggaranDao()
 }

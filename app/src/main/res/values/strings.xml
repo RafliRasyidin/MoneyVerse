@@ -86,4 +86,7 @@
     <string name="buat_anggaran_baru">Buat Anggaran Baru</string>
     <string name="sisa">Sisa</string>
     <string name="anggaran_masih_batas_wajar">Anggaran kamu masih dalam batas wajar</string>
+    <string name="anggaran_warning">Opss! anggaran kamu hampir mendekati limit</string>
+    <string name="anggaran_bahaya">Opss! anggaran kamu sudah melebihi limit</string>
+    <string name="daftar_anggaran">Daftar Anggaran</string>
 </resources>
