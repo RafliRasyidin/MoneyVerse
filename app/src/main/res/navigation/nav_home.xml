@@ -41,7 +41,15 @@
         android:id="@+id/anggaranFragment"
         android:name="com.rasyidin.moneyverse.ui.screen.anggaran.AnggaranFragment"
         android:label="fragment_anggaran"
-        tools:layout="@layout/fragment_anggaran" />
+        tools:layout="@layout/fragment_anggaran" >
+        <action
+            android:id="@+id/action_anggaranFragment_to_addAnggaranFragment"
+            app:destination="@id/addAnggaranFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/push_left"
+            app:popEnterAnim="@anim/push_right"
+            app:popExitAnim="@anim/slide_right"/>
+    </fragment>
     <fragment
         android:id="@+id/reportFragment"
         android:name="com.rasyidin.moneyverse.ui.screen.report.ReportFragment"
@@ -126,4 +134,9 @@
             app:argType="string"
             android:defaultValue=""/>
     </fragment>
+    <fragment
+        android:id="@+id/addAnggaranFragment"
+        android:name="com.rasyidin.moneyverse.ui.screen.anggaran.add.AddAnggaranFragment"
+        android:label="fragment_add_anggaran"
+        tools:layout="@layout/fragment_add_anggaran" />
 </navigation>

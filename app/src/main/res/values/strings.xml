@@ -89,4 +89,16 @@
     <string name="anggaran_warning">Opss! anggaran kamu hampir mendekati limit</string>
     <string name="anggaran_bahaya">Opss! anggaran kamu sudah melebihi limit</string>
     <string name="daftar_anggaran">Daftar Anggaran</string>
+    <string name="buat_anggaran">Buat Anggaran</string>
+    <string name="bulanan">Bulanan</string>
+    <string name="mingguan">Mingguan</string>
+    <string name="tahunan">Tahunan</string>
+    <string name="harian">Harian</string>
+    <string name="pilih_jenis_anggaran">Pilih Jenis Anggaran</string>
+    <string name="jenis_anggaran">Jenis Anggaran</string>
+    <string name="dari_tanggal">Sampai Tanggal</string>
+    <string name="sampai_tanggal">Sampai Tanggal</string>
+    <string name="anggaran_berulang">Anggaran Berulang</string>
+    <string name="info_anggaran">Anggaran %s akan aktif dari tanggal %s</string>
+    <string name="info_anggaran_berulang">Anggaran %s akan aktif dari tanggal %s sampai tanggal %s</string>
 </resources>

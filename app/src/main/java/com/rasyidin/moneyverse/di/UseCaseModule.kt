@@ -1,9 +1,15 @@
 package com.rasyidin.moneyverse.di
 
 import com.rasyidin.moneyverse.data.repository.account.AccountRepository
+import com.rasyidin.moneyverse.data.repository.anggaran.AnggaranRepository
 import com.rasyidin.moneyverse.data.repository.category.CategoryRepository
 import com.rasyidin.moneyverse.data.repository.transaction.TransactionRepository
 import com.rasyidin.moneyverse.domain.usecase.account.*
+import com.rasyidin.moneyverse.domain.usecase.anggaran.AnggaranUseCase
+import com.rasyidin.moneyverse.domain.usecase.anggaran.GetTotalAnggaran
+import com.rasyidin.moneyverse.domain.usecase.anggaran.UpsertAnggaran
+import com.rasyidin.moneyverse.domain.usecase.anggaran.add.AddAnggaranUseCase
+import com.rasyidin.moneyverse.domain.usecase.anggaran.add.GetCategories
 import com.rasyidin.moneyverse.domain.usecase.home.HomeUseCase
 import com.rasyidin.moneyverse.domain.usecase.transaction.AddTransaction
 import com.rasyidin.moneyverse.domain.usecase.home.GetRecentTransactions
@@ -96,5 +102,21 @@ class UseCaseModule {
     ): DetailTransactionUseCase = DetailTransactionUseCase(
         getDetailTransaction = GetDetailTransaction(transactionRepo),
         deleteTransaction = DeleteTransaction(transactionRepo)
+    )
+
+    @Provides
+    fun providesAnggaranUseCase(
+        anggaranRepo: AnggaranRepository
+    ): AnggaranUseCase = AnggaranUseCase(
+        getTotalAnggaran = GetTotalAnggaran(anggaranRepo)
+    )
+
+    @Provides
+    fun providesAddAnggaranUseCase(
+        anggaranRepo: AnggaranRepository,
+        categoryRepo: CategoryRepository
+    ): AddAnggaranUseCase = AddAnggaranUseCase(
+        upsertAnggaran = UpsertAnggaran(anggaranRepo),
+        getCategories = GetCategories(categoryRepo)
     )
 }

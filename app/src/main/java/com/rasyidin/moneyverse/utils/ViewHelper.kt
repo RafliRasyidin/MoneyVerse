@@ -18,6 +18,10 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -87,6 +91,29 @@ fun Modifier.clickable(
         role = role,
         onClick = onClick
     )
+}
+
+fun String.highlight(textStyle: TextStyle, vararg words: String, color: Color): AnnotatedString {
+    return buildAnnotatedString {
+        val regex = Regex("\\b(${words.joinToString("|")})\\b", RegexOption.IGNORE_CASE)
+        val matches = regex.findAll(this@highlight)
+        var curIndex = 0
+        matches.forEach { matchResult ->
+            val range = matchResult.range
+            val plainText = this@highlight.substring(curIndex, range.first)
+            if (plainText.isNotEmpty()) {
+                append(plainText)
+            }
+            val highlightedText = this@highlight.substring(range)
+            withStyle(textStyle.toSpanStyle().copy(color = color)) {
+                append(highlightedText)
+            }
+            curIndex = range.last + 1
+        }
+        if (curIndex < this@highlight.length) {
+            append(this@highlight.substring(curIndex))
+        }
+    }
 }
 
 fun Context.showShortToast(message: String) {

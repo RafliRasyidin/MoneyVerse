@@ -1,18 +1,16 @@
-package com.rasyidin.moneyverse.ui.screen.anggaran
+package com.rasyidin.moneyverse.ui.screen.anggaran.add
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.rasyidin.moneyverse.R
-import com.rasyidin.moneyverse.databinding.FragmentAnggaranBinding
+import com.rasyidin.moneyverse.databinding.FragmentAddAnggaranBinding
 import com.rasyidin.moneyverse.ui.component.FragmentBinding
 import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
-import com.rasyidin.moneyverse.utils.showBotNav
+import com.rasyidin.moneyverse.utils.hideBotNav
+import dagger.hilt.android.AndroidEntryPoint
 
-class AnggaranFragment : FragmentBinding<FragmentAnggaranBinding>(FragmentAnggaranBinding::inflate) {
+@AndroidEntryPoint
+class AddAnggaranFragment : FragmentBinding<FragmentAddAnggaranBinding>(FragmentAddAnggaranBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -23,13 +21,15 @@ class AnggaranFragment : FragmentBinding<FragmentAnggaranBinding>(FragmentAnggar
     private fun setContent() {
         binding.composeView.setContent {
             MoneyVerseTheme {
-                AnggaranScreen(navController = findNavController())
+                AddAnggaranScreen(navController = findNavController())
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        showBotNav()
+        hideBotNav()
     }
+
+
 }

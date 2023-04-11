@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.model.anggaran.AnggaranUi
 import com.rasyidin.moneyverse.domain.model.anggaran.ItemAnggaran
@@ -38,7 +39,8 @@ import com.rasyidin.moneyverse.utils.toCurrency
 
 @Composable
 fun AnggaranScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val listAnggaran = mutableListOf(
         ItemAnggaran(
@@ -69,13 +71,23 @@ fun AnggaranScreen(
             totalOutcome = 600000
         ),
     )
-    AnggaranContent(modifier = modifier, anggaranUi = AnggaranUi(listAnggaran = listAnggaran))
+    AnggaranContent(
+        modifier = modifier,
+        anggaranUi = AnggaranUi(listAnggaran = listAnggaran),
+        onAddClick = {
+            val action = AnggaranFragmentDirections.actionAnggaranFragmentToAddAnggaranFragment()
+            navController.navigate(action)
+        },
+        onItemClick = {}
+    )
 }
 
 @Composable
 fun AnggaranContent(
     modifier: Modifier = Modifier,
-    anggaranUi: AnggaranUi
+    anggaranUi: AnggaranUi,
+    onAddClick: () -> Unit,
+    onItemClick: () -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -87,7 +99,7 @@ fun AnggaranContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         SaldoAnggaran(
-            onAddClick = {},
+            onAddClick = onAddClick,
             sisaAnggaran = anggaranUi.sisaAnggaran,
             totalAnggaran = anggaranUi.totalAnggaran
         )
@@ -98,7 +110,10 @@ fun AnggaranContent(
             style = MaterialTheme.typography.h6,
             color = ColorBlack
         )
-        ListAnggaran(listAnggaran = anggaranUi.listAnggaran)
+        ListAnggaran(
+            listAnggaran = anggaranUi.listAnggaran,
+            onItemClick = onItemClick
+        )
     }
 }
 
@@ -199,7 +214,8 @@ fun SaldoAnggaran(
 @Composable
 fun ListAnggaran(
     modifier: Modifier = Modifier,
-    listAnggaran: List<ItemAnggaran>
+    listAnggaran: List<ItemAnggaran>,
+    onItemClick: () -> Unit
 ) {
     LazyColumn(
         modifier = modifier.padding(PaddingValues(horizontal = 12.dp))
@@ -208,7 +224,7 @@ fun ListAnggaran(
             ItemAnggaran(
                 modifier = Modifier.padding(PaddingValues(vertical = 12.dp)),
                 item = itemAnggaran,
-                onItemClick = {}
+                onItemClick = onItemClick
             )
         }
     }
@@ -428,7 +444,9 @@ private fun PreviewAnggaranContent() {
                 totalAnggaran = 5000000,
                 dateFilter = "Juni 2022",
                 listAnggaran = listAnggaran
-            )
+            ),
+            onAddClick = {},
+            onItemClick = {}
         )
     }
 }

@@ -11,9 +11,6 @@ data class AnggaranEntity(
     @PrimaryKey
     var id: String,
 
-    @ColumnInfo("transactionId")
-    var transactionId: String,
-
     @ColumnInfo("categoryId")
     var categoryId: Int,
 
@@ -29,18 +26,21 @@ data class AnggaranEntity(
     @ColumnInfo("anggaranType")
     var anggaranType: AnggaranType = AnggaranType.MONTHLY,
 
-    @ColumnInfo("jadwalAnggaran")
-    var anggaranSchedule: String
+    @ColumnInfo("tanggalMulai")
+    var startDate: String,
+
+    @ColumnInfo("tanggalAkhir")
+    var endDate: String
 ) {
     fun toDomain() = Anggaran(
         id = id,
-        transactionId = transactionId,
         categoryId = categoryId,
         nominalAnggaran = nominalAnggaran,
         createdAt = createdAt,
         anggaranBerulang = anggaranBerulang,
         anggaranType = anggaranType,
-        anggaranSchedule = anggaranSchedule
+        startDate = startDate,
+        endDate = endDate
     )
 }
 
