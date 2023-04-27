@@ -65,7 +65,7 @@ class AddAnggaranViewModel @Inject constructor(private val useCase: AddAnggaranU
             is AddAnggaranEvent.OnSelectEndDate -> _uiState.value = uiState.value.copy(endDate = event.date)
             is AddAnggaranEvent.OnSelectStartDate -> _uiState.value = uiState.value.copy(startDate = event.date)
             is AddAnggaranEvent.OnAnggaranBerulangChecked -> _uiState.value = uiState.value.copy(anggaranBerulang = event.isChecked)
-            is AddAnggaranEvent.Save -> upsertCategory()
+            is AddAnggaranEvent.Save -> upsertAnggaran()
             is AddAnggaranEvent.ShowSheetAnggaranType -> _sheetState.value = SheetAnggaranEvent.ShowSheetAnggaranType
             is AddAnggaranEvent.ShowSheetCalendarEndDate -> _sheetState.value = SheetAnggaranEvent.ShowSheetCalendarEndDate
             is AddAnggaranEvent.ShowSheetCalendarStartDate -> _sheetState.value = SheetAnggaranEvent.ShowSheetCalendarStartDate
@@ -81,6 +81,10 @@ class AddAnggaranViewModel @Inject constructor(private val useCase: AddAnggaranU
                     categories?.let {
                         _uiState.value = uiState.value.copy(
                             categories = categories,
+                            categoryId = -1,
+                            categoryName = MoneyVerseApp.appContext!!.getString(R.string.pilih_kategori),
+                            categoryBgColor = ColorBgBlue.toArgb(),
+                            categoryIconPath = R.drawable.ic_tagihan
                         )
                     }
                 }
@@ -89,7 +93,7 @@ class AddAnggaranViewModel @Inject constructor(private val useCase: AddAnggaranU
         }
     }
 
-    private fun upsertCategory() {
+    private fun upsertAnggaran() {
         viewModelScope.launch {
             useCase.upsertAnggaran(
                 Anggaran(
@@ -143,7 +147,9 @@ class AddAnggaranViewModel @Inject constructor(private val useCase: AddAnggaranU
         val isCategorySelected = uiState.value.categoryId != -1
         val isStartDateSelected = uiState.value.startDate.isNotEmpty()
         val isEndDateSelected = uiState.value.endDate.isNotEmpty()
-        buttonState = isNominalNotEmpty && isCategorySelected && isStartDateSelected
+        _uiState.value = uiState.value.copy(
+            buttonState = isNominalNotEmpty && isCategorySelected && isStartDateSelected
+        )
     }
 
 }

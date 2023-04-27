@@ -2,10 +2,26 @@ package com.rasyidin.moneyverse.ui.screen.anggaran.add
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -22,9 +38,24 @@ import androidx.navigation.NavController
 import com.rasyidin.moneyverse.R
 import com.rasyidin.moneyverse.domain.model.anggaran.AddAnggaranUi
 import com.rasyidin.moneyverse.domain.model.anggaran.AnggaranType
-import com.rasyidin.moneyverse.domain.model.anggaran.AnggaranType.*
-import com.rasyidin.moneyverse.ui.component.*
-import com.rasyidin.moneyverse.ui.theme.*
+import com.rasyidin.moneyverse.domain.model.anggaran.AnggaranType.ANNUAL
+import com.rasyidin.moneyverse.domain.model.anggaran.AnggaranType.DAILY
+import com.rasyidin.moneyverse.domain.model.anggaran.AnggaranType.MONTHLY
+import com.rasyidin.moneyverse.domain.model.anggaran.AnggaranType.WEEKLY
+import com.rasyidin.moneyverse.ui.component.MVButtonPrimary
+import com.rasyidin.moneyverse.ui.component.MVCalendarVerticalPager
+import com.rasyidin.moneyverse.ui.component.MVCardSelect
+import com.rasyidin.moneyverse.ui.component.MVTextFieldNominal
+import com.rasyidin.moneyverse.ui.component.MVToolbar
+import com.rasyidin.moneyverse.ui.component.SheetContentAnggaranType
+import com.rasyidin.moneyverse.ui.component.SheetContentCalendar
+import com.rasyidin.moneyverse.ui.component.SheetContentCategories
+import com.rasyidin.moneyverse.ui.theme.ColorGray200
+import com.rasyidin.moneyverse.ui.theme.ColorGray500
+import com.rasyidin.moneyverse.ui.theme.ColorPurple500
+import com.rasyidin.moneyverse.ui.theme.ColorWhite
+import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
+import com.rasyidin.moneyverse.ui.theme.SheetShape
 import com.rasyidin.moneyverse.utils.DateUtils
 import com.rasyidin.moneyverse.utils.DateUtils.formatDate
 import com.rasyidin.moneyverse.utils.highlight
@@ -87,14 +118,26 @@ fun AddAnggaranScreen(
                     )
                 }
                 SheetAnggaranEvent.ShowSheetCalendarStartDate -> {
-                    SheetContentCalendar(
-                        onSelectedDateClick = { value ->
-                            coroutineScope.launch {
-                                modalSheetState.hide()
-                                viewModel.onEvent(AddAnggaranEvent.OnSelectStartDate(value))
-                            }
+                    when (uiState.anggaranType) {
+                        DAILY -> {
+                            SheetContentCalendar(
+                                onSelectedDateClick = { value ->
+                                    coroutineScope.launch {
+                                        modalSheetState.hide()
+                                        viewModel.onEvent(AddAnggaranEvent.OnSelectStartDate(value))
+                                    }
+                                }
+                            )
                         }
-                    )
+                        WEEKLY -> MVCalendarVerticalPager(onSelected = {})
+                        MONTHLY -> {
+                            MVCalendarVerticalPager(
+                                modifier = Modifier.fillMaxHeight(.5F),
+                                onSelected = {}
+                            )
+                        }
+                        ANNUAL -> MVCalendarVerticalPager(onSelected = {})
+                    }
                 }
                 SheetAnggaranEvent.ShowSheetCategories -> {
                     SheetContentCategories(
@@ -163,6 +206,9 @@ fun AddAnggaranScreen(
                 },
                 onCheckedAnggaranBerulang = { isChecked ->
                     viewModel.onEvent(AddAnggaranEvent.OnAnggaranBerulangChecked(isChecked))
+                },
+                onSaveClick = {
+                    viewModel.onEvent(AddAnggaranEvent.Save)
                 }
             )
         }
@@ -179,7 +225,8 @@ fun AddAnggaranContent(
     onCardAnggaranTypeClick: () -> Unit,
     onCardStartDateClick: () -> Unit,
     onCardEndDateClick: () -> Unit,
-    onCheckedAnggaranBerulang: (Boolean) -> Unit
+    onCheckedAnggaranBerulang: (Boolean) -> Unit,
+    onSaveClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -213,7 +260,19 @@ fun AddAnggaranContent(
         )
         Spacer(modifier = Modifier.height(18.dp))
         MVCardSelect(
-            label = stringResource(id = if (uiState.anggaranBerulang) R.string.dari_tanggal else R.string.tanggal),
+            label = stringResource(
+                id = when {
+                    uiState.anggaranBerulang -> {
+                        when (uiState.anggaranType) {
+                            DAILY -> R.string.dari_tanggal
+                            WEEKLY -> R.string.dari_tanggal
+                            MONTHLY -> R.string.dari_bulan
+                            ANNUAL -> R.string.dari_tahun
+                        }
+                    }
+                    else -> R.string.tanggal
+                }
+            ),
             name = uiState.startDate.formatDate(to = DateUtils.NORMAL_DATE_FORMAT),
             bgColor = null,
             iconPath = R.drawable.ic_calendar,
@@ -222,7 +281,14 @@ fun AddAnggaranContent(
         Spacer(modifier = Modifier.height(18.dp))
         AnimatedVisibility(visible = uiState.anggaranBerulang) {
             MVCardSelect(
-                label = stringResource(id = R.string.sampai_tanggal),
+                label = stringResource(
+                    id = when (uiState.anggaranType) {
+                        DAILY -> R.string.sampai_tanggal
+                        WEEKLY -> R.string.sampai_tanggal
+                        MONTHLY -> R.string.sampai_bulan
+                        ANNUAL -> R.string.sampai_tahun
+                    }
+                ),
                 name = uiState.endDate.formatDate(to = DateUtils.NORMAL_DATE_FORMAT),
                 bgColor = null,
                 iconPath = R.drawable.ic_calendar,
@@ -243,7 +309,20 @@ fun AddAnggaranContent(
             isChecked = uiState.anggaranBerulang,
             onCheckedChange = onCheckedAnggaranBerulang
         )
-
+        Spacer(modifier = Modifier.weight(1F))
+        MVButtonPrimary(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+            onClick = { onSaveClick.invoke() },
+            enabled = uiState.buttonState,
+        ) {
+            Text(
+                text = stringResource(id = R.string.simpan),
+                style = MaterialTheme.typography.button,
+                color = ColorWhite
+            )
+        }
     }
 }
 
@@ -404,7 +483,8 @@ private fun PreviewAddAnggaranContent() {
             onCardAnggaranTypeClick = {},
             onCardStartDateClick = {},
             onCardEndDateClick = {},
-            onCheckedAnggaranBerulang = {}
+            onCheckedAnggaranBerulang = {},
+            onSaveClick = {}
         )
     }
 }

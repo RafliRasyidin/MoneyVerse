@@ -21,5 +21,6 @@ data class AddAnggaranUi(
     var endDate: String = "",
     var anggaranBerulang: Boolean = false,
     var categories: List<Category> = emptyList(),
-    var anggaranTypes: List<ItemAnggaranType> = emptyList()
+    var anggaranTypes: List<ItemAnggaranType> = emptyList(),
+    var buttonState: Boolean = false
 )

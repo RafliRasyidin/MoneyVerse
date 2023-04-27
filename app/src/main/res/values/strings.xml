@@ -96,9 +96,13 @@
     <string name="harian">Harian</string>
     <string name="pilih_jenis_anggaran">Pilih Jenis Anggaran</string>
     <string name="jenis_anggaran">Jenis Anggaran</string>
-    <string name="dari_tanggal">Sampai Tanggal</string>
+    <string name="dari_tanggal">Dari Tanggal</string>
     <string name="sampai_tanggal">Sampai Tanggal</string>
     <string name="anggaran_berulang">Anggaran Berulang</string>
     <string name="info_anggaran">Anggaran %s akan aktif dari tanggal %s</string>
     <string name="info_anggaran_berulang">Anggaran %s akan aktif dari tanggal %s sampai tanggal %s</string>
+    <string name="dari_bulan">Dari Bulan</string>
+    <string name="dari_tahun">Dari Tahun</string>
+    <string name="sampai_bulan">Sampai Bulan</string>
+    <string name="sampai_tahun">Sampai Tahun</string>
 </resources>
