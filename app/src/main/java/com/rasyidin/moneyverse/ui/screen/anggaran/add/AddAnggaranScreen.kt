@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
@@ -43,6 +45,7 @@ import com.rasyidin.moneyverse.domain.model.anggaran.AnggaranType.DAILY
 import com.rasyidin.moneyverse.domain.model.anggaran.AnggaranType.MONTHLY
 import com.rasyidin.moneyverse.domain.model.anggaran.AnggaranType.WEEKLY
 import com.rasyidin.moneyverse.ui.component.MVButtonPrimary
+import com.rasyidin.moneyverse.ui.component.MVCalendarVerticalMonthYear
 import com.rasyidin.moneyverse.ui.component.MVCalendarVerticalPager
 import com.rasyidin.moneyverse.ui.component.MVCardSelect
 import com.rasyidin.moneyverse.ui.component.MVTextFieldNominal
@@ -58,6 +61,7 @@ import com.rasyidin.moneyverse.ui.theme.MoneyVerseTheme
 import com.rasyidin.moneyverse.ui.theme.SheetShape
 import com.rasyidin.moneyverse.utils.DateUtils
 import com.rasyidin.moneyverse.utils.DateUtils.formatDate
+import com.rasyidin.moneyverse.utils.gesturesDisabled
 import com.rasyidin.moneyverse.utils.highlight
 import kotlinx.coroutines.launch
 
@@ -131,9 +135,15 @@ fun AddAnggaranScreen(
                         }
                         WEEKLY -> MVCalendarVerticalPager(onSelected = {})
                         MONTHLY -> {
-                            MVCalendarVerticalPager(
-                                modifier = Modifier.fillMaxHeight(.5F),
-                                onSelected = {}
+                            MVCalendarVerticalMonthYear(
+                                modifier = Modifier
+                                    .padding(PaddingValues(vertical = 8.dp)),
+                                onSelectedDate = { value ->
+                                    coroutineScope.launch {
+                                        modalSheetState.hide()
+                                        viewModel.onEvent(AddAnggaranEvent.OnSelectStartDate(value))
+                                    }
+                                }
                             )
                         }
                         ANNUAL -> MVCalendarVerticalPager(onSelected = {})

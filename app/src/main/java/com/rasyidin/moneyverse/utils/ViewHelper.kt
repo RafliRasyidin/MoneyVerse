@@ -17,6 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -171,8 +174,8 @@ fun rememberFirstMostVisibleMonth(
     LaunchedEffect(state) {
         snapshotFlow { state.layoutInfo.firstMostVisibleMonth(viewPortPercent) }
             .filterNotNull()
-            .collect {
-                month -> visibleMonth.value = month
+            .collect { month ->
+                visibleMonth.value = month
             }
     }
     return visibleMonth.value
@@ -194,3 +197,19 @@ private fun CalendarLayoutInfo.firstMostVisibleMonth(viewPortPercent: Float = 50
         }?.month
     }
 }
+
+fun Modifier.gesturesDisabled(disabled: Boolean = true) =
+    if (disabled) {
+        pointerInput(Unit) {
+            awaitPointerEventScope {
+                // we should wait for all new pointer events
+                while (true) {
+                    awaitPointerEvent(pass = PointerEventPass.Initial)
+                        .changes
+                        .forEach(PointerInputChange::consume)
+                }
+            }
+        }
+    } else {
+        this
+    }
